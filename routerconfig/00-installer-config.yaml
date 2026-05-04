@@ -1,0 +1,49 @@
+
+# Located in /etc/netplan/00-installer-config.yaml
+# To config network interfaces
+# Run "sudo netplan try --config-file foo.yaml" to test this config correct or not
+# Run "sudo netplan generate && sudo netplan apply" after editing
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    LAN_1G: # 板载网卡，千兆给电视（百兆）
+      dhcp4: false # 禁用DHCPv4
+      dhcp6: false # 禁用DHCPv6
+      optional: true # 置为非必须，防止Ubuntu的网络检查造成系统启动延迟
+      accept-ra: true
+    LAN_2.5G_1: # 2.5G网卡，作为LAN使用
+      dhcp4: false # 禁用DHCPv4
+      dhcp6: false # 禁用DHCPv6
+      optional: true # 设置为非必须，防止Ubuntu的网络检查造成系统启动延迟
+    LAN_2.5G_2: # 网卡enp2s0，作为LAN使用，配置同网卡enp1s0一致
+      dhcp4: false
+      dhcp6: false
+      optional: true
+  bridges:
+    br_lan: # 将2.5G的俩个网口组成网桥，方便盲插，网桥名称为br_lan
+      interfaces: # 包含的所有网卡名称
+        - "LAN_2.5G_1"
+        - "LAN_2.5G_2"
+      addresses: # 固定网卡所拥有的内网IP地址段
+        - 192.168.2.1/24
+        # - fc00:192:168:2::1/64 # TODO 等公网IPV6调通后再行分配 
+      dhcp4: false # 禁用DHCPv4
+      dhcp6: false # 禁用DHCPv6
+      nameservers: # 设置默认DNS服务器，非必须
+        addresses:
+          - 223.5.5.5
+          # - "2400:3200::1"
+      parameters:
+        stp: true # 启用生成树协议，防止环路
+        forward-delay: 4
+      optional: true # 置为非必须，防止Ubuntu的网络检查造成系统启动延迟
+  vlans:
+    vlan_ppp:      # 用于ppp上网拨号的vlan ID
+      id: 36       # ID需和光猫上网VLAN一致
+      link: LAN_1G
+      dhcp4: false # 禁用DHCPv4
+      dhcp6: false # 禁用DHCPv6
+      accept-ra: true
+      # 后续可创见IPTV使用的VLAN

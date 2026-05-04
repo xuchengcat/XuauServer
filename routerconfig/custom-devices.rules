@@ -1,0 +1,6 @@
+#config used in dell 3060 MFF
+#SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="54:bf:64:89:7c:82", ATTR{dev_id}=="0x0",ATTR{type}=="1", NAME="LAN_1G"
+#config used in G4600
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="60:45:cb:6a:70:bb", ATTR{dev_id}=="0x0",ATTR{type}=="1", NAME="LAN_1G"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="a8:b8:e0:01:02:27", ATTR{dev_id}=="0x0",ATTR{type}=="1", NAME="LAN_2.5G_1"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="a8:b8:e0:01:02:28", ATTR{dev_id}=="0x0",ATTR{type}=="1", NAME="LAN_2.5G_2"

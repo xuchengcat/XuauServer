@@ -1,0 +1,16 @@
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - USER=xuau
+      - PASS=123456
+    volumes:
+      - /mnt/SDD128G/transmission/config:/config
+      - /mnt/HDD14T/Media_Data_HDD:/downloads
+      - /mnt/SDD128G/transmission/watch:/watch
+    network_mode: host
+    restart: unless-stopped

@@ -1,0 +1,16 @@
+{
+  "category": "Metadata",
+  "changelog": "Auto Released by Actions",
+  "description": "MetaTube Plugin for Jellyfin/Emby",
+  "guid": "01cc53ec-c415-4108-bbd4-a684a9801a32",
+  "name": "MetaTube",
+  "overview": "MetaTube Plugin for Jellyfin/Emby.",
+  "owner": "MetaTube",
+  "targetAbi": "10.9.0.0",
+  "timestamp": "2024-10-31T02:00:35.0000000Z",
+  "version": "2024.1031.200.0",
+  "status": "Superceded",
+  "autoUpdate": true,
+  "imagePath": "",
+  "assemblies": []
+}

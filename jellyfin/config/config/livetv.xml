@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LiveTvOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <GuideDays xsi:nil="true" />
+  <EnableRecordingSubfolders>false</EnableRecordingSubfolders>
+  <EnableOriginalAudioWithEncodedRecordings>false</EnableOriginalAudioWithEncodedRecordings>
+  <TunerHosts>
+    <TunerHostInfo>
+      <Id>287c701a20754f70a1ba24f6d676c99b</Id>
+      <Url>https://iptv.xuchengcat.cn/tv.m3u</Url>
+      <Type>m3u</Type>
+      <ImportFavoritesOnly>false</ImportFavoritesOnly>
+      <AllowHWTranscoding>false</AllowHWTranscoding>
+      <EnableStreamLooping>false</EnableStreamLooping>
+      <TunerCount>0</TunerCount>
+    </TunerHostInfo>
+  </TunerHosts>
+  <ListingProviders />
+  <PrePaddingSeconds>0</PrePaddingSeconds>
+  <PostPaddingSeconds>0</PostPaddingSeconds>
+  <MediaLocationsCreated />
+  <RecordingPostProcessorArguments>"{path}"</RecordingPostProcessorArguments>
+</LiveTvOptions>

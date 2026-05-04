@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LibraryOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Enabled>true</Enabled>
+  <EnablePhotos>true</EnablePhotos>
+  <EnableRealtimeMonitor>true</EnableRealtimeMonitor>
+  <EnableLUFSScan>true</EnableLUFSScan>
+  <EnableChapterImageExtraction>true</EnableChapterImageExtraction>
+  <ExtractChapterImagesDuringLibraryScan>true</ExtractChapterImagesDuringLibraryScan>
+  <EnableTrickplayImageExtraction>true</EnableTrickplayImageExtraction>
+  <ExtractTrickplayImagesDuringLibraryScan>false</ExtractTrickplayImagesDuringLibraryScan>
+  <PathInfos>
+    <MediaPathInfo>
+      <Path>/media_AV</Path>
+    </MediaPathInfo>
+  </PathInfos>
+  <SaveLocalMetadata>false</SaveLocalMetadata>
+  <EnableAutomaticSeriesGrouping>false</EnableAutomaticSeriesGrouping>
+  <EnableEmbeddedTitles>false</EnableEmbeddedTitles>
+  <EnableEmbeddedExtrasTitles>false</EnableEmbeddedExtrasTitles>
+  <EnableEmbeddedEpisodeInfos>false</EnableEmbeddedEpisodeInfos>
+  <AutomaticRefreshIntervalDays>0</AutomaticRefreshIntervalDays>
+  <PreferredMetadataLanguage>zh</PreferredMetadataLanguage>
+  <MetadataCountryCode>HK</MetadataCountryCode>
+  <SeasonZeroDisplayName>Specials</SeasonZeroDisplayName>
+  <MetadataSavers />
+  <DisabledLocalMetadataReaders />
+  <LocalMetadataReaderOrder>
+    <string>Nfo</string>
+  </LocalMetadataReaderOrder>
+  <DisabledSubtitleFetchers />
+  <SubtitleFetcherOrder />
+  <DisabledMediaSegmentProviders />
+  <MediaSegmentProvideOrder />
+  <SkipSubtitlesIfEmbeddedSubtitlesPresent>false</SkipSubtitlesIfEmbeddedSubtitlesPresent>
+  <SkipSubtitlesIfAudioTrackMatches>false</SkipSubtitlesIfAudioTrackMatches>
+  <SubtitleDownloadLanguages />
+  <RequirePerfectSubtitleMatch>true</RequirePerfectSubtitleMatch>
+  <SaveSubtitlesWithMedia>true</SaveSubtitlesWithMedia>
+  <DisabledLyricFetchers />
+  <LyricFetcherOrder />
+  <CustomTagDelimiters>
+    <string>/</string>
+    <string>|</string>
+    <string>;</string>
+    <string>\</string>
+  </CustomTagDelimiters>
+  <DelimiterWhitelist />
+  <AutomaticallyAddToCollection>false</AutomaticallyAddToCollection>
+  <AllowEmbeddedSubtitles>AllowAll</AllowEmbeddedSubtitles>
+  <TypeOptions>
+    <TypeOptions>
+      <Type>Movie</Type>
+      <MetadataFetchers>
+        <string>MetaTube</string>
+      </MetadataFetchers>
+      <MetadataFetcherOrder>
+        <string>MetaTube</string>
+        <string>TheMovieDb</string>
+        <string>The Open Movie Database</string>
+        <string>MetaShark</string>
+      </MetadataFetcherOrder>
+      <ImageFetchers>
+        <string>MetaTube</string>
+      </ImageFetchers>
+      <ImageFetcherOrder>
+        <string>MetaTube</string>
+        <string>TheMovieDb</string>
+        <string>MetaShark</string>
+        <string>The Open Movie Database</string>
+        <string>Embedded Image Extractor</string>
+        <string>Screen Grabber</string>
+      </ImageFetcherOrder>
+      <ImageOptions />
+    </TypeOptions>
+  </TypeOptions>
+</LibraryOptions>

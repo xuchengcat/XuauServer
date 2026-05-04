@@ -1,0 +1,12 @@
+services:
+  lyricapi:
+    image: hisatri/lyricapi:latest
+    container_name: lyricapi
+    ports: 
+      - 28883:28883
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /mnt/HDD14T/Media_Data_HDD/Music:/music:ro
+    restart: unless-stopped
+

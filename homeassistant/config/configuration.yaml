@@ -1,0 +1,125 @@
+# =============================================================================
+# Home Assistant Configuration
+# =============================================================================
+
+homeassistant:
+  packages: !include_dir_named packages/
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# =============================================================================
+# Frontend & UI
+# =============================================================================
+
+frontend:
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
+  themes: !include_dir_merge_named themes
+
+lovelace:
+  mode: storage
+
+# =============================================================================
+# Network & Proxy
+# =============================================================================
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.0.0/24
+    - 192.168.192.0/24
+    - 172.16.0.0/12
+
+# =============================================================================
+# Text-to-Speech
+# =============================================================================
+
+tts:
+  - platform: google_translate
+
+# =============================================================================
+# Includes - External YAML files
+# =============================================================================
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# =============================================================================
+# Wake on LAN
+# =============================================================================
+
+wake_on_lan:
+
+# =============================================================================
+# Shell Commands
+# =============================================================================
+
+shell_command:
+  turn_off_connect: 'ssh -i /config/.ssh/id_rsa xuche@192.168.2.2 "shutdown /s /t 10"'
+  turn_on_steam: 'ssh -i /config/.ssh/id_rsa xuche@192.168.2.2 "schtasks /run /tn \"MyFlow\\RunSteam\""'
+
+# =============================================================================
+# Input Helpers
+# =============================================================================
+
+input_boolean:
+  gamemode:
+    name: "游戏模式"
+    icon: mdi:nintendo-switch
+
+input_select:
+  badroom_mode:
+    name: "卧室场景模式"
+    options:
+      - "起床"
+      - "入睡"
+      - "观影"
+      - "白天"
+    initial: "起床"
+    icon: mdi:home-automation
+
+input_number:
+  disk_temp_sdc:
+    name: sdc温度
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "°C"
+  disk_temp_sdb:
+    name: sdb温度
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "°C"
+
+# =============================================================================
+# Template Entities (新版写法)
+# =============================================================================
+
+template:
+  - sensor:
+      - name: "SuzhouChargeDay1"
+        unit_of_measurement: "kWh"
+        state: "{{ states('sensor.sql_suzhouchargeday1') }}"
+  - switch:
+      - name: "XuauGame"
+        unique_id: xuau_game_wol
+        state: "{{ is_state('device_tracker.xuau_game', 'home') }}"
+        turn_on:
+          - action: wake_on_lan.send_magic_packet
+            data:
+              mac: "D8:43:AE:9D:74:D5"
+              broadcast_address: "192.168.2.255"
+              broadcast_port: 9
+        turn_off:
+          - action: shell_command.turn_off_connect
+        icon: mdi:desktop-tower
+
+sql:
+  - name: "SQL SuzhouChargeDay1"
+    db_url: "sqlite:////sgcc_elec/homeassistant.db"
+    query: "SELECT usage FROM daily3206624836319 ORDER BY date DESC LIMIT 1 OFFSET 0;"
+    column: "usage"
+    unit_of_measurement: "kWh"

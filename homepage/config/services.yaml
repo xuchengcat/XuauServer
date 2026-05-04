@@ -1,0 +1,175 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/services
+# - System Monitor:
+#     - Network Usage:
+#         widget:
+#           type: glances
+#           version: 4
+#           url: https://glances.xuchengcat.cn
+#           metric: network:pppoe_dial
+#           chart: false
+#     - Temperature:
+#         widget:
+#           type: glances
+#           version: 4
+#           url: https://glances.xuchengcat.cn
+#           metric: sensor:pch_cannonlake 0
+#           chart: false
+# - Storage Monitor:
+    # - HDD14T:
+    #     widget:
+    #       type: glances
+    #       version: 4
+    #       url: https://glances.xuchengcat.cn
+    #       metric: fs:/mnt/HDD14T
+    #       chart: false
+    # - SDD512G:
+    #     widget:
+    #       type: glances
+    #       version: 4
+    #       url: https://glances.xuchengcat.cn
+    #       metric: fs:/etc/hosts
+    #       chart: false
+
+- NA Area:
+    - Jellyfin:
+        icon: si-jellyfin-#00a4dc
+        href: https://jellyfin.xuchengcat.cn:444
+        description: 影音娱乐
+        server: my-docker
+        container: jellyfin_qsv
+        widget:
+          type: jellyfin
+          url: http://jellyfin:8096
+          key: 952a6776a69f4cc98849716f52a95e32
+          enableNowPlaying: true
+          enableBlocks: true
+          showEpisodeNumber: true
+          expandOneStreamToTwoRows: false
+    - Transmission:
+        icon: si-transmission-#D70008
+        href: https://transmission.xuchengcat.cn:444
+        description: 下载服务
+        server: my-docker
+        container: transmission
+        widget:
+          type: transmission
+          url: http://172.17.0.1:9091
+          username: xuau
+          password: 123456
+    - PhotoPrism:
+        icon: /icons/photoprism.png
+        href: https://photoprism.xuchengcat.cn:444
+        description: 照片存储
+        server: my-docker
+        container: photoprism
+        widget:
+          type: photoprism
+            #username: xuau
+            #password: 123456
+          url: http://photoprism:2342
+          key: RxfNRC-Y7Rq5r-vNEtdi-8xqRDQ
+          fields: ["albums", "photos", "videos"]
+  
+    # - Glances:
+    #     icon: /icons/cadvisor.png
+    #     href: https://glances.xuchengcat.cn
+    #     description: 状态查询
+    #     server: my-docker
+    #     container: glances
+    #     widget:
+    #       type: glances
+    #       version: 4
+    #       url: https://glances.xuchengcat.cn
+    #       metric: sensor:Package id 0
+    #       chart: false
+
+# - HA Area:
+    - HomeAssistant:
+        icon: si-homeassistant-#18BCF2
+        href: https://homeassistant.xuchengcat.cn:444
+        description: 智能家居
+        server: my-docker
+        container: homeassistant
+        widget:
+          type: homeassistant
+          url: http://172.17.0.1:8123
+          key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwOWY0YjRlNzU4Yjg0ZWQ5YTFhMzgxMjZkMDAwM2U1MyIsImlhdCI6MTc0NzAzNzE5OSwiZXhwIjoyMDYyMzk3MTk5fQ.uXp09j04-TV3ueksbBWG9ZntX-svP_fJXLeC-21E4nw"
+          fields: ["people_home", "lights_on", "switches_on"]
+    - MoonTV:
+        icon: si-jellyfin-#808080
+        href: https://moontv.xuchengcat.cn:444
+        description: 聚合影视
+
+    - EspHome:
+        icon: si-esphome-#000000
+        href: http://192.168.2.1:6052
+        description: DIY
+    - Nodred:
+        icon: si-nodered-#8F0000
+        href: https://nodred.xuchengcat.cn:444
+        description: 自动化
+        server: my-docker
+        container: Node_Red
+    - XiaoMusic:
+        icon: si-xiaomi-#ff6900
+        href: https://xiaomusic.xuchengcat.cn:444
+        description: 自动化
+        server: my-docker
+        container: xiaomusic
+          #- Shinobi:
+          #icon: /icons/shinobi.png
+          #href: https://shinobi.xuchengcat.cn:444
+          #description: 监控设置
+    - Frigate:
+        icon: /icons/frigate.png
+        href: https://frigate.xuchengcat.cn:444
+        description: 监控设置
+        server: my-docker
+        container: frigate
+    - NextCloud:
+        icon: si-nextcloud-#0082C9
+        href: https://nextcloud.xuchengcat.cn:444
+        description: 私有云服务
+        server: my-docker
+        container: nextcloud
+        #widget:
+          #type: nextcloud
+          #url: https://nextcloud.xuchengcat.cn
+          #key: HwQu7CgKUbUJqGUNuTvFYFrRRmcLNnaYJz8KJyDjS5xaAJYKwBDCP88oJb7VSiKG
+          #fields: ["memoryusage","numfiles","numshares"]
+
+    - Wechat:
+        icon: si-wechat-#07C160
+        href: https://wechat.xuchengcat.cn:444
+        description: 微信备份
+        server: my-docker
+        container: cloudbak
+
+# - MA Area:
+    - Portainer:
+        icon: si-portainer-#13BEF9
+        href: https://portainer.xuchengcat.cn:444
+        description: Docker管理
+        server: my-docker
+        container: portainer
+    - NginxProxy:
+        icon: si-nginxproxymanager-#F15833
+        href: https://nginx.xuchengcat.cn:444
+        description: 反代理
+        server: my-docker
+        container: nginx-proxy-manager
+    - Sshwifty:
+        icon: si-zsh-#F15A24
+        href: https://ssh.xuchengcat.cn:444
+        description: 网页版ssh
+    # - Bark:
+    #     icon: /icons/google-messages.png
+    #     abbr: BA
+    #     href: https://bark.xuchengcat.cn:444
+    #     description: ios通知服务
+    - ClashConfig:
+        icon: /icons/clash.png
+        href: http://xuchengcat.cn:9999/ui/#/
+        description: 机场配置

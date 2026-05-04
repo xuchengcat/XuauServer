@@ -1,0 +1,16 @@
+{
+  "category": "Metadata",
+  "changelog": "https://github.com/91270/Emby.MeiamSub/commit/492294941f822595446fedcf268f4117dacebc1c\n",
+  "description": "Download subtitles from Shooter.cn. https://github.com/jjm2473/jellyfin-plugin-shootersub original source https://github.com/91270/Emby.MeiamSub\n",
+  "guid": "b44072e0-f89d-4ddb-ab5d-4b81de0fb759",
+  "name": "MeiamSub.Shooter",
+  "overview": "Download subtitles from Shooter.cn",
+  "owner": "jjm2473",
+  "targetAbi": "10.7.0.0",
+  "timestamp": "2022-01-07T08:39:45.0000000Z",
+  "version": "1.0.4.0",
+  "status": "Active",
+  "autoUpdate": true,
+  "imagePath": "",
+  "assemblies": []
+}

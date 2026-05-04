@@ -1,0 +1,34 @@
+# =============================================================================
+# Scripts
+# =============================================================================
+
+set_light_mode:
+  alias: Set Light Mode
+  description: "切换小米灯的模式 (日光/月光)"
+  fields:
+    entity_id:
+      description: "目标灯实体"
+      example: "light.yeelink_ceiling14_21b8_light"
+      default: "light.yeelink_ceiling14_21b8_light"
+      selector:
+        entity:
+          domain: light
+  sequence:
+    - action: xiaomi_miot.set_miot_property
+      data:
+        entity_id: "{{ entity_id }}"
+        siid: 2
+        piid: 4
+        value: >
+          {% if is_state_attr(entity_id, 'light.mode', 1) %}
+            2
+          {% else %}
+            1
+          {% endif %}
+
+open_steam:
+  alias: Open Steam Bigpicture
+  description: "远程启动Steam大屏模式"
+  icon: mdi:steam
+  sequence:
+    - action: shell_command.turn_on_steam

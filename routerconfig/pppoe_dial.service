@@ -1,0 +1,20 @@
+# Located in /etc/systemd/system/pppoe_dial.service
+# 参考3.3小节
+
+[Unit]
+Description=PPPoE auto dial
+After=systemd-networkd.service
+StartLimitBurst=5
+StartLimitIntervalSec=120
+
+[Service]
+User=root
+ExecStartPre=-/bin/sh -ec '\
+    /usr/bin/mkdir -p /var/log/pppoe_dial'
+ExecStart=pppd call pppoe_dial
+ExecStop=poff pppoe_dial
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

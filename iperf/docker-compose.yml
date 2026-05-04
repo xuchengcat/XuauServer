@@ -1,0 +1,10 @@
+version: '3'
+services:
+  iperf3:
+    container_name: iperf3
+    image: sk278/iperf3:latest
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 5201:5201/tcp
+      - 5201:5201/udp

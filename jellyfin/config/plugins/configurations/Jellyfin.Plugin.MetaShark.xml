@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DoubanCookies>bid=Ii5ofvlC1Nc; dbcl2="79424006:P3+/6yfzu+Q"; ck=u4sc; frodotk_db="30793794ee7cb620916ba6becb762260"; push_noty_num=0; push_doumail_num=0; ll="118163"; _pk_ref.100001.4cf6=%5B%22%22%2C%22%22%2C1777870755%2C%22https%3A%2F%2Fwww.douban.com%2Fexplore%2F%22%5D; _pk_id.100001.4cf6=a4801b5a256aed39.1777870755.; _pk_ses.100001.4cf6=1; _vwo_uuid_v2=DC2ECF2CA3ED18D1D78E9E68723D79E55|22dbd7644a36a7b31a02e1d1d61cf280</DoubanCookies>
+  <EnableDoubanAvoidRiskControl>true</EnableDoubanAvoidRiskControl>
+  <EnableDoubanLargePoster>true</EnableDoubanLargePoster>
+  <EnableDoubanBackdropRaw>false</EnableDoubanBackdropRaw>
+  <DoubanImageProxyBaseUrl>https://jellyfin.xuchengcat.cn:444</DoubanImageProxyBaseUrl>
+  <EnableTmdb>true</EnableTmdb>
+  <EnableTmdbSearch>false</EnableTmdbSearch>
+  <EnableTmdbBackdrop>true</EnableTmdbBackdrop>
+  <EnableTmdbLogo>true</EnableTmdbLogo>
+  <EnableTmdbCollection>true</EnableTmdbCollection>
+  <EnableTmdbOfficialRating>true</EnableTmdbOfficialRating>
+  <TmdbApiKey />
+  <TmdbHost />
+  <TmdbProxyType />
+  <TmdbProxyPort />
+  <TmdbProxyHost />
+</PluginConfiguration>

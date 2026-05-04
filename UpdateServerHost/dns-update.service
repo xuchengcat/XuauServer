@@ -1,0 +1,13 @@
+[Unit]
+Description=DNS Update Service for xuchengcat.cn
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/path/to/curl_host.sh
+Restart=always
+RestartSec=60
+User=root
+
+[Install]
+WantedBy=multi-user.target 
