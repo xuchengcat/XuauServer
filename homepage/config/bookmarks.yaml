@@ -1,0 +1,79 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/bookmarks
+- PT:
+  - MTeam:
+    - icon: /icons/mteam.png
+      href: https://zp.m-team.io/index
+      description: 馒头
+  - Dicmusic:
+    - icon: /icons/haitun.png
+      href: https://dicmusic.com/torrents.php
+      description: 海豚
+        #- Kufei:
+        #- icon: /icons/kufei.png 
+        #href: https://kufei.org/torrents.php
+        #description: 库非
+        #- Cafei:
+        #- icon: /icons/ptcafe.png
+        #href: https://ptcafe.club/torrents.php
+        #description: 咖啡
+
+- Management:
+  - mojievpn:
+    - icon: /icons/mojie.png
+      href: https://mojie.me/#/dashboard
+      description: VPN
+  - Excahange:
+    - abbr: EX
+      href: https://exchange.xuchengcat.cn:444
+      description: 交换机
+  - ZeroTier:
+    - icon: /icons/zerotier.png
+      href: https://my.zerotier.com/network/abfd31bd470eb354/
+      description: 内网穿透
+  - Render:
+    - icon: /icons/render.png
+      href: https://dashboard.render.com/
+      description: bark server
+
+- Luntan:
+  - Hassbian:
+    - icon: /icons/hassiban.png
+      href: https://bbs.hassbian.com/
+      description: 智能家居
+  - Enshan:
+    - icon: /icons/enshan.png
+      href: https://www.right.com.cn/forum/
+      description: 软路由
+  - Reddit:
+    - icon: /icons/reddit.png
+      href: https://reddit.com/
+      description: " "
+  - FrigatePlus:
+    - icon: /icons/frigate.png
+      href: https://plus.frigate.video/dashboard/
+      description: " "
+
+- Outside:
+    - Manwa:
+        - abbr: MW
+          href: https://manwa.me/bookshelf
+          description: "漫画"
+    - Xslist:
+        - abbr: XS
+          href: https://xlist.org/zh
+          description: "AI识脸"
+    - Ref:
+        - abbr: RF
+          href: https://reference.doraemon.press/
+          description: "速查手册"
+    
+    - Github:
+        - icon: /icons/github.png
+          href: https://github.com/xuchengcat/ServerBkp/
+          description: " "
+    - YouTube:
+        - icon: /icons/youtube.png
+          href: https://youtube.com/
+          description: " "

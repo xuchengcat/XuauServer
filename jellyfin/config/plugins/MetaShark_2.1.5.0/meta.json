@@ -1,0 +1,15 @@
+{
+  "category": "",
+  "changelog": "",
+  "description": "",
+  "guid": "9a19103f-16f7-4668-be54-9a1e7a4f7556",
+  "name": "MetaShark",
+  "overview": "",
+  "owner": "",
+  "targetAbi": "10.10.7.0",
+  "timestamp": "0001-01-01T00:00:00.0000000Z",
+  "version": "2.1.5.0",
+  "status": "Active",
+  "autoUpdate": false,
+  "assemblies": []
+}

@@ -1,0 +1,1792 @@
+[
+    {
+        "id": "2524e973a45d6f57",
+        "type": "tab",
+        "label": "HA配置页",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "783a4e34d3609ab4",
+        "type": "tab",
+        "label": "BYD汽车",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "88f73c2b61d26b96",
+        "type": "tab",
+        "label": "HA测试",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "16d77c25f9e59817",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 5,
+        "addon": false,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true,
+        "heartbeat": false,
+        "heartbeatInterval": 30,
+        "areaSelector": "friendlyName",
+        "deviceSelector": "friendlyName",
+        "entitySelector": "friendlyName",
+        "statusSeparator": ": ",
+        "statusYear": "hidden",
+        "statusMonth": "short",
+        "statusDay": "numeric",
+        "statusHourCycle": "default",
+        "statusTimeFormat": "h:m",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "71382ba0c3e85132",
+        "type": "server-state-changed",
+        "z": "2524e973a45d6f57",
+        "d": true,
+        "name": "xiaoai_inputchat",
+        "server": "16d77c25f9e59817",
+        "version": 6,
+        "outputs": 2,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.xiaomi_lx04_null_conversation"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "[\"游戏模式\",\"打开游戏模式\"]",
+        "ifStateType": "jsonata",
+        "ifStateOperator": "includes",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [],
+        "x": 100,
+        "y": 140,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "e64ac2ee91ada423",
+        "type": "api-current-state",
+        "z": "2524e973a45d6f57",
+        "name": "当前电视状态",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "switch.xiaomi_cn_mitv_361a9234f28f39506f747f83dc9af17d_74ae84707c1cbc24fe75019132f1db2a_rmh1_is_on_p_8_1",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 320,
+        "y": 220,
+        "wires": [
+            [
+                "8381849f2348dcc6"
+            ],
+            [
+                "f0ec8db5b64d2741"
+            ]
+        ]
+    },
+    {
+        "id": "f0ec8db5b64d2741",
+        "type": "api-current-state",
+        "z": "2524e973a45d6f57",
+        "name": "当前电脑状态",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "switch.xuaugame",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 600,
+        "y": 180,
+        "wires": [
+            [
+                "30ff429d8cc0e66e"
+            ],
+            [
+                "8e90168371ca74bf"
+            ]
+        ]
+    },
+    {
+        "id": "8381849f2348dcc6",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "打开电视",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.xiaomi_cn_mitv_361a9234f28f39506f747f83dc9af17d_74ae84707c1cbc24fe75019132f1db2a_rmh1_is_on_p_8_1"
+        ],
+        "labelId": [],
+        "data": "off",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 420,
+        "y": 80,
+        "wires": [
+            [
+                "f0ec8db5b64d2741"
+            ]
+        ]
+    },
+    {
+        "id": "8e90168371ca74bf",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "打开电脑",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.xuaugame"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 720,
+        "y": 260,
+        "wires": [
+            [
+                "ed9de29e0cd04f5c"
+            ]
+        ]
+    },
+    {
+        "id": "30ff429d8cc0e66e",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "执行结果返回",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "persistent_notification.create",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "{\"message\":\"游戏模式已打开\"}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "persistent_notification",
+        "service": "create",
+        "x": 1240,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ff1feb27d8f0b28a",
+        "type": "server-state-changed",
+        "z": "2524e973a45d6f57",
+        "d": true,
+        "name": "xiaoai_inputchat",
+        "server": "16d77c25f9e59817",
+        "version": 6,
+        "outputs": 2,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.xiaomi_lx04_null_conversation"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "[\"关闭游戏模式\",\"关闭电脑\"]",
+        "ifStateType": "jsonata",
+        "ifStateOperator": "includes",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [],
+        "x": 100,
+        "y": 720,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "121925d03bfd09f5",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "关闭电脑",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.xuaugame"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 420,
+        "y": 480,
+        "wires": [
+            [
+                "801d0724e42bb17a"
+            ]
+        ]
+    },
+    {
+        "id": "6cbdc013c9f30ee7",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "游戏模式打开",
+        "info": "",
+        "x": 90,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "e9c97b67f02ed023",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "游戏模式自动关闭",
+        "info": "",
+        "x": 110,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "07775f4b69156a79",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "执行结果返回",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "persistent_notification.create",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "{\"message\":\"电脑已关闭\"}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "persistent_notification",
+        "service": "create",
+        "x": 1060,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "801d0724e42bb17a",
+        "type": "ha-wait-until",
+        "z": "2524e973a45d6f57",
+        "name": "等待电脑关机",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "entities": {
+            "entity": [
+                "switch.xuaugame"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "property": "state",
+        "comparator": "is",
+        "value": "off",
+        "valueType": "str",
+        "timeout": "120",
+        "timeoutType": "num",
+        "timeoutUnits": "seconds",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "x": 620,
+        "y": 420,
+        "wires": [
+            [
+                "9c5d55a71fd8bb76"
+            ],
+            [
+                "1fae78abcca512f7"
+            ]
+        ]
+    },
+    {
+        "id": "0ff814317872b04d",
+        "type": "api-current-state",
+        "z": "2524e973a45d6f57",
+        "name": "当前电脑状态",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "switch.xuaugame",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 320,
+        "y": 360,
+        "wires": [
+            [
+                "121925d03bfd09f5"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "ed9de29e0cd04f5c",
+        "type": "ha-wait-until",
+        "z": "2524e973a45d6f57",
+        "name": "等待电脑开机",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "entities": {
+            "entity": [
+                "switch.xuaugame"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "property": "state",
+        "comparator": "is",
+        "value": "on",
+        "valueType": "str",
+        "timeout": "120",
+        "timeoutType": "num",
+        "timeoutUnits": "seconds",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "x": 940,
+        "y": 260,
+        "wires": [
+            [
+                "992cbc827add8be6"
+            ],
+            [
+                "1fae78abcca512f7"
+            ]
+        ]
+    },
+    {
+        "id": "aea9421688c1ab61",
+        "type": "server-state-changed",
+        "z": "2524e973a45d6f57",
+        "name": "游戏模式",
+        "server": "16d77c25f9e59817",
+        "version": 6,
+        "outputs": 2,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "input_boolean.gamemode"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "habool",
+        "ifState": "true",
+        "ifStateType": "bool",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": true,
+        "ignorePrevStateUnknown": true,
+        "ignorePrevStateUnavailable": true,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [],
+        "x": 80,
+        "y": 260,
+        "wires": [
+            [
+                "e64ac2ee91ada423"
+            ],
+            [
+                "0ff814317872b04d"
+            ]
+        ]
+    },
+    {
+        "id": "e6bd9fc9474b1ee0",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "客厅游戏模式，Siri操控",
+        "info": "",
+        "x": 120,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "acfaf63f194d3325",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "卧室起床模式，小爱操控 -- 起床/闹钟控制",
+        "info": "工作日按闹钟时间自动打开窗帘\n非工作日等待手动操作/联动",
+        "x": 180,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "8929fa601af387cc",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "卧室睡眠模式，小爱操控 --睡觉/睡眠",
+        "info": "睡眠模式小爱自动息屏",
+        "x": 160,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "166b3f65980aab2e",
+        "type": "function",
+        "z": "2524e973a45d6f57",
+        "name": "Check_WorkDay",
+        "func": "let now = new Date();\nlet year = now.getFullYear();\nlet month = now.getMonth() + 1; // JavaScript 的月份从 0 开始，需要 +1\nlet day = now.getDate();\n// 生成目标 URL\nlet url = `https://tiansh.github.io/gzr/${year}/${month}/${day}.json`;\nmsg.url = url; // 将 URL 赋值给 msg.url 传递给下一个节点\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 110,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "629b2c6c21633e26",
+        "type": "inject",
+        "z": "2524e973a45d6f57",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "15 07 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fdfc576c5689a854",
+        "type": "http request",
+        "z": "2524e973a45d6f57",
+        "name": "查询",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://holiday.dreace.top",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 250,
+        "y": 840,
+        "wires": [
+            [
+                "e6687544311d61e1"
+            ]
+        ]
+    },
+    {
+        "id": "e6687544311d61e1",
+        "type": "switch",
+        "z": "2524e973a45d6f57",
+        "name": "是否为工作日",
+        "property": "payload.isHoliday",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 480,
+        "y": 880,
+        "wires": [
+            [
+                "2f799e8b045b155e"
+            ],
+            [
+                "af6de7be77c6c138"
+            ]
+        ]
+    },
+    {
+        "id": "9c5d55a71fd8bb76",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "关闭电视",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.xiaomi_cn_mitv_361a9234f28f39506f747f83dc9af17d_74ae84707c1cbc24fe75019132f1db2a_rmh1_is_on_p_8_1"
+        ],
+        "labelId": [],
+        "data": "off",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 800,
+        "y": 360,
+        "wires": [
+            [
+                "07775f4b69156a79"
+            ]
+        ]
+    },
+    {
+        "id": "1fae78abcca512f7",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "异常结果返回",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "notify.mobile_app_chengde_iphone",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "{\"message\":\"电脑未能响应，请检查\"}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "notify",
+        "service": "mobile_app_chengde_iphone",
+        "x": 1200,
+        "y": 300,
+        "wires": [
+            []
+        ],
+        "icon": "node-red/alert.svg"
+    },
+    {
+        "id": "602adaf488d91a5f",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "先暂定每天7:15运行脚本",
+        "info": "# 工作日 7:15起床\n# 非工作日若11点窗帘还为开，则打开窗帘\n# 窗帘分俩步打开方便换衣服",
+        "x": 130,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "2f799e8b045b155e",
+        "type": "api-current-state",
+        "z": "2524e973a45d6f57",
+        "name": "右窗帘是否已打开",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "open",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "cover.lumi_cn_1000178523_hmcn02_s_2_2",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 970,
+        "y": 700,
+        "wires": [
+            [
+                "055939f5d55bf3d8"
+            ],
+            [
+                "4a33d6c1be22eb73"
+            ]
+        ]
+    },
+    {
+        "id": "055939f5d55bf3d8",
+        "type": "delay",
+        "z": "2524e973a45d6f57",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1180,
+        "y": 780,
+        "wires": [
+            [
+                "4262ad8fcef3ab61"
+            ]
+        ]
+    },
+    {
+        "id": "4a33d6c1be22eb73",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "打开右窗帘",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "cover.set_cover_position",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "cover.lumi_cn_1000178523_hmcn02_s_2_2"
+        ],
+        "labelId": [],
+        "data": "{\"position\": 100}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "cover",
+        "service": "set_cover_position",
+        "x": 990,
+        "y": 780,
+        "wires": [
+            [
+                "055939f5d55bf3d8"
+            ]
+        ]
+    },
+    {
+        "id": "b41b670e82cdacf9",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "打开左窗帘",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "cover.set_cover_position",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "cover.lumi_cn_1049392236_hmcn02_s_2_2"
+        ],
+        "labelId": [],
+        "data": "{\"position\": 100}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "cover",
+        "service": "set_cover_position",
+        "x": 990,
+        "y": 940,
+        "wires": [
+            [
+                "41bcad8d07f0e61d"
+            ]
+        ]
+    },
+    {
+        "id": "4262ad8fcef3ab61",
+        "type": "api-current-state",
+        "z": "2524e973a45d6f57",
+        "name": "左窗帘是否已打开",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "open",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "cover.lumi_cn_1049392236_hmcn02_s_2_2",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 990,
+        "y": 860,
+        "wires": [
+            [],
+            [
+                "b41b670e82cdacf9"
+            ]
+        ]
+    },
+    {
+        "id": "41bcad8d07f0e61d",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "执行结果记录",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "notify.notify",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "{\"message\":\"窗帘已打开\"}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "notify",
+        "service": "notify",
+        "x": 1300,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "af6de7be77c6c138",
+        "type": "delay",
+        "z": "2524e973a45d6f57",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3.5",
+        "timeoutUnits": "hours",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 700,
+        "y": 880,
+        "wires": [
+            [
+                "2f799e8b045b155e"
+            ]
+        ]
+    },
+    {
+        "id": "992cbc827add8be6",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "script.open_steam",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "script",
+        "service": "open_steam",
+        "x": 1070,
+        "y": 180,
+        "wires": [
+            [
+                "30ff429d8cc0e66e"
+            ]
+        ]
+    },
+    {
+        "id": "c9357520ba8a8547",
+        "type": "inject",
+        "z": "2524e973a45d6f57",
+        "name": "每小时检查",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3600",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 520,
+        "wires": [
+            [
+                "619f1e3bb0278207"
+            ]
+        ]
+    },
+    {
+        "id": "619f1e3bb0278207",
+        "type": "api-current-state",
+        "z": "2524e973a45d6f57",
+        "name": "游戏模式打开",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.gamemode",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 320,
+        "y": 560,
+        "wires": [
+            [
+                "b03db8a7fa9e8189"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b03db8a7fa9e8189",
+        "type": "api-current-state",
+        "z": "2524e973a45d6f57",
+        "name": "电脑状态",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "switch.xuaugame",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 540,
+        "y": 560,
+        "wires": [
+            [],
+            [
+                "fa9dd0c696b6e23e"
+            ]
+        ]
+    },
+    {
+        "id": "fa9dd0c696b6e23e",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "关闭游戏模式",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.gamemode"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_boolean",
+        "service": "turn_off",
+        "x": 760,
+        "y": 560,
+        "wires": [
+            [
+                "704e4f22e8766aff"
+            ]
+        ]
+    },
+    {
+        "id": "704e4f22e8766aff",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "执行结果返回",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "persistent_notification.create",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "{\"message\":\"游戏模式已关闭\"}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "persistent_notification",
+        "service": "create",
+        "x": 1000,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "060cb7fd16034de6",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "低电量监控",
+        "info": "",
+        "x": 80,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "e08841617e71e3eb",
+        "type": "inject",
+        "z": "2524e973a45d6f57",
+        "name": "每小时检测",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3600",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 1240,
+        "wires": [
+            [
+                "1d0ece8d28b73150"
+            ]
+        ]
+    },
+    {
+        "id": "a3b6acd3e2f2c2a5",
+        "type": "function",
+        "z": "2524e973a45d6f57",
+        "name": "Battery Check",
+        "func": "let sensors = msg.payload; // 获取传感器数组\nlet minValue = Infinity;\nlet minSensor = null;\n\nfor (let i = 0; i < sensors.length; i++) {\n    const sensor = sensors[i];\n    const value = parseFloat(sensor.state); // 获取传感器的状态值\n\n    // 检查状态是否小于 20\n    if (value < 20) {\n        msg.payload = `${sensor.attributes.friendly_name} 低: ${value}`;\n        return msg; // 立即返回消息通知\n    }\n    \n    // 更新最小值\n    if (value < minValue) {\n        minValue = value;\n        minSensor = sensor.attributes.friendly_name;\n    }\n}\n\n// 如果所有传感器的状态都大于 20，返回最小的值\nif(minValue<40){\nmsg.payload = `${minSensor} 较低: ${minValue}`;\n}else{\nmsg.payload = ``;\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1240,
+        "wires": [
+            [
+                "286ca84e04f7d674"
+            ]
+        ]
+    },
+    {
+        "id": "1d0ece8d28b73150",
+        "type": "ha-get-entities",
+        "z": "2524e973a45d6f57",
+        "name": "",
+        "server": "16d77c25f9e59817",
+        "version": 1,
+        "rules": [
+            {
+                "condition": "state_object",
+                "property": "entity_id",
+                "logic": "includes",
+                "value": "sensor.miaomiaoc_cn_blt_3_1599m5an0lo00_t2_battery_level_p_3_1, sensor.miaomiaoc_cn_blt_3_16irj7it8ls00_t2_battery_level_p_3_1, sensor.lumi_cn_1000178523_hmcn02_battery_level_p_5_1, sensor.lumi_cn_1049392236_hmcn02_battery_level_p_5_1",
+                "valueType": "str"
+            }
+        ],
+        "outputType": "array",
+        "outputEmptyResults": false,
+        "outputLocationType": "msg",
+        "outputLocation": "payload",
+        "outputResultsCount": 1,
+        "x": 290,
+        "y": 1240,
+        "wires": [
+            [
+                "a3b6acd3e2f2c2a5"
+            ]
+        ]
+    },
+    {
+        "id": "286ca84e04f7d674",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_text.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_text.hao_cai_ti_xing"
+        ],
+        "labelId": [],
+        "data": "{\"value\":\"{{payload}}\"}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "last",
+        "blockInputOverrides": true,
+        "domain": "input_text",
+        "service": "set_value",
+        "x": 820,
+        "y": 1240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2f895604452cddbf",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "https://github.com/Dreace/ChinaHolidayAPI",
+        "info": "",
+        "x": 440,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "a496f70753557ea7",
+        "type": "comment",
+        "z": "2524e973a45d6f57",
+        "name": "硬盘温度报警",
+        "info": "",
+        "x": 90,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "e6f50622850ff3fe",
+        "type": "poll-state",
+        "z": "2524e973a45d6f57",
+        "name": "",
+        "server": "16d77c25f9e59817",
+        "version": 3,
+        "exposeAsEntityConfig": "",
+        "updateInterval": "300",
+        "updateIntervalType": "num",
+        "updateIntervalUnits": "seconds",
+        "outputInitially": false,
+        "outputOnChanged": false,
+        "entityId": "input_number.disk_temp_sdb",
+        "stateType": "num",
+        "ifState": "54",
+        "ifStateType": "num",
+        "ifStateOperator": "gte",
+        "outputs": 2,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 170,
+        "y": 1400,
+        "wires": [
+            [
+                "010b52d52526266f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "010b52d52526266f",
+        "type": "function",
+        "z": "2524e973a45d6f57",
+        "name": "Bark通知",
+        "func": "// Bark 服务器和 Token\nconst BARK_SERVER = \"xuau-bark-server.onrender.com\";\nconst BARK_TOKEN = \"iphone\"; // 你的设备 token\n\n// 通知标题和内容\nconst title =  `服务器温度过高，已到${msg.payload}°C`;; // 你可以自定义内容\n\n// group参数可选\nconst group = \"Server\";\n\n// 构造 Bark 通知 URL\nconst url = `https://${BARK_SERVER}/${BARK_TOKEN}/${encodeURIComponent(title)}?group=${encodeURIComponent(group)}`;\n\n// 设置 HTTP request 节点需要的参数\nmsg.method = \"GET\";\nmsg.url = url;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 1400,
+        "wires": [
+            [
+                "80d25819207ffa35"
+            ]
+        ]
+    },
+    {
+        "id": "80d25819207ffa35",
+        "type": "www-request",
+        "z": "2524e973a45d6f57",
+        "name": "",
+        "method": "use",
+        "ret": "txt",
+        "url": "",
+        "follow-redirects": true,
+        "persistent-http": true,
+        "tls": "",
+        "x": 650,
+        "y": 1400,
+        "wires": [
+            [
+                "f842aa4d3b58aaf9"
+            ]
+        ]
+    },
+    {
+        "id": "f842aa4d3b58aaf9",
+        "type": "api-call-service",
+        "z": "2524e973a45d6f57",
+        "name": "执行结果记录",
+        "server": "16d77c25f9e59817",
+        "version": 7,
+        "debugenabled": false,
+        "action": "notify.notify",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "{\"message\":\"硬盘温度过高”}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "notify",
+        "service": "notify",
+        "x": 880,
+        "y": 1400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "db96b1656990bb5a",
+        "type": "function",
+        "z": "783a4e34d3609ab4",
+        "name": "API参数",
+        "func": "const userInfo = {\n    \"cookies\": \"0ab08166-73d7-42ac-a569-02ee6710ea63=3807a8bb1a62c923c4da621150f1739e; HWWAFSESID=d77b5766679fd175d4; HWWAFSESTIME=1739444061370; openid=1330039e4d444ddc99bdedb47f4ccc781739444066363\"\n}\nif (typeof (msg.payload) === \"object\" && msg.payload.listInfo[0].vin) {\n    global.set(\"bydUserInfo\", Object.assign(userInfo, msg.payload.listInfo[0]));\n}\nmsg.headers = {\"cookie\":userInfo.cookies}\nif (!global.get(\"bydUserInfo\")) {    \n    msg.url = `https://bydcloud.byd.com/wechat/getuserinfo?timeStamp=${Math.floor(Date.now())}&random=${global.uuid}`\n    return [msg, null];\n} else {\n    msg.url = `https://bydcloud.byd.com/wechat/location?caridentifier=${global.get(\"bydUserInfo\").vin}&timeStamp=${Math.floor(Date.now())}&random=${global.uuid}&longitude=0&latitude=0`\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 80,
+        "wires": [
+            [
+                "15373302673f15cb"
+            ],
+            [
+                "995d06dd7b5cf891"
+            ]
+        ]
+    },
+    {
+        "id": "09c3ad85d1ef04be",
+        "type": "function",
+        "z": "783a4e34d3609ab4",
+        "name": "坐标转换",
+        "func": "//定义一些常量\nvar x_PI = 3.14159265358979324 * 3000.0 / 180.0;\nvar PI = 3.1415926535897932384626;\nvar a = 6378245.0;\nvar ee = 0.00669342162296594323;\n\n/**\n* 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换\n* 即 百度 转 谷歌、高德\n* @param bd_lon\n* @param bd_lat\n* @returns {*[]}\n*/\nfunction bd09togcj02(bd_lon, bd_lat) {\n   var x_pi = 3.14159265358979324 * 3000.0 / 180.0;\n   var x = bd_lon - 0.0065;\n   var y = bd_lat - 0.006;\n   var z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);\n   var theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);\n   var gg_lng = z * Math.cos(theta);\n   var gg_lat = z * Math.sin(theta);\n   return [gg_lng, gg_lat]\n}\n\n/**\n* 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换\n* 即谷歌、高德 转 百度\n* @param lng\n* @param lat\n* @returns {*[]}\n*/\nfunction gcj02tobd09(lng, lat) {\n   var z = Math.sqrt(lng * lng + lat * lat) + 0.00002 * Math.sin(lat * x_PI);\n   var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * x_PI);\n   var bd_lng = z * Math.cos(theta) + 0.0065;\n   var bd_lat = z * Math.sin(theta) + 0.006;\n   return [bd_lng, bd_lat]\n}\n\n/**\n* WGS84转GCj02/谷歌、高德\n* @param lng\n* @param lat\n* @returns {*[]}\n*/\nfunction wgs84togcj02(lng, lat) {\n   if (out_of_china(lng, lat)) {\n       return [lng, lat]\n   }\n   else {\n       var dlat = transformlat(lng - 105.0, lat - 35.0);\n       var dlng = transformlng(lng - 105.0, lat - 35.0);\n       var radlat = lat / 180.0 * PI;\n       var magic = Math.sin(radlat);\n       magic = 1 - ee * magic * magic;\n       var sqrtmagic = Math.sqrt(magic);\n       dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);\n       dlng = (dlng * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);\n       var mglat = lat + dlat;\n       var mglng = lng + dlng;\n       return [mglng, mglat]\n   }\n}\n\n/**\n* GCJ02/谷歌、高德 转换为 WGS84 gcj02towgs84\n* @param lng\n* @param lat\n* @returns {*[]}\n*/\nfunction gcj02towgs84(lat, lng) {\n   if (out_of_china(lng, lat)) {\n       return [lat, lng]\n   }\n   else {\n       var dlat = transformlat(lng - 105.0, lat - 35.0);\n       var dlng = transformlng(lng - 105.0, lat - 35.0);\n       var radlat = lat / 180.0 * PI;\n       var magic = Math.sin(radlat);\n       magic = 1 - ee * magic * magic;\n       var sqrtmagic = Math.sqrt(magic);\n       dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);\n       dlng = (dlng * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);\n       mglat = lat + dlat;\n       mglng = lng + dlng;\n       return [lat * 2 - mglat, lng * 2 - mglng]\n   }\n}\n\nfunction transformlat(lng, lat) {\n   var ret = -100.0 + 2.0 * lng + 3.0 * lat + 0.2 * lat * lat + 0.1 * lng * lat + 0.2 * Math.sqrt(Math.abs(lng));\n   ret += (20.0 * Math.sin(6.0 * lng * PI) + 20.0 * Math.sin(2.0 * lng * PI)) * 2.0 / 3.0;\n   ret += (20.0 * Math.sin(lat * PI) + 40.0 * Math.sin(lat / 3.0 * PI)) * 2.0 / 3.0;\n   ret += (160.0 * Math.sin(lat / 12.0 * PI) + 320 * Math.sin(lat * PI / 30.0)) * 2.0 / 3.0;\n   return ret\n}\n\nfunction transformlng(lng, lat) {\n   var ret = 300.0 + lng + 2.0 * lat + 0.1 * lng * lng + 0.1 * lng * lat + 0.1 * Math.sqrt(Math.abs(lng));\n   ret += (20.0 * Math.sin(6.0 * lng * PI) + 20.0 * Math.sin(2.0 * lng * PI)) * 2.0 / 3.0;\n   ret += (20.0 * Math.sin(lng * PI) + 40.0 * Math.sin(lng / 3.0 * PI)) * 2.0 / 3.0;\n   ret += (150.0 * Math.sin(lng / 12.0 * PI) + 300.0 * Math.sin(lng / 30.0 * PI)) * 2.0 / 3.0;\n   return ret\n}\n\n/**\n* 判断是否在国内，不在国内则不做偏移\n* @param lng\n* @param lat\n* @returns {boolean}\n*/\nfunction out_of_china(lng, lat) {\n   return (lng < 72.004 || lng > 137.8347) || ((lat < 0.8293 || lat > 55.8271) || false)\n}\n     \nlet lng = msg.payload.data.longitude / 1000000\nlet lat = msg.payload.data.latitude / 1000000\nmsg.payload = {\"domain\":\"device_tracker\",\"service\":\"see\",\"data\":{\"dev_id\" : \"car\", \"gps\": gcj02towgs84(lat, lng) }} \n\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 680,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "954400be0ac60234",
+        "type": "inject",
+        "z": "783a4e34d3609ab4",
+        "name": "定时执行",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "BYD_CAR_GPS",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "995d06dd7b5cf891",
+        "type": "www-request",
+        "z": "783a4e34d3609ab4",
+        "name": "获取位置",
+        "method": "GET",
+        "ret": "obj",
+        "url": "",
+        "follow-redirects": true,
+        "persistent-http": false,
+        "tls": "",
+        "x": 520,
+        "y": 100,
+        "wires": [
+            [
+                "09c3ad85d1ef04be"
+            ]
+        ]
+    },
+    {
+        "id": "d84acb75ed3288ac",
+        "type": "function",
+        "z": "783a4e34d3609ab4",
+        "name": "API参数",
+        "func": "let userInfo = global.get(\"bydUserInfo\");\nlet msgType = typeof (msg.payload)\nif (userInfo) {\n    msg.headers = {};\n    msg.headers['Content-Type'] = 'application/json';\n    msg.headers['cookie'] = userInfo.cookies;\n    msg.payload = `{\"caridentifier\": \"${userInfo.vin}\",\"random\":\"${global.get(\"uuid\")}\",\"autoType\":\"${userInfo.autoType}\",\"energyType\":${userInfo.energyType}, \"timeStamp\": ${Math.floor(Date.now())}}`\n    if (msgType === \"number\"){\n        return [msg, null]\n    } else {\n        return [null, msg]\n    }\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 200,
+        "wires": [
+            [
+                "c9bb72624a012ea7"
+            ],
+            [
+                "8c3132b97ca6e067"
+            ]
+        ]
+    },
+    {
+        "id": "c9bb72624a012ea7",
+        "type": "http request",
+        "z": "783a4e34d3609ab4",
+        "name": "发送请求",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://bydcloud.byd.com/wechat/Vehicle/vehicleRealTimeRequest",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 520,
+        "y": 140,
+        "wires": [
+            [
+                "d84acb75ed3288ac"
+            ]
+        ]
+    },
+    {
+        "id": "8c3132b97ca6e067",
+        "type": "http request",
+        "z": "783a4e34d3609ab4",
+        "name": "获取信息",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://bydcloud.byd.com/wechat/Vehicle/vehicleRealTimeResult",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 520,
+        "y": 200,
+        "wires": [
+            [
+                "782c815c81993b9c",
+                "1ab32ce4a53739bc"
+            ]
+        ]
+    },
+    {
+        "id": "782c815c81993b9c",
+        "type": "function",
+        "z": "783a4e34d3609ab4",
+        "name": "生成sensor",
+        "func": "const prefix = \"home/button/byd_car\"\nlet msg_config = [], car_info = msg.payload.data\nmsg_config = [\n    {\n        \"topic\": \"homeassistant/sensor/byd_car/config\",\n        \"payload\": {\n            \"~\": prefix.replace(\"button\", \"sensor\"),\n            \"name\": \"BYD_CAR\",\n            \"state_topic\": \"~/state\",\n            \"unique_id\": \"bydcar\",\n            \"icon\": \"mdi:car\",\n            \"json_attributes_topic\": \"~/info\"\n        }\n    },\n    {//整车状态 \n        \"topic\": \"homeassistant/sensor/byd_car_zczt/config\",\n        \"payload\": {\n            \"~\": prefix.replace(\"button\", \"sensor\"),\n            \"name\": \"BYD_CAR_ZCZT\",\n            \"state_topic\": \"~/zczt/state\",\n            \"unique_id\": \"byd_car_zczt\",\n            \"icon\": \"mdi:car\"\n        }\n    },\n    {//左前门状态\n        \"topic\": \"homeassistant/binary_sensor/byd_car_cmzq/config\",\n        \"payload\": {\n            \"~\": prefix.replace(\"button\", \"binary_sensor\"),\n            \"name\": \"BYD_CAR_CMZQ\",\n            \"state_topic\": \"~/cmzq/state\",\n            \"payload_on\": 1,\n            \"payload_off\": 0,\n            \"unique_id\": \"byd_car_cmzq\",\n            \"icon\": \"mdi:car-door-lock\"\n        }\n    },\n    {\n        \"topic\": \"homeassistant/button/byd_car_door_lock/config\",\n        \"payload\": {\n            \"name\": \"byd_car_door_lock\",//车门上锁\n            \"command_topic\": `${prefix}/door_lock/control`,\n            \"payload_press\": \"8F14E45FCEEA167A5A36DEDD4BEA2543\",\n            \"unique_id\": \"byd_car_door_lock\",\n            \"icon\": \"mdi:car-door-lock\"\n        }\n    },\n    {\n        \"topic\": \"homeassistant/button/byd_car_door_unlock/config\",\n        \"payload\": {\n            \"name\": \"byd_car_door_unlock\",//车门解锁\n            \"command_topic\": `${prefix}/door_unlock/control`,\n            \"payload_press\": \"E4DA3B7FBBCE2345D7772B0674A318D5\",\n            \"unique_id\": \"byd_car_door_unlock\",\n            \"icon\": \"mdi:car-door\"\n        }\n    },\n    {\n        \"topic\": \"homeassistant/button/byd_car_turnon_aircondition/config\",\n        \"payload\": {\n            \"name\": \"byd_car_turnon_aircondition\",//开启空调\n            \"command_topic\": `${prefix}/turnon_aircondition/control`,\n            \"payload_press\": \"ECCBC87E4B5CE2FE28308FD9F2A7BAF3\",\n            \"unique_id\": \"byd_car_turnon_aircondition\",\n            \"icon\": \"mdi:hvac\"\n        }\n    },\n    {\n        \"topic\": \"homeassistant/button/byd_car_turnoff_aircondition/config\",\n        \"payload\": {\n            \"name\": \"byd_car_turnoff_aircondition\",//关闭空调\n            \"command_topic\": `${prefix}/turnoff_aircondition/control`,\n            \"payload_press\": \"45C48CCE2E2D7FBDEA1AFC51C7C6AD26\",\n            \"unique_id\": \"byd_car_turnoff_aircondition\",\n            \"icon\": \"mdi:hvac-off\"\n        }\n    },\n    {\n        \"topic\": \"homeassistant/button/byd_car_light_alert/config\",\n        \"payload\": {\n            \"name\": \"byd_car_light_alert\",//闪灯鸣笛\n            \"command_topic\": `${prefix}/light_alert/control`,\n            \"payload_press\": \"D3D9446802A44259755D38E6D163E820\",\n            \"unique_id\": \"byd_car_light_alert\",\n            \"icon\": \"mdi:bugle\"\n        }\n    },\n    {\n        \"topic\": \"homeassistant/button/byd_car_close_window/config\",\n        \"payload\": {\n            \"name\": \"byd_car_close_window\",//关闭车窗\n            \"command_topic\": `${prefix}/close_window/control`,\n            \"payload_press\": \"70EFDF2EC9B086079795C442636B55FB\",\n            \"unique_id\": \"byd_car_close_window\",\n            \"icon\": \"mdi:car-select\"\n        }\n    },\n    {\n        \"topic\": \"homeassistant/button/byd_car_flash_light/config\",\n        \"payload\": {\n            \"name\": \"byd_car_flash_light\",//闪灯\n            \"command_topic\": `${prefix}/flash_light/control`,\n            \"payload_press\": \"B6D767D2F8ED5D21A44B0E5886680CB9\",\n            \"unique_id\": \"byd_car_flash_light\",\n            \"icon\": \"mdi:car-light-alert\"\n        }\n    }, \n    {\n        \"topic\": \"homeassistant/button/byd_car_seat_heat/config\",\n        \"payload\": {\n            \"name\": \"byd_car_seat_heat\",//座椅通风加热\n            \"command_topic\": `${prefix}/seat_heat/control`,\n            \"payload_press\": \"4E732CED3463D06DE0CA9A15B6153677\",\n            \"unique_id\": \"byd_car_seat_heat\",\n            \"icon\": \"mdi:car-seat-heater\"\n        }\n    },\n    {\n        \"topic\": \"homeassistant/switch/byd_car_trunk/config\",\n        \"payload\": {\n            \"~\": prefix.replace(\"button\", \"switch\"),\n            \"name\": \"byd_car_trunk\",//后备箱\n            \"state_topic\": \"~/trunk/state\",\n            \"command_topic\": \"~/trunk/control\",\n            \"payload_on\": \"1679091C5A880FAF6FB5E6087EB1B2DC\",\n            \"payload_off\": \"1C383CD30B7C298AB50293ADFECB7B18\",\n            \"state_on\": 1,\n            \"state_off\": 0,\n            \"unique_id\": \"byd_car_trunk\",\n            \"icon\": \"mdi:car-back\"\n        }\n    },\n    {\n        \"topic\": `${prefix.replace(\"button\", \"switch\")}/trunk/state`,\n        \"payload\": car_info.hbx\n    },\n    {\n        \"topic\": `${prefix.replace(\"button\", \"sensor\")}/state`,\n        \"payload\": car_info.ok == 1 ? \"启动\" : \"熄火\"\n    },\n    {\n        \"topic\": `${prefix.replace(\"button\", \"sensor\")}/info`,\n        \"payload\": car_info\n    },\n    {\n        \"topic\": `${prefix.replace(\"button\", \"sensor\")}/zczt/state`,\n        \"payload\": car_info.zczt\n    },\n    {\n        \"topic\": `${prefix.replace(\"button\", \"binary_sensor\")}/cmzq/state`,\n        \"payload\": car_info.cmzq\n    }\n]\n\nreturn [msg_config];\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4dc769c454960f07",
+        "type": "comment",
+        "z": "783a4e34d3609ab4",
+        "name": "BYD_CAR_INFO",
+        "info": "获取比亚迪汽车车况信息",
+        "x": 80,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "94c45860fa9cdb14",
+        "type": "comment",
+        "z": "783a4e34d3609ab4",
+        "name": "BYD_CAR_GPS",
+        "info": "获取比亚迪汽车GPS位置",
+        "x": 80,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "0e9b70297b8d20cc",
+        "type": "function",
+        "z": "783a4e34d3609ab4",
+        "name": "API参数",
+        "func": "let userInfo = global.get(\"bydUserInfo\");\nconst commandPwd = \"D09*************17B26FB8E2298F\" //控制密码的MD5大写值\nlet apiPayload = msg.payload\nif (userInfo) {\n    msg.headers = {};\n    msg.headers['Content-Type'] = 'application/json';\n    msg.headers['cookie'] = userInfo.cookies\n    let basic_payload = { \"caridentifier\": userInfo.vin, \"random\": global.get(\"uuid\"),\"timeStamp\": Math.floor(Date.now()) }\n    if (typeof (apiPayload) === \"string\") {\n        if (apiPayload == \"ECCBC87E4B5CE2FE28308FD9F2A7BAF3\") {\n            basic_payload.appendParam = 26;\n        }\n        if (apiPayload != \"E4DA3B7FBBCE2345D7772B0674A318D5\"){\n            basic_payload.commandPwd = commandPwd\n            basic_payload.commandType = apiPayload\n            flow.set(\"bydApiPayload\", apiPayload);\n            msg.payload = JSON.stringify(basic_payload)\n            return [msg, null]\n        }\n    } else {\n        if (0 == apiPayload.rebackResult){\n            basic_payload.requestSerial = apiPayload.requestSerial\n            basic_payload.commandType = flow.get(\"bydApiPayload\")\n            msg.payload = JSON.stringify(basic_payload)\n            return [null, msg]\n        }\n    }\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 300,
+        "wires": [
+            [
+                "eee9b0208afd1268"
+            ],
+            [
+                "678461778b468807"
+            ]
+        ]
+    },
+    {
+        "id": "4ca052499578e64e",
+        "type": "comment",
+        "z": "783a4e34d3609ab4",
+        "name": "BYD_CAR_CONTROL",
+        "info": "比亚迪汽车控制功能",
+        "x": 120,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "eee9b0208afd1268",
+        "type": "http request",
+        "z": "783a4e34d3609ab4",
+        "name": "发送请求",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://bydcloud.byd.com/wechat/Vehicle/remoteControl",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 520,
+        "y": 260,
+        "wires": [
+            [
+                "0e9b70297b8d20cc"
+            ]
+        ]
+    },
+    {
+        "id": "678461778b468807",
+        "type": "http request",
+        "z": "783a4e34d3609ab4",
+        "name": "获取结果",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://bydcloud.byd.com/wechat/Vehicle/getRemoteControlResult",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 520,
+        "y": 320,
+        "wires": [
+            [
+                "7f9707e47215d844"
+            ]
+        ]
+    },
+    {
+        "id": "7f9707e47215d844",
+        "type": "function",
+        "z": "783a4e34d3609ab4",
+        "name": "更新状态",
+        "func": "let commandType = flow.get(\"bydApiPayload\")\nconst cmdList = [\"1C383CD30B7C298AB50293ADFECB7B18\", \"1679091C5A880FAF6FB5E6087EB1B2DC\"]\nif(commandType && msg.payload.data > 1){\n    if (commandType in cmdList){\n        msg.topic = \"home/swtich/byd_car/trunk/state\"\n        msg.payload = commandType == cmdList[1] ? 1 : 0\n        \n        return msg\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "15373302673f15cb",
+        "type": "www-request",
+        "z": "783a4e34d3609ab4",
+        "name": "UserInfo",
+        "method": "GET",
+        "ret": "obj",
+        "url": "",
+        "follow-redirects": true,
+        "persistent-http": false,
+        "tls": "",
+        "x": 520,
+        "y": 40,
+        "wires": [
+            [
+                "db96b1656990bb5a"
+            ]
+        ]
+    },
+    {
+        "id": "353341e24f8d32ca",
+        "type": "uuid",
+        "z": "783a4e34d3609ab4",
+        "uuidVersion": "v4",
+        "namespaceType": "",
+        "namespace": "",
+        "namespaceCustom": "",
+        "name": "uuid",
+        "field": "uuid",
+        "fieldType": "global",
+        "x": 250,
+        "y": 120,
+        "wires": [
+            [
+                "db96b1656990bb5a"
+            ]
+        ]
+    },
+    {
+        "id": "98ffd5892925a636",
+        "type": "inject",
+        "z": "783a4e34d3609ab4",
+        "name": "定时执行",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "36000",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "BYD_CAR_GPS",
+        "payload": "",
+        "payloadType": "date",
+        "x": 90,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1ab32ce4a53739bc",
+        "type": "debug",
+        "z": "783a4e34d3609ab4",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 280,
+        "wires": []
+    }
+]

@@ -1,0 +1,26 @@
+Format: 1.8
+Date: Thu, 24 Feb 2022 11:30:13 -0700
+Source: gasket-dkms
+Binary: gasket-dkms
+Built-For-Profiles: noudeb
+Architecture: all
+Version: 1.0-18
+Distribution: unstable
+Urgency: low
+Maintainer: Coral <coral-support@google.com>
+Changed-By: Coral <coral-support@google.com>
+Description:
+ gasket-dkms - DKMS source for the gasket driver
+Changes:
+ gasket-dkms (1.0-18) unstable; urgency=low
+ .
+   * Import DMA_BUF symbol namespace for kernels >= 5.16.
+Checksums-Sha1:
+ d8b0d8d5d59003b4168a66c23c5592cfaffcde07 48994 gasket-dkms_1.0-18_all.deb
+ 9cd465699c9cb2ea720e38d3c1e0cfdd899b8c29 6109 gasket-dkms_1.0-18_amd64.buildinfo
+Checksums-Sha256:
+ 9c2132b19d186a509005cda408aa492d8e7ede398aad6b890bcc9d8c1f1cbbe5 48994 gasket-dkms_1.0-18_all.deb
+ 0f7bdd09863d43eb378644dbc7290a3b48532e0ada6e9e85ac376cc60ac2abb6 6109 gasket-dkms_1.0-18_amd64.buildinfo
+Files:
+ 07f4f98b6ac7da7c6c108898d325a52e 48994 kernel optional gasket-dkms_1.0-18_all.deb
+ 5b20902657c1c0f16111aa3bd17f0a64 6109 - - gasket-dkms_1.0-18_amd64.buildinfo

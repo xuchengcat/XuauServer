@@ -1,0 +1,57 @@
+# Located in /etc/ppp/peers/pppoe_dial
+# 参考3.3小节
+
+# Print debug info
+#debug
+logfile /var/log/pppoe_dial/run.log
+
+# interface name
+ifname pppoe_dial # 虚拟网卡名称设置为pppoe_dial
+
+# Keep pppd in terminal
+nodetach
+
+# Set default route
+defaultroute
+
+# Do not set PPP compression
+ipcp-accept-local
+ipcp-accept-remote
+local
+
+# Set PPPoE used interface
+plugin pppoe.so LAN_1G 
+# Username & password
+user "18862112116" # 你的上网用户名
+password "391564" # 你的上网密码
+noauth
+# Hide password when print connect info
+hide-password
+
+# 启用IPv6
+# Use IPv6
++ipv6
+#ipv6cp-use-ipaddr
+ipv6cp-accept-local
+ipv6cp-accept-remote
+ipv6cp-max-failure 100
+ipv6cp-restart 2
+
+# Set default route v6
+defaultroute6
+
+usepeerdns
+
+# Conn check
+lcp-echo-interval 60 # Ping sending interval
+lcp-echo-failure 10 # Times of ping failure tolerance
+
+# Reconnect
+persist
+maxfail 10
+holdoff 1
+
+# PPPoE compliant settings.
+noaccomp
+default-asyncmap
+mtu 1492

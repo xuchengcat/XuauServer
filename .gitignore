@@ -1,0 +1,132 @@
+*.log
+*.png
+homeassistant/config/home-assistant.log*
+homeassistant/config/home-assistant_v2.d*
+transmission/config/settings.json
+*/__pycache__/*
+homeassistant/config/custom_components/*
+homeassistant/config/www/*
+
+# Permission denied directories
+bark/data/bark.db
+esp_home/**/.platformio/
+nginx_proxy_manager/letsencrypt/archive/
+nginx_proxy_manager/letsencrypt/live/
+nginx_proxy_manager/letsencrypt/accounts/
+zerotier/config/controller.d/
+esp_home/esphome_normal/.cache/
+homeassistant/config/.ssh/
+homeassistant/config/.storage/
+nextcloud/config/config.php
+mqtt/config/password.txt
+zerotier/config/*.secret
+shinobi/Shinobi/.bash_history
+transmission/transmission-web-control/
+esp_home/ESPHome_ESP32-C6
+
+# Active database WAL files (concurrently written by running services)
+*.db-shm
+*.db-wal
+
+# Frigate NVR data (not config)
+frigate/model_cache/
+frigate/*.db
+frigate/.exports
+frigate/.jwt_secret
+frigate/.search_stats.json
+frigate/.timeline
+frigate/.vacuum
+nginx_proxy_manager/letsencrypt/credentials/
+esp_home/esphome_normal/.esphome/
+
+# Large data directories (not config)
+photoprism/storage/
+jellyfin/cache/
+shinobi/Shinobi/
+nextcloud/data/
+
+# ===== Homebridge =====
+homebridge/node_modules/
+homebridge/accessories/
+homebridge/persist/
+homebridge/backups/
+homebridge/homebridge.log
+homebridge/auth.json
+homebridge/.uix-dashboard.json
+homebridge/.uix-secrets
+
+# ===== Node-RED =====
+nodered/data/node_modules/
+nodered/data/.npm/
+nodered/data/flows_cred.json
+nodered/data/.flows_cred.json.backup
+nodered/data/*.backup
+
+# ===== Nextcloud (application code, keep only config/ and custom_apps/) =====
+nextcloud/3rdparty/
+nextcloud/apps/
+nextcloud/core/
+nextcloud/lib/
+nextcloud/dist/
+nextcloud/themes/
+nextcloud/resources/
+nextcloud/ocs/
+nextcloud/ocs-provider/
+nextcloud/*.php
+nextcloud/index.html
+nextcloud/AUTHORS
+nextcloud/COPYING
+nextcloud/LICENSES
+nextcloud/REUSE.toml
+nextcloud/occ
+nextcloud/composer.json
+nextcloud/composer.lock
+nextcloud/package.json
+nextcloud/package-lock.json
+nextcloud/nextcloud-init-sync.lock
+
+# ===== Transmission (runtime state) =====
+transmission/config/resume/
+transmission/config/stats.json
+transmission/config/dht.dat
+transmission/config/blocklists/
+transmission/config/torrents/
+
+# ===== Portainer =====
+portainer/config/portainer.db
+portainer/config/certs/key.pem
+portainer/config/chisel/private-key.pem
+portainer/config/portainer.key
+
+# ===== ZeroTier (runtime) =====
+zerotier/config/metrics.prom
+zerotier/config/zerotier-one.pid
+zerotier/config/zerotier-one.port
+
+# ===== HomeAssistant (runtime state) =====
+homeassistant/config/.ha_run.lock
+homeassistant/config/.HA_VERSION
+homeassistant/config/image/
+
+# ===== Nginx Proxy Manager =====
+nginx_proxy_manager/data/logs/
+nginx_proxy_manager/data/nginx/proxy_host/
+
+# ===== Jellyfin (data/logs/cache) =====
+jellyfin/config/data/
+jellyfin/config/log/
+jellyfin/config/metadata/
+jellyfin/config/transcodes/
+nextcloud/.htaccess
+nextcloud/.user.ini
+nextcloud/LICENSES/
+nextcloud/console.php
+nextcloud/cron.php
+nextcloud/public.php
+nextcloud/remote.php
+nextcloud/robots.txt
+nextcloud/status.php
+nextcloud/version.php
+homeassistant/config/id_rsa
+nginx_proxy_manager/data/database.sqlite
+nginx_proxy_manager/data/*.sqlite

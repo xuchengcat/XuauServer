@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Server>http://metatube:8080</Server>
+  <Token />
+  <EnableCollections>true</EnableCollections>
+  <EnableDirectors>true</EnableDirectors>
+  <EnableRatings>true</EnableRatings>
+  <EnableTrailers>true</EnableTrailers>
+  <EnableRealActorNames>false</EnableRealActorNames>
+  <EnableBadges>true</EnableBadges>
+  <BadgeUrl>zimu.png</BadgeUrl>
+  <PrimaryImageRatio>-1</PrimaryImageRatio>
+  <DefaultImageQuality>90</DefaultImageQuality>
+  <EnableMovieProviderFilter>false</EnableMovieProviderFilter>
+  <RawMovieProviderFilter />
+  <EnableTemplate>false</EnableTemplate>
+  <NameTemplate>{number} {title}</NameTemplate>
+  <TaglineTemplate>配信開始日 {date}</TaglineTemplate>
+  <TranslationMode>Both</TranslationMode>
+  <TranslationEngine>GoogleFree</TranslationEngine>
+  <BaiduAppId />
+  <BaiduAppKey />
+  <GoogleApiKey />
+  <DeepLApiKey />
+  <DeepLAltUrl />
+  <OpenAiApiKey />
+  <EnableTitleSubstitution>false</EnableTitleSubstitution>
+  <TitleRawSubstitutionTable />
+  <EnableActorSubstitution>false</EnableActorSubstitution>
+  <ActorRawSubstitutionTable />
+  <EnableGenreSubstitution>false</EnableGenreSubstitution>
+  <GenreRawSubstitutionTable />
+</PluginConfiguration>

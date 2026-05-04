@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LibraryOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <EnablePhotos>true</EnablePhotos>
+  <EnableRealtimeMonitor>true</EnableRealtimeMonitor>
+  <EnableChapterImageExtraction>true</EnableChapterImageExtraction>
+  <ExtractChapterImagesDuringLibraryScan>false</ExtractChapterImagesDuringLibraryScan>
+  <PathInfos>
+    <MediaPathInfo>
+      <Path>/media</Path>
+    </MediaPathInfo>
+  </PathInfos>
+  <SaveLocalMetadata>false</SaveLocalMetadata>
+  <EnableAutomaticSeriesGrouping>false</EnableAutomaticSeriesGrouping>
+  <EnableEmbeddedTitles>false</EnableEmbeddedTitles>
+  <EnableEmbeddedEpisodeInfos>false</EnableEmbeddedEpisodeInfos>
+  <AutomaticRefreshIntervalDays>90</AutomaticRefreshIntervalDays>
+  <PreferredMetadataLanguage>zh</PreferredMetadataLanguage>
+  <MetadataCountryCode>TW</MetadataCountryCode>
+  <SeasonZeroDisplayName>Specials</SeasonZeroDisplayName>
+  <MetadataSavers />
+  <DisabledLocalMetadataReaders />
+  <LocalMetadataReaderOrder>
+    <string>Nfo</string>
+  </LocalMetadataReaderOrder>
+  <DisabledSubtitleFetchers />
+  <SubtitleFetcherOrder>
+    <string>MeiamSub.Shooter</string>
+    <string>MeiamSub.Thunder</string>
+  </SubtitleFetcherOrder>
+  <SkipSubtitlesIfEmbeddedSubtitlesPresent>false</SkipSubtitlesIfEmbeddedSubtitlesPresent>
+  <SkipSubtitlesIfAudioTrackMatches>false</SkipSubtitlesIfAudioTrackMatches>
+  <SubtitleDownloadLanguages />
+  <RequirePerfectSubtitleMatch>true</RequirePerfectSubtitleMatch>
+  <SaveSubtitlesWithMedia>true</SaveSubtitlesWithMedia>
+  <AutomaticallyAddToCollection>true</AutomaticallyAddToCollection>
+  <AllowEmbeddedSubtitles>AllowAll</AllowEmbeddedSubtitles>
+  <TypeOptions>
+    <TypeOptions>
+      <Type>Movie</Type>
+      <MetadataFetchers>
+        <string>MetaShark</string>
+        <string>TheMovieDb</string>
+        <string>The Open Movie Database</string>
+      </MetadataFetchers>
+      <MetadataFetcherOrder>
+        <string>MetaShark</string>
+        <string>TheMovieDb</string>
+        <string>The Open Movie Database</string>
+      </MetadataFetcherOrder>
+      <ImageFetchers>
+        <string>MetaShark</string>
+        <string>TheMovieDb</string>
+        <string>The Open Movie Database</string>
+        <string>Embedded Image Extractor</string>
+        <string>Screen Grabber</string>
+      </ImageFetchers>
+      <ImageFetcherOrder>
+        <string>MetaShark</string>
+        <string>TheMovieDb</string>
+        <string>The Open Movie Database</string>
+        <string>Embedded Image Extractor</string>
+        <string>Screen Grabber</string>
+      </ImageFetcherOrder>
+      <ImageOptions />
+    </TypeOptions>
+  </TypeOptions>
+</LibraryOptions>

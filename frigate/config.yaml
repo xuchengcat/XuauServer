@@ -1,0 +1,163 @@
+mqtt:
+  enabled: true
+  host: mosquitto
+  port: 1883
+  user: xuau
+  password: "123456"
+
+auth:
+  failed_login_rate_limit: 1/second;5/minute;20/hour
+  trusted_proxies:
+    - 172.17.0.0/16 # <---- this is the subnet
+
+tls:
+  enabled: false
+
+detectors:
+  coral:
+    type: edgetpu
+    device: pci
+
+objects:
+  track:
+    - person
+
+review:
+  alerts:
+    labels:
+      - person
+
+cameras:
+  suzhoudoor:
+    enabled: true
+    ffmpeg:
+      hwaccel_args: preset-intel-qsv-h265
+      output_args:
+        record: preset-record-generic-audio-aac
+      inputs:
+        - path: rtsp://admin:123456@192.168.2.98:554/mpeg4 # <----- Main stream
+          input_args: preset-rtsp-generic
+          roles:
+            - record
+        - path: rtsp://admin:123456@192.168.2.98:554/mpeg4cif # <----- Sub stream
+          input_args: preset-rtsp-generic
+          roles:
+            - audio
+            - detect
+    # ffmpeg:
+    #   hwaccel_args: preset-intel-qsv-h264
+    #   inputs:
+    #     - path: rtsp://admin@192.168.2.99:8554/live0.264 # <----- main stream
+    #       input_args: preset-rtsp-generic
+    #       roles:
+    #         - record
+    #     - path: rtsp://admin@192.168.2.99:8554/live1.264 # <----- sub stream
+    #       input_args: preset-rtsp-generic
+    #       roles:
+    #         - detect
+    detect:
+      enabled: true
+      width: 720
+      height: 480
+      fps: 10       # Recommended value of 5
+      min_initialized: 2  # Number of detection hits needed
+      max_disappeared: 25 # Frames without detection before object considered gone
+      stationary:
+        interval: 500    # Frequency for confirming stationary objects
+        threshold: 500   # Frames before object considered stationary
+    motion:
+      mask: 0,0.007,0.315,0.009,0.317,0.093,0.003,0.093
+      threshold: 25
+      contour_area: 10
+      improve_contrast: true
+    objects:
+      mask: 0.18,0.106,0.203,1,0,1,0,0.103
+      filters:
+        person:
+          min_area: 5000        # Minimum size of detection box
+          max_area: 100000      # Maximum size of detection box
+          min_score: 0.5        # Minimum detection score
+          threshold: 0.7        # Required score to be considered a person
+    record:
+      enabled: true
+      retain:
+        days: 30
+        mode: all
+      alerts:
+        retain:
+          days: 365
+          mode: motion
+      detections:
+        retain:
+          days: 365
+          mode: motion
+  bedroom:
+    enabled: true
+    ffmpeg:
+      hwaccel_args: preset-intel-qsv-h265
+      output_args:
+        record: preset-record-generic-audio-aac
+      inputs:
+        - path: 
+            rtsp://192.168.2.90:554/user=admin&password=&channel=1&stream=0.sdp?     # <----- Main stream
+          input_args: preset-rtsp-generic
+          roles:
+            - record
+        - path: 
+            rtsp://192.168.2.90:554/user=admin&password=&channel=1&stream=1.sdp?     # <----- Sub stream
+          input_args: preset-rtsp-generic
+          roles:
+            - audio
+            - detect
+    detect:
+      enabled: true
+      width: 704
+      height: 576
+      fps: 10       # Recommended value of 5
+      min_initialized: 2  # Number of detection hits needed
+      max_disappeared: 25 # Frames without detection before object considered gone
+      stationary:
+        interval: 500    # Frequency for confirming stationary objects
+        threshold: 500   # Frames before object considered stationary
+    audio:
+      enabled: true
+      min_volume: -40
+      listen:
+        - speech
+        - babbling
+        - yell
+        - laughter
+        - snicker
+        - crying
+        - children_playing
+    motion:
+      mask: 0,0,0.37,0,0.367,0.086,0.003,0.086
+      threshold: 25
+      contour_area: 10
+      improve_contrast: true
+    objects:
+      filters:
+        person:
+          min_area: 5000        # Minimum size of detection box
+          max_area: 100000      # Maximum size of detection box
+          min_score: 0.5        # Minimum detection score
+          threshold: 0.7        # Required score to be considered a person
+    record:
+      enabled: true
+      retain:
+        days: 30
+        mode: all
+      alerts:
+        retain:
+          days: 365
+          mode: motion
+      detections:
+        retain:
+          days: 365
+          mode: motion
+
+version: 0.15-1
+semantic_search:
+  enabled: true
+  reindex: false
+  model_size: small

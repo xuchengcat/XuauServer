@@ -1,0 +1,18 @@
+{
+    "bridge": {
+        "name": "Homebridge 14DA",
+        "username": "0E:B7:F3:50:14:DA",
+        "port": 51543,
+        "pin": "122-59-666",
+        "advertiser": "bonjour-hap"
+    },
+    "accessories": [],
+    "platforms": [
+        {
+            "name": "Config",
+            "port": 8581,
+            "platform": "config",
+            "lang": "zh-CN"
+        }
+    ]
+}

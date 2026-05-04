@@ -1,0 +1,25 @@
+version: '3'
+services:
+  shinobi:
+    build:
+      context: .
+      args:
+        SHINOBI_BRANCH: dev
+    container_name: shinobi_camera
+    volumes:
+      - /dev/shm/ShinobiRAM:/dev/shm/streams
+      - /mnt/SDD128G/shinobi/Shinobi:/home/Shinobi
+      - /mnt/camera1t/videos:/home/Shinobi/videos
+    ports:
+      - "11911:8080"
+    devices:
+      - /dev/apex_0:/dev/apex_0 # Google Croal API
+      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel GPU
+    environment:
+      - HOME=/home/Shinobi
+      - DB_HOST=shinobi-sql
+      - DB_USER=majesticflame
+      - DB_PASSWORD=1234
+      - DB_DATABASE=ccio
+      - SHINOBI_UPDATE=false
+    restart: unless-stopped

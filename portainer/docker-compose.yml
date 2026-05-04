@@ -1,0 +1,14 @@
+
+
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: "unless-stopped"
+    ports:
+      - 8000:8000
+      - 9000:9000
+      - 9043:9043
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/SDD128G/portainer/config:/data

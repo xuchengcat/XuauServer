@@ -1,0 +1,46 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/widgets
+
+- glances:
+    url: https://glances.xuchengcat.cn:444
+    version: 4
+    cpu: true
+    mem: true
+    cputemp: true
+    # uptime: true
+    disk:
+      - /mnt/HDD14T
+      - /mnt/camera1t
+    #expanded: true
+    
+#- resources:
+#    label: System
+#    cpu: true
+#    memory: true
+#    cputemp: true
+#    uptime: true
+#    disk: 
+#        - /disk/mount/HDD14T
+#        - /disk/mount/HDD12T
+#    units: centigrade
+
+- openmeteo:
+    label: Suzhou
+    latitude: 31.13441
+    longitude: 120.60508
+    units: metric
+    cache: 30
+
+- search:
+    provider: custom
+    url:  https://www.google.com.tw/search?q=
+    target: _blank
+
+- datetime:
+    text_size: short
+    format:
+      dateStyle: short
+      timeStyle: short
+      hourCycle: h23
+
