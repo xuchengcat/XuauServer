@@ -118,9 +118,9 @@ services:
       OPENCLAW_WORKSPACE_DIR: /home/node/.openclaw/workspace
       TZ: Asia/Shanghai
       # 代理配置，用于访问 OpenAI / Anthropic 等境外 Token 提供商
-      # 注：172.18.0.1:17890 为 ShellCrash mixed-port，无需认证凭证
-      HTTP_PROXY: http://172.18.0.1:17890
-      HTTPS_PROXY: http://172.18.0.1:17890
+      # 注：172.18.0.1:17890 为 ShellCrash mixed-port，认证：xuau:86335676
+      HTTP_PROXY: http://xuau:86335676@172.18.0.1:17890
+      HTTPS_PROXY: http://xuau:86335676@172.18.0.1:17890
       # NO_PROXY 需使用主机名/域名，不能依赖 CIDR 匹配域名（Node.js 不支持）
       # .xuchengcat.cn 覆盖 nginx-proxy-manager 代理的所有内网域名，避免走代理返回 502
       NO_PROXY: localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16,192.168.2.1,.xuchengcat.cn
@@ -317,7 +317,7 @@ services:
     environment:
       - PLUS_API_KEY=93a7661b-aab9-4c20-94be-e9ec6c53029a:3c358977e302950122f6881e0ee2d03331ed9529
     cpus: 2.5
-    mem_limit: 6g
+    mem_limit: 8g
     depends_on:
       - mosquitto
 
