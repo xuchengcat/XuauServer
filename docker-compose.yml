@@ -128,7 +128,7 @@ services:
       # WebDAV 地址：https://nextcloud.xuchengcat.cn:444/remote.php/dav/files/YOUR_USER/
       NEXTCLOUD_URL: https://nextcloud.xuchengcat.cn:444
       NEXTCLOUD_USER: xuau
-      NEXTCLOUD_PASSWORD: ""   # 建议使用 Nextcloud 应用密码（设置→安全→应用密码）
+      NEXTCLOUD_PASSWORD: "THWt2-FkrX5-FP5LB-yN6Lk-KRMKd"   # 建议使用 Nextcloud 应用密码（设置→安全→应用密码）
     extra_hosts:
       - "host.docker.internal:host-gateway"
     init: true
