@@ -100,6 +100,53 @@ services:
     cpus: 0.5
     mem_limit: 4g
 
+  openclaw:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: openclaw
+    restart: unless-stopped
+    ports:
+      - "18789:18789"
+    volumes:
+      # 本地配置固化
+      - /mnt/SDD128G/openclaw/config:/home/node/.openclaw
+      - /mnt/SDD128G/openclaw/workspace:/home/node/.openclaw/workspace
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      # 固定容器内路径，防止宿主机环境变量覆盖
+      OPENCLAW_CONFIG_DIR: /home/node/.openclaw
+      OPENCLAW_WORKSPACE_DIR: /home/node/.openclaw/workspace
+      TZ: Asia/Shanghai
+      # 代理配置，用于访问 OpenAI / Anthropic 等境外 Token 提供商
+      # 注：172.18.0.1:17890 为 ShellCrash mixed-port，无需认证凭证
+      HTTP_PROXY: http://172.18.0.1:17890
+      HTTPS_PROXY: http://172.18.0.1:17890
+      # NO_PROXY 需使用主机名/域名，不能依赖 CIDR 匹配域名（Node.js 不支持）
+      # .xuchengcat.cn 覆盖 nginx-proxy-manager 代理的所有内网域名，避免走代理返回 502
+      NO_PROXY: localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16,192.168.2.1,.xuchengcat.cn
+      # Nextcloud WebDAV 凭证，供 skill 调用 API 写入笔记
+      # WebDAV 地址：https://nextcloud.xuchengcat.cn:444/remote.php/dav/files/YOUR_USER/
+      NEXTCLOUD_URL: https://nextcloud.xuchengcat.cn:444
+      NEXTCLOUD_USER: xuau
+      NEXTCLOUD_PASSWORD: ""   # 建议使用 Nextcloud 应用密码（设置→安全→应用密码）
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    init: true
+    command:
+      ["node", "dist/index.js", "gateway", "--bind", "lan", "--port", "18789"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:18789/healthz').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
   photoprism:
     container_name: photoprism
     ## Use photoprism/photoprism:preview for testing preview builds:
