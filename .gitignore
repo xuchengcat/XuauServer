@@ -133,3 +133,4 @@ nginx_proxy_manager/data/database.sqlite
 nginx_proxy_manager/data/*.sqlite
 sgcc_elec/
 zerotier/config/networks.d/*.conf
+openclaw/
