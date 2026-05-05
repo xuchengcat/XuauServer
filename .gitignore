@@ -44,6 +44,7 @@ photoprism/storage/
 jellyfin/cache/
 shinobi/Shinobi/
 nextcloud/data/
+nextcloud/custom_apps/
 
 # ===== Homebridge =====
 homebridge/node_modules/
