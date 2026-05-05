@@ -1,0 +1,61 @@
+# =============================================================================
+# 青萍温湿度传感器持久化
+# 使用 trigger-based template sensor，offline/unavailable 时保持上次有效值
+# 原始实体: sensor.co2_qingping_temperature / sensor.co2_qingping_humidity
+# =============================================================================
+
+template:
+
+  # ---------------------------------------------------------------------------
+  # 青萍温度 — 持久化（保持上次有效值）
+  # ---------------------------------------------------------------------------
+  - trigger:
+      - platform: state
+        entity_id: sensor.co2_qingping_temperature
+    condition:
+      - condition: template
+        value_template: >
+          {{ trigger.to_state.state not in ['unavailable', 'unknown', 'none', ''] }}
+    sensor:
+      - name: "qingping_temperature_last"
+        unique_id: qingping_temperature_last
+        state: "{{ trigger.to_state.state }}"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+
+  # ---------------------------------------------------------------------------
+  # 青萍湿度 — 持久化（保持上次有效值）
+  # ---------------------------------------------------------------------------
+  - trigger:
+      - platform: state
+        entity_id: sensor.co2_qingping_humidity
+    condition:
+      - condition: template
+        value_template: >
+          {{ trigger.to_state.state not in ['unavailable', 'unknown', 'none', ''] }}
+    sensor:
+      - name: "qingping_humidity_last"
+        unique_id: qingping_humidity_last
+        state: "{{ trigger.to_state.state }}"
+        unit_of_measurement: "%"
+        device_class: humidity
+        state_class: measurement
+
+  # ---------------------------------------------------------------------------
+  # 青萍 CO2 — 持久化（保持上次有效值）
+  # ---------------------------------------------------------------------------
+  - trigger:
+      - platform: state
+        entity_id: sensor.co2_qingping_co2
+    condition:
+      - condition: template
+        value_template: >
+          {{ trigger.to_state.state not in ['unavailable', 'unknown', 'none', ''] }}
+    sensor:
+      - name: "qingping_co2_last"
+        unique_id: qingping_co2_last
+        state: "{{ trigger.to_state.state }}"
+        unit_of_measurement: "ppm"
+        device_class: carbon_dioxide
+        state_class: measurement

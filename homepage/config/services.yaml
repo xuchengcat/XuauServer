@@ -173,3 +173,9 @@
         icon: /icons/clash.png
         href: http://xuchengcat.cn:9999/ui/#/
         description: 机场配置
+    - OpenClaw:
+        icon: si-anthropic-#D97757
+        href: https://openclaw.xuchengcat.cn:444
+        description: AI编程助手
+        server: my-docker
+        container: openclaw
