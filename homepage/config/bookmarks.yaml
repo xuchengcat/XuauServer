@@ -36,6 +36,10 @@
     - icon: /icons/render.png
       href: https://dashboard.render.com/
       description: bark server
+  - DeepSeek:
+    - icon: /icons/deepseek.png
+      href: https://platform.deepseek.com/top_up
+      description: 充值
 
 - Luntan:
   - Hassbian:
