@@ -59,7 +59,7 @@ cameras:
       enabled: true
       width: 720
       height: 480
-      fps: 10       # Recommended value of 5
+      fps: 5       # Recommended value of 5
       min_initialized: 2  # Number of detection hits needed
       max_disappeared: 25 # Frames without detection before object considered gone
       stationary:
@@ -113,7 +113,7 @@ cameras:
       enabled: true
       width: 704
       height: 576
-      fps: 10       # Recommended value of 5
+      fps: 5       # Recommended value of 5
       min_initialized: 2  # Number of detection hits needed
       max_disappeared: 25 # Frames without detection before object considered gone
       stationary:
