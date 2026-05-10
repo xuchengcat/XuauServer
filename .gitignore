@@ -135,3 +135,4 @@ sgcc_elec/
 zerotier/config/networks.d/*.conf
 openclaw/
 xiaomusic/conf/.mi.token
+.env

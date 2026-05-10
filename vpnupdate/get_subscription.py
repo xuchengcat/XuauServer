@@ -3,10 +3,12 @@ import base64
 import json
 from datetime import datetime
 import re
+import os
 
 def get_subscription():
     # 订阅链接
-    url = "https://msub.xn--bwwx30f.top/api/v1/client/subscribe?token=9e6ebe8c27d62e3025f0a7ae87be6589"
+    token = os.environ["VPN_SUBSCRIPTION_TOKEN"]
+    url = f"https://msub.xn--bwwx30f.top/api/v1/client/subscribe?token={token}"
     
     try:
         # 设置请求头
