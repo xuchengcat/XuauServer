@@ -119,8 +119,8 @@ services:
       TZ: Asia/Shanghai
       # 代理配置，用于访问 OpenAI / Anthropic 等境外 Token 提供商
       # 注：172.18.0.1:17890 为 ShellCrash mixed-port，认证：xuau:86335676
-      HTTP_PROXY: http://xuau:86335676@172.18.0.1:17890
-      HTTPS_PROXY: http://xuau:86335676@172.18.0.1:17890
+      HTTP_PROXY: ${PROXY_URL}
+      HTTPS_PROXY: ${PROXY_URL}
       # NO_PROXY 需使用主机名/域名，不能依赖 CIDR 匹配域名（Node.js 不支持）
       # .xuchengcat.cn 覆盖 nginx-proxy-manager 代理的所有内网域名，避免走代理返回 502
       NO_PROXY: localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16,192.168.2.1,.xuchengcat.cn
