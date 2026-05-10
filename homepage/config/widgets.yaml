@@ -33,8 +33,7 @@
     cache: 30
 
 - search:
-    provider: custom
-    url:  https://www.google.com.tw/search?q=
+    provider: bing
     target: _blank
 
 - datetime:
