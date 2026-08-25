@@ -40,6 +40,10 @@
     - icon: /icons/deepseek.png
       href: https://platform.deepseek.com/top_up
       description: 充值
+  - Doubao:
+    - icon: /icons/doubao.png
+      href: https://ark.volcengine.com/region:cn-beijing/endpoint?config=%7B%7D
+      description: 火山引擎
 
 - Luntan:
   - Hassbian:

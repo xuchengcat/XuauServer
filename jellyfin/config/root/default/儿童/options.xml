@@ -50,20 +50,13 @@
   <TypeOptions>
     <TypeOptions>
       <Type>Series</Type>
-      <MetadataFetchers>
-        <string>MetaShark</string>
-        <string>TheMovieDb</string>
-        <string>The Open Movie Database</string>
-      </MetadataFetchers>
+      <MetadataFetchers />
       <MetadataFetcherOrder>
         <string>MetaShark</string>
         <string>TheMovieDb</string>
         <string>The Open Movie Database</string>
       </MetadataFetcherOrder>
-      <ImageFetchers>
-        <string>MetaShark</string>
-        <string>TheMovieDb</string>
-      </ImageFetchers>
+      <ImageFetchers />
       <ImageFetcherOrder>
         <string>MetaShark</string>
         <string>TheMovieDb</string>
@@ -72,18 +65,12 @@
     </TypeOptions>
     <TypeOptions>
       <Type>Season</Type>
-      <MetadataFetchers>
-        <string>MetaShark</string>
-        <string>TheMovieDb</string>
-      </MetadataFetchers>
+      <MetadataFetchers />
       <MetadataFetcherOrder>
         <string>MetaShark</string>
         <string>TheMovieDb</string>
       </MetadataFetcherOrder>
-      <ImageFetchers>
-        <string>MetaShark</string>
-        <string>TheMovieDb</string>
-      </ImageFetchers>
+      <ImageFetchers />
       <ImageFetcherOrder>
         <string>MetaShark</string>
         <string>TheMovieDb</string>
@@ -92,21 +79,13 @@
     </TypeOptions>
     <TypeOptions>
       <Type>Episode</Type>
-      <MetadataFetchers>
-        <string>MetaShark</string>
-        <string>TheMovieDb</string>
-        <string>The Open Movie Database</string>
-      </MetadataFetchers>
+      <MetadataFetchers />
       <MetadataFetcherOrder>
         <string>MetaShark</string>
         <string>TheMovieDb</string>
         <string>The Open Movie Database</string>
       </MetadataFetcherOrder>
       <ImageFetchers>
-        <string>MetaShark</string>
-        <string>TheMovieDb</string>
-        <string>The Open Movie Database</string>
-        <string>Embedded Image Extractor</string>
         <string>Screen Grabber</string>
       </ImageFetchers>
       <ImageFetcherOrder>
