@@ -1,5 +1,6 @@
 *.log
 *.png
+*.ico
 homeassistant/config/home-assistant.log*
 homeassistant/config/home-assistant_v2.d*
 transmission/config/settings.json
@@ -19,7 +20,9 @@ homeassistant/config/.ssh/
 homeassistant/config/.storage/
 nextcloud/config/config.php
 mqtt/config/password.txt
+mqtt/data/
 zerotier/config/*.secret
+zerotier/config/peers.d/
 shinobi/Shinobi/.bash_history
 transmission/transmission-web-control/
 esp_home/ESPHome_ESP32-C6
@@ -95,6 +98,7 @@ transmission/config/torrents/
 
 # ===== Portainer =====
 portainer/config/portainer.db
+portainer/config/docker_config/
 portainer/config/certs/key.pem
 portainer/config/chisel/private-key.pem
 portainer/config/portainer.key
@@ -136,3 +140,7 @@ zerotier/config/networks.d/*.conf
 openclaw/
 xiaomusic/conf/.mi.token
 .env
+
+# Local tools and private proxy/subscription configuration
+codex/
+shellclash/config.yaml

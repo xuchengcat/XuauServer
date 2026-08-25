@@ -1,0 +1,83 @@
+- DOMAIN-SUFFIX,m-team.cc,DIRECT
+- DOMAIN-SUFFIX,m-team.io,DIRECT
+- DOMAIN-SUFFIX,tracker.52dic.vip,DIRECT
+- DOMAIN-SUFFIX,dicmusic.com,DIRECT
+- DOMAIN-SUFFIX,kufei.org,DIRECT
+- DOMAIN-SUFFIX,ptcafe.club,DIRECT
+- DOMAIN-SUFFIX,account.xiaomi.com,DIRECT
+- DOMAIN-SUFFIX,ha.api.io.mi.com,DIRECT
+- DOMAIN-SUFFIX,miot-spec.org,DIRECT
+- DOMAIN-SUFFIX,cn-ha.mqtt.io.mi.com,DIRECT
+- DOMAIN-SUFFIX,xiaohongshu.com,DIRECT
+- DOMAIN-SUFFIX,ieasytech.com,DIRECT
+  #- DOMAIN,www.google.com,Google FCM
+
+  #Envirment For Develop
+  #- DOMAIN-SUFFIX,esphome.io,Developer
+  #- DOMAIN-SUFFIX,api.open-meteo.com,Developer
+  #- DOMAIN-SUFFIX,mirror.gcr.io,Developer
+  #- DOMAIN-SUFFIX,lscr.io,Developer
+  #- DOMAIN-SUFFIX,docker.io,Developer
+  #- DOMAIN-SUFFIX,home-assistant.io,Developer
+  #- DOMAIN-SUFFIX,met.no,Developer
+  #- DOMAIN-SUFFIX,151365.io,Developer
+  #- DOMAIN-SUFFIX,archive.ubuntu.com,Developer
+  #- DOMAIN-SUFFIX,github.io,Developer
+
+
+# Captive Portal Detection - DIRECT
+- DOMAIN,captive.apple.com,DIRECT
+- DOMAIN,connectivitycheck.platform.hicloud.com,DIRECT
+- DOMAIN,conncheck.rom.honor.com,DIRECT
+- DOMAIN,connect.rom.miui.com,DIRECT
+
+# ZeroTier Central - DIRECT (ensure real IP reported to controller)
+- DOMAIN-SUFFIX,zerotier.com,DIRECT
+
+# ChatGPT / OpenAI
+- DOMAIN-SUFFIX,chatgpt.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,openai.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,auth.openai.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,oaistatic.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,oaiusercontent.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,oaistatsig.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,openaimerge.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,workos.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,workoscdn.com,🤖 ChatGPT
+- DOMAIN-SUFFIX,workos.imgix.net,🤖 ChatGPT
+- DOMAIN-SUFFIX,intercom.io,🤖 ChatGPT
+- DOMAIN-SUFFIX,intercomcdn.com,🤖 ChatGPT
+
+# Steam
+- DOMAIN-SUFFIX,steampowered.com,🎮 Steam
+- DOMAIN-SUFFIX,steamcommunity.com,🎮 Steam
+- DOMAIN-SUFFIX,steam-chat.com,🎮 Steam
+- DOMAIN-SUFFIX,steamgames.com,🎮 Steam
+- DOMAIN-SUFFIX,steamserver.net,🎮 Steam
+- DOMAIN-SUFFIX,steamstat.us,🎮 Steam
+- DOMAIN-SUFFIX,steamstatic.com,🎮 Steam
+- DOMAIN-SUFFIX,steamusercontent.com,🎮 Steam
+- DOMAIN-SUFFIX,steam.tv,🎮 Steam
+- DOMAIN-SUFFIX,valvesoftware.com,🎮 Steam
+- DOMAIN-SUFFIX,steamcdn-a.akamaihd.net,🎮 Steam
+- DOMAIN-SUFFIX,steamcommunity-a.akamaihd.net,🎮 Steam
+- DOMAIN-SUFFIX,steamstore-a.akamaihd.net,🎮 Steam
+- DOMAIN-SUFFIX,steamusercontent-a.akamaihd.net,🎮 Steam
+- DOMAIN-SUFFIX,steamuserimages-a.akamaihd.net,🎮 Steam
+- DOMAIN-SUFFIX,steambroadcast.akamaized.net,🎮 Steam
+- DOMAIN-SUFFIX,steampipe.akamaized.net,🎮 Steam
+
+# Don't Starve / Don't Starve Together (Klei)
+- DOMAIN-SUFFIX,klei.com,🎮 Steam
+- DOMAIN-SUFFIX,kleientertainment.com,🎮 Steam
+- DOMAIN-SUFFIX,kleiforums.com,🎮 Steam
+
+# World of Warships / Wargaming
+- DOMAIN-SUFFIX,worldofwarships.com,🎮 Steam
+- DOMAIN-SUFFIX,worldofwarships.asia,🎮 Steam
+- DOMAIN-SUFFIX,worldofwarships.eu,🎮 Steam
+- DOMAIN-SUFFIX,worldofwarships.ru,🎮 Steam
+- DOMAIN-SUFFIX,worldofwarships.cn,🎮 Steam
+- DOMAIN-SUFFIX,wargaming.net,🎮 Steam
+- DOMAIN-SUFFIX,wargaming.com,🎮 Steam
+- DOMAIN-SUFFIX,wgcdn.co,🎮 Steam
