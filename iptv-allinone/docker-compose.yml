@@ -1,8 +1,0 @@
-services:
-  allinone:
-    image: youshandefeiyang/allinone:latest
-    container_name: iptv
-    privileged: true
-    restart: unless-stopped
-    ports:
-      - "35455:35455"
