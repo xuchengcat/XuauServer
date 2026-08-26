@@ -29,7 +29,6 @@
 | **tpu** | TPU 加速相关配置 |
 | **kms** | KMS 激活服务 |
 | **lyricapi** | 歌词 API 服务 |
-| **iptv-allinone** | IPTV 聚合服务 |
 
 ## 仓库说明
 
