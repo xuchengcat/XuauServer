@@ -47,6 +47,12 @@
           enableBlocks: true
           showEpisodeNumber: true
           expandOneStreamToTwoRows: false
+    - WebDAV:
+        icon: mdi-folder-network
+        href: https://webdav.xuchengcat.cn:444
+        description: 媒体文件管理
+        server: my-docker
+        container: webdav
     - Transmission:
         icon: si-transmission-#D70008
         href: https://transmission.xuchengcat.cn:444
