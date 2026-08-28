@@ -144,3 +144,6 @@ xiaomusic/conf/.mi.token
 # Local tools and private proxy/subscription configuration
 codex/
 shellclash/config.yaml
+
+# Kavita runtime database, generated settings, cache, and secrets
+kavita/config/
