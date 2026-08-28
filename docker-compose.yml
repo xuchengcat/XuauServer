@@ -32,6 +32,18 @@ services:
     # cpus: 0.5
     mem_limit: 4g
 
+  webdav:
+    image: sigoden/dufs:latest
+    container_name: webdav
+    user: "1000:1000"
+    env_file:
+      - /mnt/SDD128G/webdav/.env
+    volumes:
+      - /mnt/HDD14T/Media_Data_HDD:/data
+    restart: unless-stopped
+    cpus: 0.5
+    mem_limit: 1g
+
   moontv:
     image: ghcr.io/senshinya/moontv:latest
     container_name: moontv
