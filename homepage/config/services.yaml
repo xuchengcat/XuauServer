@@ -71,13 +71,6 @@
           url: http://photoprism:2342
           key: RxfNRC-Y7Rq5r-vNEtdi-8xqRDQ
           fields: ["albums", "photos", "videos"]
-    - WebDAV:
-        icon: mdi-folder-network
-        href: https://webdav.xuchengcat.cn:444
-        description: 媒体文件管理
-        server: my-docker
-        container: webdav
-  
     # - Glances:
     #     icon: /icons/cadvisor.png
     #     href: https://glances.xuchengcat.cn
@@ -103,6 +96,12 @@
           url: http://172.17.0.1:8123
           key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwOWY0YjRlNzU4Yjg0ZWQ5YTFhMzgxMjZkMDAwM2U1MyIsImlhdCI6MTc0NzAzNzE5OSwiZXhwIjoyMDYyMzk3MTk5fQ.uXp09j04-TV3ueksbBWG9ZntX-svP_fJXLeC-21E4nw"
           fields: ["people_home", "lights_on", "switches_on"]
+    - WebDAV:
+        icon: mdi-folder-network
+        href: https://webdav.xuchengcat.cn:444
+        description: 媒体文件管理
+        server: my-docker
+        container: webdav
     - MoonTV:
         icon: si-jellyfin-#808080
         href: https://moontv.xuchengcat.cn:444
