@@ -115,7 +115,7 @@
 
     - EspHome:
         icon: si-esphome-#000000
-        href: http://192.168.2.1:6052
+        href: https://esphome.xuchengcat.cn:444
         description: DIY
     - Nodred:
         icon: si-nodered-#8F0000
