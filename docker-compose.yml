@@ -44,6 +44,21 @@ services:
     cpus: 0.5
     mem_limit: 1g
 
+  kavita:
+    image: jvmilazz0/kavita:latest
+    container_name: kavita
+    environment:
+      TZ: Asia/Shanghai
+      HTTP_PROXY: ${PROXY_URL}
+      HTTPS_PROXY: ${PROXY_URL}
+      NO_PROXY: localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16,192.168.2.1,.xuchengcat.cn
+    volumes:
+      - /mnt/SDD128G/kavita/config:/kavita/config
+      - /mnt/HDD14T/Media_Data_HDD/Manga:/manga:ro
+    restart: unless-stopped
+    cpus: 1
+    mem_limit: 2g
+
   moontv:
     image: ghcr.io/senshinya/moontv:latest
     container_name: moontv

@@ -96,6 +96,12 @@
           url: http://172.17.0.1:8123
           key: "<removed-ha-token>"
           fields: ["people_home", "lights_on", "switches_on"]
+    - Kavita:
+        icon: si-kavita-#4AC694
+        href: https://kavita.xuchengcat.cn:444
+        description: 漫画阅读
+        server: my-docker
+        container: kavita
     - WebDAV:
         icon: mdi-folder-network
         href: https://webdav.xuchengcat.cn:444
