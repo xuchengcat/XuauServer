@@ -139,6 +139,8 @@ sgcc_elec/
 zerotier/config/networks.d/*.conf
 openclaw/
 xiaomusic/conf/.mi.token
+xiaomusic/conf/auth.json
+xiaomusic/conf/plugins-config.json
 .env
 
 # Local tools and private proxy/subscription configuration
