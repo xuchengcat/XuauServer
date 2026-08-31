@@ -77,6 +77,8 @@ services:
       - 18090:18090
     volumes:
       - /mnt/HDD14T/Media_Data_HDD/Music:/app/music
+      - /mnt/HDD14T/Media_Data_HDD/Child:/app/music/Child
+      - /mnt/HDD14T/Media_Data_HDD/ChildSongs:/app/music/ChildSongs
       - /mnt/SDD128G/xiaomusic/conf:/app/conf
     environment:
       XIAOMUSIC_PUBLIC_PORT: 18090
