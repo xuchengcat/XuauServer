@@ -112,11 +112,15 @@
         icon: si-jellyfin-#808080
         href: https://moontv.xuchengcat.cn:444
         description: 聚合影视
+        server: my-docker
+        container: moontv
 
     - EspHome:
         icon: si-esphome-#000000
         href: https://esphome.xuchengcat.cn:444
         description: DIY
+        server: my-docker
+        container: esphome
     - Nodred:
         icon: si-nodered-#8F0000
         href: https://nodred.xuchengcat.cn:444
@@ -175,18 +179,20 @@
         icon: si-zsh-#F15A24
         href: https://ssh.xuchengcat.cn:444
         description: 网页版ssh
+        server: my-docker
+        container: sshwifty
     # - Bark:
     #     icon: /icons/google-messages.png
     #     abbr: BA
     #     href: https://bark.xuchengcat.cn:444
     #     description: ios通知服务
-    - ClashConfig:
-        icon: /icons/clash.png
-        href: http://xuchengcat.cn:9999/ui/#/
-        description: 机场配置
     - OpenClaw:
         icon: si-anthropic-#D97757
         href: https://openclaw.xuchengcat.cn:444
         description: AI编程助手
         server: my-docker
         container: openclaw
+    - ClashConfig:
+        icon: /icons/clash.png
+        href: http://xuchengcat.cn:9999/ui/#/
+        description: 机场配置
