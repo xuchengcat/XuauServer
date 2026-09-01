@@ -482,17 +482,17 @@ services:
       interval: 10s
       timeout: 3s
 
-  portainer:
-    container_name: portainer
-    image: portainer/portainer-ce:latest
-    restart: "unless-stopped"
-    # ports:
-    #   - 8000:8000
-    #   - 9000:9000
-    #   - 9043:9043
+  dockhand:
+    container_name: dockhand
+    image: fnsys/dockhand:latest
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/SDD128G/portainer/config:/data
+      - /mnt/SDD128G/dockhand/data:/app/data
+      # Keep the host and container paths identical so Dockhand can adopt this stack.
+      - /mnt/SDD128G:/mnt/SDD128G
 
   sshwifty:
     image: niruix/sshwifty:latest
