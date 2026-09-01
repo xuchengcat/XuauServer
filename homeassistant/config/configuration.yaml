@@ -123,3 +123,37 @@ sql:
     query: "SELECT usage FROM daily3206624836319 ORDER BY date DESC LIMIT 1 OFFSET 0;"
     column: "usage"
     unit_of_measurement: "kWh"
+
+  # 国家电网四个账户最近 7 个有数据日，供电量仪表盘表格展示。
+  # 使用紧凑 JSON，确保传感器状态不超过 Home Assistant 的 255 字符限制。
+  - name: "SGCC Last 7 Days 1051"
+    unique_id: sgcc_last_7_days_1051
+    db_url: "sqlite:////sgcc_elec/homeassistant.db"
+    query: >-
+      SELECT json_group_array(json_object('date', substr(date, 6, 5), 'usage', usage)) AS data
+      FROM (SELECT date, usage FROM daily3203089371051 ORDER BY date DESC LIMIT 7);
+    column: "data"
+
+  - name: "SGCC Last 7 Days 3403"
+    unique_id: sgcc_last_7_days_3403
+    db_url: "sqlite:////sgcc_elec/homeassistant.db"
+    query: >-
+      SELECT json_group_array(json_object('date', substr(date, 6, 5), 'usage', usage)) AS data
+      FROM (SELECT date, usage FROM daily3209762003403 ORDER BY date DESC LIMIT 7);
+    column: "data"
+
+  - name: "SGCC Last 7 Days 9011"
+    unique_id: sgcc_last_7_days_9011
+    db_url: "sqlite:////sgcc_elec/homeassistant.db"
+    query: >-
+      SELECT json_group_array(json_object('date', substr(date, 6, 5), 'usage', usage)) AS data
+      FROM (SELECT date, usage FROM daily3203005109011 ORDER BY date DESC LIMIT 7);
+    column: "data"
+
+  - name: "SGCC Last 7 Days 6319"
+    unique_id: sgcc_last_7_days_6319
+    db_url: "sqlite:////sgcc_elec/homeassistant.db"
+    query: >-
+      SELECT json_group_array(json_object('date', substr(date, 6, 5), 'usage', usage)) AS data
+      FROM (SELECT date, usage FROM daily3206624836319 ORDER BY date DESC LIMIT 7);
+    column: "data"

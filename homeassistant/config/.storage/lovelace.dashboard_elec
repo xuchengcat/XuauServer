@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace.dashboard_elec",
+  "data": {
+    "config": {
+      "button_card_templates": {
+        "sgcc_energy": {
+          "show_icon": false,
+          "show_state": false,
+          "show_label": false,
+          "tap_action": {"action": "more-info"},
+          "styles": {
+            "grid": [
+              {"grid-template-areas": "'n tier' 'stats stats' 'chart chart'"},
+              {"grid-template-columns": "1fr auto"},
+              {"grid-template-rows": "auto auto 1fr"}
+            ],
+            "card": [
+              {"padding": "20px 18px 14px"},
+              {"border-radius": "24px"},
+              {"overflow": "hidden"},
+              {"box-shadow": "0 10px 30px rgba(0,0,0,.10)"},
+              {"background": "[[[ const u=Number(states[variables.annual_usage]?.state)||0; const a=variables.kind==='home'?(u<=2760?'#22c55e':u<=4800?'#f59e0b':'#ef4444'):'#3b82f6'; return `linear-gradient(145deg, ${a}18 0%, var(--ha-card-background,var(--card-background-color)) 48%)`; ]]]"}
+            ],
+            "name": [
+              {"justify-self": "start"},
+              {"font-size": "20px"},
+              {"font-weight": "700"},
+              {"letter-spacing": "-.3px"}
+            ],
+            "custom_fields": {
+              "tier": [
+                {"justify-self": "end"},
+                {"font-size": "12px"},
+                {"font-weight": "700"},
+                {"padding": "5px 10px"},
+                {"border-radius": "999px"},
+                {"color": "white"},
+                {"background": "[[[ const u=Number(states[variables.annual_usage]?.state)||0; return variables.kind==='home'?(u<=2760?'#22c55e':u<=4800?'#f59e0b':'#ef4444'):'#3b82f6'; ]]]"}
+              ],
+              "stats": [
+                {"margin-top": "16px"},
+                {"margin-bottom": "8px"}
+              ],
+              "chart": [
+                {"width": "100%"},
+                {"min-width": "0"}
+              ]
+            }
+          },
+          "custom_fields": {
+            "tier": "[[[ const u=Number(states[variables.annual_usage]?.state)||0; if(variables.kind!=='home') return '充电账户'; return u<=2760?'第一档':u<=4800?'第二档':'第三档'; ]]]",
+            "stats": "[[[ const usage=Number(states[variables.annual_usage]?.state); const month=Number(states[variables.month_charge]?.state); const year=Number(states[variables.annual_charge]?.state); const f=(v,n=0)=>Number.isFinite(v)?v.toFixed(n):'--'; return `<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:left\"><div style=\"padding:10px;background:rgba(127,127,127,.08);border-radius:14px\"><div style=\"font-size:11px;opacity:.62\">全年用电</div><b style=\"font-size:16px\">${f(usage)} kWh</b></div><div style=\"padding:10px;background:rgba(127,127,127,.08);border-radius:14px\"><div style=\"font-size:11px;opacity:.62\">上月电费</div><b style=\"font-size:16px\">¥ ${f(month,2)}</b></div><div style=\"padding:10px;background:rgba(127,127,127,.08);border-radius:14px\"><div style=\"font-size:11px;opacity:.62\">全年累计电费</div><b style=\"font-size:16px\">¥ ${f(year,2)}</b></div></div>`; ]]]",
+            "chart": "[[[ let rows=[]; try{rows=JSON.parse(entity.state||'[]').slice().reverse()}catch(e){} if(!rows.length)return '<div style=\"padding:50px;opacity:.55\">暂无最近 7 天数据</div>'; const u=Number(states[variables.annual_usage]?.state)||0; const accent=variables.kind==='home'?(u<=2760?'#22c55e':u<=4800?'#f59e0b':'#ef4444'):'#3b82f6'; const W=700,H=190,L=30,R=30,T=34,B=48; const max=Math.max(...rows.map(r=>Number(r.usage)||0),1)*1.18; const x=i=>L+i*(W-L-R)/Math.max(rows.length-1,1); const y=v=>T+(max-v)*(H-T-B)/max; const points=rows.map((r,i)=>`${x(i)},${y(Number(r.usage)||0)}`).join(' '); const area=`${L},${H-B} ${points} ${W-R},${H-B}`; const dots=rows.map((r,i)=>`<circle cx=\"${x(i)}\" cy=\"${y(Number(r.usage)||0)}\" r=\"4.5\" fill=\"${accent}\" stroke=\"var(--ha-card-background,#fff)\" stroke-width=\"3\"/><text x=\"${x(i)}\" y=\"${Math.max(y(Number(r.usage)||0)-11,14)}\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"var(--primary-text-color)\">${Number(r.usage).toFixed(1)}</text><text x=\"${x(i)}\" y=\"${H-15}\" text-anchor=\"middle\" font-size=\"12\" fill=\"var(--secondary-text-color)\">${r.date}</text>`).join(''); return `<div style=\"position:relative;width:100%;margin-top:2px\"><div style=\"font-size:12px;opacity:.58;text-align:left;margin:0 0 -12px 4px\">最近 7 天 · kWh</div><svg viewBox=\"0 0 ${W} ${H}\" style=\"display:block;width:100%;height:auto;overflow:visible\" preserveAspectRatio=\"xMidYMid meet\"><defs><linearGradient id=\"g-${variables.suffix}\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0%\" stop-color=\"${accent}\" stop-opacity=\".30\"/><stop offset=\"100%\" stop-color=\"${accent}\" stop-opacity=\".02\"/></linearGradient></defs><line x1=\"${L}\" y1=\"${H-B}\" x2=\"${W-R}\" y2=\"${H-B}\" stroke=\"var(--divider-color)\"/><polygon points=\"${area}\" fill=\"url(#g-${variables.suffix})\"/><polyline points=\"${points}\" fill=\"none\" stroke=\"${accent}\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>${dots}</svg></div>`; ]]]"
+          }
+        }
+      },
+      "views": [
+        {
+          "type": "sections",
+          "path": "elechome",
+          "max_columns": 2,
+          "title": "国家电网",
+          "icon": "mdi:home-lightning-bolt",
+          "subview": true,
+          "badges": [
+            {
+              "type": "custom:mushroom-template-badge",
+              "content": "一档 ≤2760 kWh",
+              "icon": "mdi:numeric-1-circle",
+              "color": "green"
+            },
+            {
+              "type": "custom:mushroom-template-badge",
+              "content": "二档 2760–4800 kWh",
+              "icon": "mdi:numeric-2-circle",
+              "color": "orange"
+            },
+            {
+              "type": "custom:mushroom-template-badge",
+              "content": "三档 >4800 kWh",
+              "icon": "mdi:numeric-3-circle",
+              "color": "red"
+            }
+          ],
+          "sections": [
+            {"type":"grid","cards":[{"type":"custom:button-card","template":"sgcc_energy","entity":"sensor.sgcc_last_7_days_6319","name":"苏州家用 · 6319","variables":{"suffix":"6319","kind":"home","annual_usage":"sensor.yearly_electricity_usage_6319","month_charge":"sensor.month_electricity_charge_6319","annual_charge":"sensor.yearly_electricity_charge_6319"},"layout_options":{"grid_columns":4,"grid_rows":4}}]},
+            {"type":"grid","cards":[{"type":"custom:button-card","template":"sgcc_energy","entity":"sensor.sgcc_last_7_days_3403","name":"老家家用 · 3403","variables":{"suffix":"3403","kind":"home","annual_usage":"sensor.yearly_electricity_usage_3403","month_charge":"sensor.month_electricity_charge_3403","annual_charge":"sensor.yearly_electricity_charge_3403"},"layout_options":{"grid_columns":4,"grid_rows":4}}]},
+            {"type":"grid","cards":[{"type":"custom:button-card","template":"sgcc_energy","entity":"sensor.sgcc_last_7_days_9011","name":"苏州充电 · 9011","variables":{"suffix":"9011","kind":"charge","annual_usage":"sensor.yearly_electricity_usage_9011","month_charge":"sensor.month_electricity_charge_9011","annual_charge":"sensor.yearly_electricity_charge_9011"},"layout_options":{"grid_columns":4,"grid_rows":4}}]},
+            {"type":"grid","cards":[{"type":"custom:button-card","template":"sgcc_energy","entity":"sensor.sgcc_last_7_days_1051","name":"老家充电 · 1051","variables":{"suffix":"1051","kind":"charge","annual_usage":"sensor.yearly_electricity_usage_1051","month_charge":"sensor.month_electricity_charge_1051","annual_charge":"sensor.yearly_electricity_charge_1051"},"layout_options":{"grid_columns":4,"grid_rows":4}}]}
+          ]
+        }
+      ]
+    }
+  }
+}
