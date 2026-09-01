@@ -475,6 +475,8 @@ services:
     volumes:
       - /mnt/SDD128G/nginx_proxy_manager/data:/data
       - /mnt/SDD128G/nginx_proxy_manager/letsencrypt:/etc/letsencrypt
+      # Preserve :444 in the upstream Host header only for ESPHome WebSockets.
+      - /mnt/SDD128G/nginx_proxy_manager/proxy.conf:/etc/nginx/conf.d/include/proxy.conf
     healthcheck:
       test: ["CMD", "/usr/bin/check-health"]
       interval: 10s
