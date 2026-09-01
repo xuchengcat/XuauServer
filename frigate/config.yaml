@@ -123,13 +123,10 @@ cameras:
       enabled: true
       min_volume: -40
       listen:
-        - speech
         - babbling
         - yell
         - laughter
-        - snicker
         - crying
-        - children_playing
     motion:
       mask: 0,0,0.37,0,0.367,0.086,0.003,0.086
       threshold: 25

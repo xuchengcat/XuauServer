@@ -97,7 +97,7 @@
           key: "<removed-ha-token>"
           fields: ["people_home", "lights_on", "switches_on"]
     - Kavita:
-        icon: si-kavita-#4AC694
+        icon: sh-kavita.png
         href: https://kavita.xuchengcat.cn:444
         description: 漫画阅读
         server: my-docker

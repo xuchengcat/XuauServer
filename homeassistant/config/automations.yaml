@@ -17,3 +17,49 @@
         title: 高温警报
         message: "机柜温度过高 ({{ states('sensor.miaomiaoc_cn_blt_3_1599m5an0lo00_t2_temperature_p_2_1') }}°C)，请散热"
   mode: single
+
+- id: frigate_suzhoudoor_person_event
+  alias: Frigate - 门口有人
+  description: 门口摄像头检测到人员时触发 frigate_door_person
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.suzhoudoor_person_occupancy
+      from: "off"
+      to: "on"
+  conditions: []
+  actions:
+    - event: frigate_door_person
+      event_data:
+        camera: suzhoudoor
+        label: person
+        detected_at: "{{ now().isoformat() }}"
+  mode: single
+
+- id: frigate_bedroom_sound_event
+  alias: Frigate - 卧室声音
+  description: 卧室检测到指定声音时触发 frigate_bedroom_sound
+  triggers:
+    - trigger: state
+      entity_id:
+        - binary_sensor.bedroom_babbling_sound
+        - binary_sensor.bedroom_yell_sound
+        - binary_sensor.bedroom_laughter_sound
+        - binary_sensor.bedroom_crying_sound
+      from: "off"
+      to: "on"
+  conditions: []
+  actions:
+    - event: frigate_bedroom_sound
+      event_data:
+        camera: bedroom
+        sound: >-
+          {{ {
+            'binary_sensor.bedroom_babbling_sound': 'babbling',
+            'binary_sensor.bedroom_yell_sound': 'yell',
+            'binary_sensor.bedroom_laughter_sound': 'laughter',
+            'binary_sensor.bedroom_crying_sound': 'crying'
+          }.get(trigger.entity_id, 'unknown') }}
+        entity_id: "{{ trigger.entity_id }}"
+        detected_at: "{{ now().isoformat() }}"
+  mode: queued
+  max: 10
