@@ -159,12 +159,12 @@
         container: cloudbak
 
 # - MA Area:
-    - Portainer:
-        icon: si-portainer-#13BEF9
-        href: https://portainer.xuchengcat.cn:444
+    - Dockhand:
+        icon: mdi-docker
+        href: https://dockhand.xuchengcat.cn:444
         description: Docker管理
         server: my-docker
-        container: portainer
+        container: dockhand
     - NginxProxy:
         icon: si-nginxproxymanager-#F15833
         href: https://nginx.xuchengcat.cn:444

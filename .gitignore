@@ -103,6 +103,9 @@ portainer/config/certs/key.pem
 portainer/config/chisel/private-key.pem
 portainer/config/portainer.key
 
+# ===== Dockhand =====
+dockhand/data/
+
 # ===== ZeroTier (runtime) =====
 zerotier/config/metrics.prom
 zerotier/config/zerotier-one.pid
@@ -135,6 +138,7 @@ nextcloud/version.php
 homeassistant/config/id_rsa
 nginx_proxy_manager/data/database.sqlite
 nginx_proxy_manager/data/*.sqlite
+nginx_proxy_manager/data/database.sqlite.pre-*
 sgcc_elec/
 zerotier/config/networks.d/*.conf
 openclaw/
