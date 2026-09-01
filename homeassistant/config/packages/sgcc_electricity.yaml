@@ -1,37 +1,34 @@
 # =============================================================================
 # 国家电网电力传感器（持久化）
-# 使用 trigger-based template sensor，避免 REST API 推送方式重启后丢失数据
-# 用户ID: 3209762003403 / 3206624836319 / 3203005109011 / 3203089371051
+# 按 ARC-MX/sgcc_electricity_new README 的 trigger-based template 方案配置。
+# state_class 已适配当前 Home Assistant：电量/金额使用 total，年度累计电量使用 total_increasing。
 # =============================================================================
 
 template:
 
-  # ---------------------------------------------------------------------------
-  # 用户 3209762003403
-  # ---------------------------------------------------------------------------
+  # 大姜充电（户号后缀 1051）
   - trigger:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.electricity_charge_balance_3209762003403
+          entity_id: sensor.electricity_charge_balance_1051
     sensor:
-      - name: electricity_charge_balance_3209762003403
-        unique_id: electricity_charge_balance_3209762003403
-        state: "{{ states('sensor.electricity_charge_balance_3209762003403') }}"
-        state_class: measurement
+      - name: electricity_charge_balance_1051
+        unique_id: electricity_charge_balance_1051
+        state: "{{ states('sensor.electricity_charge_balance_1051') }}"
+        state_class: total
         unit_of_measurement: "CNY"
         device_class: monetary
-
   - trigger:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.last_electricity_usage_3209762003403
+          entity_id: sensor.last_electricity_usage_1051
     sensor:
-      - name: last_electricity_usage_3209762003403
-        unique_id: last_electricity_usage_3209762003403
-        state: "{{ states('sensor.last_electricity_usage_3209762003403') }}"
-        state_class: measurement
+      - name: last_electricity_usage_1051
+        unique_id: last_electricity_usage_1051
+        state: "{{ states('sensor.last_electricity_usage_1051') }}"
+        state_class: total
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -39,11 +36,37 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.yearly_electricity_usage_3209762003403
+          entity_id: sensor.month_electricity_usage_1051
     sensor:
-      - name: yearly_electricity_usage_3209762003403
-        unique_id: yearly_electricity_usage_3209762003403
-        state: "{{ states('sensor.yearly_electricity_usage_3209762003403') }}"
+      - name: month_electricity_usage_1051
+        unique_id: month_electricity_usage_1051
+        state: "{{ states('sensor.month_electricity_usage_1051') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_electricity_charge_1051
+    sensor:
+      - name: month_electricity_charge_1051
+        unique_id: month_electricity_charge_1051
+        state: "{{ states('sensor.month_electricity_charge_1051') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.yearly_electricity_usage_1051
+    sensor:
+      - name: yearly_electricity_usage_1051
+        unique_id: yearly_electricity_usage_1051
+        state: "{{ states('sensor.yearly_electricity_usage_1051') }}"
         state_class: total_increasing
         unit_of_measurement: "kWh"
         device_class: energy
@@ -52,12 +75,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.yearly_electricity_charge_3209762003403
+          entity_id: sensor.yearly_electricity_charge_1051
     sensor:
-      - name: yearly_electricity_charge_3209762003403
-        unique_id: yearly_electricity_charge_3209762003403
-        state: "{{ states('sensor.yearly_electricity_charge_3209762003403') }}"
-        state_class: total_increasing
+      - name: yearly_electricity_charge_1051
+        unique_id: yearly_electricity_charge_1051
+        state: "{{ states('sensor.yearly_electricity_charge_1051') }}"
+        state_class: total
         unit_of_measurement: "CNY"
         device_class: monetary
 
@@ -65,12 +88,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.month_electricity_usage_3209762003403
+          entity_id: sensor.month_valley_usage_1051
     sensor:
-      - name: month_electricity_usage_3209762003403
-        unique_id: month_electricity_usage_3209762003403
-        state: "{{ states('sensor.month_electricity_usage_3209762003403') }}"
-        state_class: measurement
+      - name: month_valley_usage_1051
+        unique_id: month_valley_usage_1051
+        state: "{{ states('sensor.month_valley_usage_1051') }}"
+        state_class: total
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -78,41 +101,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.month_electricity_charge_3209762003403
+          entity_id: sensor.month_flat_usage_1051
     sensor:
-      - name: month_electricity_charge_3209762003403
-        unique_id: month_electricity_charge_3209762003403
-        state: "{{ states('sensor.month_electricity_charge_3209762003403') }}"
-        state_class: measurement
-        unit_of_measurement: "CNY"
-        device_class: monetary
-
-  # ---------------------------------------------------------------------------
-  # 用户 3206624836319
-  # ---------------------------------------------------------------------------
-  - trigger:
-      - platform: event
-        event_type: state_changed
-        event_data:
-          entity_id: sensor.electricity_charge_balance_3206624836319
-    sensor:
-      - name: electricity_charge_balance_3206624836319
-        unique_id: electricity_charge_balance_3206624836319
-        state: "{{ states('sensor.electricity_charge_balance_3206624836319') }}"
-        state_class: measurement
-        unit_of_measurement: "CNY"
-        device_class: monetary
-
-  - trigger:
-      - platform: event
-        event_type: state_changed
-        event_data:
-          entity_id: sensor.last_electricity_usage_3206624836319
-    sensor:
-      - name: last_electricity_usage_3206624836319
-        unique_id: last_electricity_usage_3206624836319
-        state: "{{ states('sensor.last_electricity_usage_3206624836319') }}"
-        state_class: measurement
+      - name: month_flat_usage_1051
+        unique_id: month_flat_usage_1051
+        state: "{{ states('sensor.month_flat_usage_1051') }}"
+        state_class: total
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -120,12 +114,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.yearly_electricity_usage_3206624836319
+          entity_id: sensor.month_peak_usage_1051
     sensor:
-      - name: yearly_electricity_usage_3206624836319
-        unique_id: yearly_electricity_usage_3206624836319
-        state: "{{ states('sensor.yearly_electricity_usage_3206624836319') }}"
-        state_class: total_increasing
+      - name: month_peak_usage_1051
+        unique_id: month_peak_usage_1051
+        state: "{{ states('sensor.month_peak_usage_1051') }}"
+        state_class: total
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -133,25 +127,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.yearly_electricity_charge_3206624836319
+          entity_id: sensor.month_tip_usage_1051
     sensor:
-      - name: yearly_electricity_charge_3206624836319
-        unique_id: yearly_electricity_charge_3206624836319
-        state: "{{ states('sensor.yearly_electricity_charge_3206624836319') }}"
-        state_class: total_increasing
-        unit_of_measurement: "CNY"
-        device_class: monetary
-
-  - trigger:
-      - platform: event
-        event_type: state_changed
-        event_data:
-          entity_id: sensor.month_electricity_usage_3206624836319
-    sensor:
-      - name: month_electricity_usage_3206624836319
-        unique_id: month_electricity_usage_3206624836319
-        state: "{{ states('sensor.month_electricity_usage_3206624836319') }}"
-        state_class: measurement
+      - name: month_tip_usage_1051
+        unique_id: month_tip_usage_1051
+        state: "{{ states('sensor.month_tip_usage_1051') }}"
+        state_class: total
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -159,28 +140,25 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.month_electricity_charge_3206624836319
+          entity_id: sensor.prepay_balance_1051
     sensor:
-      - name: month_electricity_charge_3206624836319
-        unique_id: month_electricity_charge_3206624836319
-        state: "{{ states('sensor.month_electricity_charge_3206624836319') }}"
-        state_class: measurement
+      - name: prepay_balance_1051
+        unique_id: prepay_balance_1051
+        state: "{{ states('sensor.prepay_balance_1051') }}"
+        state_class: total
         unit_of_measurement: "CNY"
         device_class: monetary
-
-  # ---------------------------------------------------------------------------
-  # 用户 3203005109011
-  # ---------------------------------------------------------------------------
+  # 天铂充电（户号后缀 9011）
   - trigger:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.electricity_charge_balance_3203005109011
+          entity_id: sensor.electricity_charge_balance_9011
     sensor:
-      - name: electricity_charge_balance_3203005109011
-        unique_id: electricity_charge_balance_3203005109011
-        state: "{{ states('sensor.electricity_charge_balance_3203005109011') }}"
-        state_class: measurement
+      - name: electricity_charge_balance_9011
+        unique_id: electricity_charge_balance_9011
+        state: "{{ states('sensor.electricity_charge_balance_9011') }}"
+        state_class: total
         unit_of_measurement: "CNY"
         device_class: monetary
 
@@ -188,12 +166,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.last_electricity_usage_3203005109011
+          entity_id: sensor.last_electricity_usage_9011
     sensor:
-      - name: last_electricity_usage_3203005109011
-        unique_id: last_electricity_usage_3203005109011
-        state: "{{ states('sensor.last_electricity_usage_3203005109011') }}"
-        state_class: measurement
+      - name: last_electricity_usage_9011
+        unique_id: last_electricity_usage_9011
+        state: "{{ states('sensor.last_electricity_usage_9011') }}"
+        state_class: total
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -201,11 +179,37 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.yearly_electricity_usage_3203005109011
+          entity_id: sensor.month_electricity_usage_9011
     sensor:
-      - name: yearly_electricity_usage_3203005109011
-        unique_id: yearly_electricity_usage_3203005109011
-        state: "{{ states('sensor.yearly_electricity_usage_3203005109011') }}"
+      - name: month_electricity_usage_9011
+        unique_id: month_electricity_usage_9011
+        state: "{{ states('sensor.month_electricity_usage_9011') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_electricity_charge_9011
+    sensor:
+      - name: month_electricity_charge_9011
+        unique_id: month_electricity_charge_9011
+        state: "{{ states('sensor.month_electricity_charge_9011') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.yearly_electricity_usage_9011
+    sensor:
+      - name: yearly_electricity_usage_9011
+        unique_id: yearly_electricity_usage_9011
+        state: "{{ states('sensor.yearly_electricity_usage_9011') }}"
         state_class: total_increasing
         unit_of_measurement: "kWh"
         device_class: energy
@@ -214,25 +218,144 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.yearly_electricity_charge_3203005109011
+          entity_id: sensor.yearly_electricity_charge_9011
     sensor:
-      - name: yearly_electricity_charge_3203005109011
-        unique_id: yearly_electricity_charge_3203005109011
-        state: "{{ states('sensor.yearly_electricity_charge_3203005109011') }}"
+      - name: yearly_electricity_charge_9011
+        unique_id: yearly_electricity_charge_9011
+        state: "{{ states('sensor.yearly_electricity_charge_9011') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_valley_usage_9011
+    sensor:
+      - name: month_valley_usage_9011
+        unique_id: month_valley_usage_9011
+        state: "{{ states('sensor.month_valley_usage_9011') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_flat_usage_9011
+    sensor:
+      - name: month_flat_usage_9011
+        unique_id: month_flat_usage_9011
+        state: "{{ states('sensor.month_flat_usage_9011') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_peak_usage_9011
+    sensor:
+      - name: month_peak_usage_9011
+        unique_id: month_peak_usage_9011
+        state: "{{ states('sensor.month_peak_usage_9011') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_tip_usage_9011
+    sensor:
+      - name: month_tip_usage_9011
+        unique_id: month_tip_usage_9011
+        state: "{{ states('sensor.month_tip_usage_9011') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.prepay_balance_9011
+    sensor:
+      - name: prepay_balance_9011
+        unique_id: prepay_balance_9011
+        state: "{{ states('sensor.prepay_balance_9011') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+
+  # 大姜村（户号后缀 3403）
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.electricity_charge_balance_3403
+    sensor:
+      - name: electricity_charge_balance_3403
+        unique_id: electricity_charge_balance_3403
+        state: "{{ states('sensor.electricity_charge_balance_3403') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.last_electricity_usage_3403
+    sensor:
+      - name: last_electricity_usage_3403
+        unique_id: last_electricity_usage_3403
+        state: "{{ states('sensor.last_electricity_usage_3403') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_electricity_usage_3403
+    sensor:
+      - name: month_electricity_usage_3403
+        unique_id: month_electricity_usage_3403
+        state: "{{ states('sensor.month_electricity_usage_3403') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_electricity_charge_3403
+    sensor:
+      - name: month_electricity_charge_3403
+        unique_id: month_electricity_charge_3403
+        state: "{{ states('sensor.month_electricity_charge_3403') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.yearly_electricity_usage_3403
+    sensor:
+      - name: yearly_electricity_usage_3403
+        unique_id: yearly_electricity_usage_3403
+        state: "{{ states('sensor.yearly_electricity_usage_3403') }}"
         state_class: total_increasing
-        unit_of_measurement: "CNY"
-        device_class: monetary
-
-  - trigger:
-      - platform: event
-        event_type: state_changed
-        event_data:
-          entity_id: sensor.month_electricity_usage_3203005109011
-    sensor:
-      - name: month_electricity_usage_3203005109011
-        unique_id: month_electricity_usage_3203005109011
-        state: "{{ states('sensor.month_electricity_usage_3203005109011') }}"
-        state_class: measurement
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -240,28 +363,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.month_electricity_charge_3203005109011
+          entity_id: sensor.yearly_electricity_charge_3403
     sensor:
-      - name: month_electricity_charge_3203005109011
-        unique_id: month_electricity_charge_3203005109011
-        state: "{{ states('sensor.month_electricity_charge_3203005109011') }}"
-        state_class: measurement
-        unit_of_measurement: "CNY"
-        device_class: monetary
-
-  # ---------------------------------------------------------------------------
-  # 用户 3203089371051
-  # ---------------------------------------------------------------------------
-  - trigger:
-      - platform: event
-        event_type: state_changed
-        event_data:
-          entity_id: sensor.electricity_charge_balance_3203089371051
-    sensor:
-      - name: electricity_charge_balance_3203089371051
-        unique_id: electricity_charge_balance_3203089371051
-        state: "{{ states('sensor.electricity_charge_balance_3203089371051') }}"
-        state_class: measurement
+      - name: yearly_electricity_charge_3403
+        unique_id: yearly_electricity_charge_3403
+        state: "{{ states('sensor.yearly_electricity_charge_3403') }}"
+        state_class: total
         unit_of_measurement: "CNY"
         device_class: monetary
 
@@ -269,12 +376,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.last_electricity_usage_3203089371051
+          entity_id: sensor.month_valley_usage_3403
     sensor:
-      - name: last_electricity_usage_3203089371051
-        unique_id: last_electricity_usage_3203089371051
-        state: "{{ states('sensor.last_electricity_usage_3203089371051') }}"
-        state_class: measurement
+      - name: month_valley_usage_3403
+        unique_id: month_valley_usage_3403
+        state: "{{ states('sensor.month_valley_usage_3403') }}"
+        state_class: total
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -282,11 +389,117 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.yearly_electricity_usage_3203089371051
+          entity_id: sensor.month_flat_usage_3403
     sensor:
-      - name: yearly_electricity_usage_3203089371051
-        unique_id: yearly_electricity_usage_3203089371051
-        state: "{{ states('sensor.yearly_electricity_usage_3203089371051') }}"
+      - name: month_flat_usage_3403
+        unique_id: month_flat_usage_3403
+        state: "{{ states('sensor.month_flat_usage_3403') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_peak_usage_3403
+    sensor:
+      - name: month_peak_usage_3403
+        unique_id: month_peak_usage_3403
+        state: "{{ states('sensor.month_peak_usage_3403') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_tip_usage_3403
+    sensor:
+      - name: month_tip_usage_3403
+        unique_id: month_tip_usage_3403
+        state: "{{ states('sensor.month_tip_usage_3403') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.prepay_balance_3403
+    sensor:
+      - name: prepay_balance_3403
+        unique_id: prepay_balance_3403
+        state: "{{ states('sensor.prepay_balance_3403') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+
+  # 天铂21-404（户号后缀 6319）
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.electricity_charge_balance_6319
+    sensor:
+      - name: electricity_charge_balance_6319
+        unique_id: electricity_charge_balance_6319
+        state: "{{ states('sensor.electricity_charge_balance_6319') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.last_electricity_usage_6319
+    sensor:
+      - name: last_electricity_usage_6319
+        unique_id: last_electricity_usage_6319
+        state: "{{ states('sensor.last_electricity_usage_6319') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_electricity_usage_6319
+    sensor:
+      - name: month_electricity_usage_6319
+        unique_id: month_electricity_usage_6319
+        state: "{{ states('sensor.month_electricity_usage_6319') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_electricity_charge_6319
+    sensor:
+      - name: month_electricity_charge_6319
+        unique_id: month_electricity_charge_6319
+        state: "{{ states('sensor.month_electricity_charge_6319') }}"
+        state_class: total
+        unit_of_measurement: "CNY"
+        device_class: monetary
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.yearly_electricity_usage_6319
+    sensor:
+      - name: yearly_electricity_usage_6319
+        unique_id: yearly_electricity_usage_6319
+        state: "{{ states('sensor.yearly_electricity_usage_6319') }}"
         state_class: total_increasing
         unit_of_measurement: "kWh"
         device_class: energy
@@ -295,12 +508,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.yearly_electricity_charge_3203089371051
+          entity_id: sensor.yearly_electricity_charge_6319
     sensor:
-      - name: yearly_electricity_charge_3203089371051
-        unique_id: yearly_electricity_charge_3203089371051
-        state: "{{ states('sensor.yearly_electricity_charge_3203089371051') }}"
-        state_class: total_increasing
+      - name: yearly_electricity_charge_6319
+        unique_id: yearly_electricity_charge_6319
+        state: "{{ states('sensor.yearly_electricity_charge_6319') }}"
+        state_class: total
         unit_of_measurement: "CNY"
         device_class: monetary
 
@@ -308,12 +521,12 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.month_electricity_usage_3203089371051
+          entity_id: sensor.month_valley_usage_6319
     sensor:
-      - name: month_electricity_usage_3203089371051
-        unique_id: month_electricity_usage_3203089371051
-        state: "{{ states('sensor.month_electricity_usage_3203089371051') }}"
-        state_class: measurement
+      - name: month_valley_usage_6319
+        unique_id: month_valley_usage_6319
+        state: "{{ states('sensor.month_valley_usage_6319') }}"
+        state_class: total
         unit_of_measurement: "kWh"
         device_class: energy
 
@@ -321,11 +534,50 @@ template:
       - platform: event
         event_type: state_changed
         event_data:
-          entity_id: sensor.month_electricity_charge_3203089371051
+          entity_id: sensor.month_flat_usage_6319
     sensor:
-      - name: month_electricity_charge_3203089371051
-        unique_id: month_electricity_charge_3203089371051
-        state: "{{ states('sensor.month_electricity_charge_3203089371051') }}"
-        state_class: measurement
+      - name: month_flat_usage_6319
+        unique_id: month_flat_usage_6319
+        state: "{{ states('sensor.month_flat_usage_6319') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_peak_usage_6319
+    sensor:
+      - name: month_peak_usage_6319
+        unique_id: month_peak_usage_6319
+        state: "{{ states('sensor.month_peak_usage_6319') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.month_tip_usage_6319
+    sensor:
+      - name: month_tip_usage_6319
+        unique_id: month_tip_usage_6319
+        state: "{{ states('sensor.month_tip_usage_6319') }}"
+        state_class: total
+        unit_of_measurement: "kWh"
+        device_class: energy
+
+  - trigger:
+      - platform: event
+        event_type: state_changed
+        event_data:
+          entity_id: sensor.prepay_balance_6319
+    sensor:
+      - name: prepay_balance_6319
+        unique_id: prepay_balance_6319
+        state: "{{ states('sensor.prepay_balance_6319') }}"
+        state_class: total
         unit_of_measurement: "CNY"
         device_class: monetary

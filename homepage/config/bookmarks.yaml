@@ -28,6 +28,10 @@
     - abbr: EX
       href: https://exchange.xuchengcat.cn:444
       description: 交换机
+  - UnWifi:
+    - abbr: WF
+      href: https://unwifi.xuchengcat.cn:444
+      description: Wi-Fi 副路由管理
   - ZeroTier:
     - icon: /icons/zerotier.png
       href: https://my.zerotier.com/network/abfd31bd470eb354/

@@ -130,7 +130,7 @@ services:
     mem_limit: 4g
 
   openclaw:
-    image: alpine/openclaw:latest
+    image: openclaw/openclaw:latest
     container_name: openclaw
     restart: unless-stopped
     ports:
@@ -279,7 +279,21 @@ services:
     restart: unless-stopped
     privileged: true
     network_mode: host
- 
+
+  sgcc_electricity:
+    image: registry.cn-hangzhou.aliyuncs.com/arcw/sgcc_electricity:latest
+    container_name: sgcc_electricity
+    env_file:
+      - /mnt/SDD128G/sgcc_elec/.env
+    environment:
+      SET_CONTAINER_TIMEZONE: "true"
+      CONTAINER_TIMEZONE: Asia/Shanghai
+    volumes:
+      - /mnt/SDD128G/sgcc_elec:/data
+    network_mode: host
+    restart: unless-stopped
+    init: true
+
   mosquitto:
     image: eclipse-mosquitto:latest
     container_name: mosquitto

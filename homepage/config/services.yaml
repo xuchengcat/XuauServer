@@ -97,7 +97,7 @@
           key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwOWY0YjRlNzU4Yjg0ZWQ5YTFhMzgxMjZkMDAwM2U1MyIsImlhdCI6MTc0NzAzNzE5OSwiZXhwIjoyMDYyMzk3MTk5fQ.uXp09j04-TV3ueksbBWG9ZntX-svP_fJXLeC-21E4nw"
           fields: ["people_home", "lights_on", "switches_on"]
     - Kavita:
-        icon: si-kavita-#4AC694
+        icon: sh-kavita.png
         href: https://kavita.xuchengcat.cn:444
         description: 漫画阅读
         server: my-docker
