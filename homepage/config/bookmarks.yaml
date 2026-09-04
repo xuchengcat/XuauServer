@@ -40,6 +40,10 @@
     - icon: /icons/render.png
       href: https://dashboard.render.com/
       description: bark server
+  - Zeabur:
+    - abbr: ZB
+      href: https://dash.zeabur.com/
+      description: 云服务
   - DeepSeek:
     - icon: /icons/deepseek.png
       href: https://platform.deepseek.com/top_up
