@@ -153,3 +153,7 @@ shellclash/config.yaml
 
 # Kavita runtime database, generated settings, cache, and secrets
 kavita/config/
+
+# MoonTVPlus private initialization and runtime data
+moontvplus/init.env
+moontvplus/data/
