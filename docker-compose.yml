@@ -60,14 +60,13 @@ services:
     mem_limit: 2g
 
   moontv:
-    image: ghcr.io/senshinya/moontv:latest
+    image: ghcr.io/mtvpls/moontvplus:latest
     container_name: moontv
     restart: unless-stopped
-    environment:
-      - PASSWORD=123456
-    # 如需自定义配置，可挂载文件
-    # volumes:
-    #   - ./config.json:/app/config.json:ro
+    env_file:
+      - /mnt/SDD128G/moontvplus/init.env
+    volumes:
+      - /mnt/SDD128G/moontvplus/data:/app/.data
 
   xiaomusic:
     image: hanxi/xiaomusic
