@@ -41,7 +41,7 @@ services:
     volumes:
       - /mnt/HDD14T/Media_Data_HDD:/data
     restart: unless-stopped
-    cpus: 0.5
+    cpus: 1
     mem_limit: 1g
 
   kavita:
@@ -56,7 +56,7 @@ services:
       - /mnt/SDD128G/kavita/config:/kavita/config
       - /mnt/HDD14T/Media_Data_HDD/Manga:/manga:ro
     restart: unless-stopped
-    cpus: 1
+    cpus: 2
     mem_limit: 2g
 
   moontv:
@@ -125,7 +125,7 @@ services:
       OVERWRITECLIURL: 'https://nextcloud.xuchengcat.cn:444'
       TRUSTED_PROXIES: '172.16.0.0/12'
       TRUSTED_DOMAINS: 'nextcloud.xuchengcat.cn'
-    cpus: 0.5
+    cpus: 1
     mem_limit: 4g
 
   openclaw:
@@ -316,7 +316,7 @@ services:
     volumes:
       - /mnt/SDD128G/nodered/data:/data
     restart: unless-stopped
-    cpus: 0.5
+    cpus: 1
     mem_limit: 4g
 
   esphome:
@@ -359,7 +359,7 @@ services:
       # - "8555:8555/udp" # WebRTC over udp
     environment:
       - PLUS_API_KEY=93a7661b-aab9-4c20-94be-e9ec6c53029a:3c358977e302950122f6881e0ee2d03331ed9529
-    cpus: 2.5
+    cpus: 3
     mem_limit: 8g
     depends_on:
       - mosquitto
@@ -442,7 +442,7 @@ services:
     environment:
       HOMEPAGE_ALLOWED_HOSTS: xuchengcat.cn,172.0.17:3000,192.168.2.1:3000
     restart: unless-stopped
-    cpus: 0.5
+    cpus: 1
     mem_limit: 4g
 
   iperf3:
