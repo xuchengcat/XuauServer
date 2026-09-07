@@ -1,0 +1,63 @@
+substitutions:
+  phone_hotspot_ssid: "MyPhoneHotspot"
+  phone_ibeacon_uuid: "7c8d9e10-1234-4567-89ab-0123456789ab"
+  phone_ibeacon_major: "100"
+  phone_ibeacon_minor: "1"
+
+esphome:
+  name: c6
+  friendly_name: C6
+  min_version: 2026.8.0
+
+esp32:
+  variant: esp32c6
+  flash_size: 4MB
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_SW_COEXIST_ENABLE: "y"
+
+# Use the CH343 USB connector, not the native ESP32 USB connector.
+logger:
+  hardware_uart: UART0
+  baud_rate: 115200
+  level: INFO
+
+external_components:
+  - source:
+      type: local
+      path: components
+    components: [hotspot_presence]
+
+# Do not add wifi:, api:, captive_portal: or espnow: to this standalone scanner.
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 320ms
+    window: 30ms
+    active: false
+    continuous: true
+
+binary_sensor:
+  - platform: hotspot_presence
+    id: phone_wifi
+    name: "Phone hotspot detected"
+    ssid: "${phone_hotspot_ssid}"
+    update_interval: 15s
+
+  - platform: ble_presence
+    id: phone_ble
+    name: "Phone BLE detected"
+    ibeacon_uuid: "${phone_ibeacon_uuid}"
+    ibeacon_major: ${phone_ibeacon_major}
+    ibeacon_minor: ${phone_ibeacon_minor}
+    timeout: 45s
+
+interval:
+  - interval: 5s
+    then:
+      - lambda: |-
+          const char *wifi_state = !id(phone_wifi).scan_ok() ? "unknown"
+              : (id(phone_wifi).state ? "1" : "0");
+          const char *ble_state = !id(phone_ble).has_state() ? "unknown"
+              : (id(phone_ble).state ? "1" : "0");
+          ESP_LOGI("presence", "WIFI=%s BLE=%s", wifi_state, ble_state);
