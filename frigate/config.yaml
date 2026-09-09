@@ -96,7 +96,11 @@ cameras:
     ffmpeg:
       hwaccel_args: preset-intel-qsv-h265
       output_args:
-        record: preset-record-generic-audio-aac
+        record: >-
+          -f segment -segment_time 10 -segment_format mp4
+          -reset_timestamps 1 -strftime 1
+          -c:v copy -c:a aac
+          -af aresample=async=1
       inputs:
         - path: 
             rtsp://192.168.2.90:554/user=admin&password=&channel=1&stream=0.sdp?     # <----- Main stream
