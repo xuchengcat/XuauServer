@@ -51,3 +51,7 @@ docker compose up -d
 
 - 主机：Ubuntu 24.04 LTS x86-64
 - 容器：Docker + Docker Compose
+
+## 系统备份
+
+Ubuntu 系统、服务数据及灾难恢复文件统一放在 [`server-backup`](server-backup/) 目录中管理。执行脚本、排除规则、配置说明和主硬盘恢复步骤均位于该目录；最近版本的恢复文档也会保存到 HDD6T 的 `/mnt/HDD6T/commonbkp/RESTORE.md`。

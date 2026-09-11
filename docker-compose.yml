@@ -1,6 +1,11 @@
 services:
   #影音娱乐
   jellyfin:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     container_name: jellyfin_qsv
     image: nyanmisaka/jellyfin:latest
     ports:
@@ -33,6 +38,11 @@ services:
     mem_limit: 4g
 
   webdav:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: sigoden/dufs:latest
     container_name: webdav
     user: "1000:1000"
@@ -45,6 +55,11 @@ services:
     mem_limit: 1g
 
   kavita:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: jvmilazz0/kavita:latest
     container_name: kavita
     environment:
@@ -60,6 +75,11 @@ services:
     mem_limit: 2g
 
   moontv:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: ghcr.io/mtvpls/moontvplus:latest
     container_name: moontv
     restart: unless-stopped
@@ -69,6 +89,11 @@ services:
       - /mnt/SDD128G/moontvplus/data:/app/.data
 
   xiaomusic:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: hanxi/xiaomusic
     container_name: xiaomusic
     restart: unless-stopped
@@ -85,6 +110,11 @@ services:
       XIAOMUSIC_DISABLE_HTTPAUTH: true
       
   lyricapi:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: hisatri/lyricapi:latest
     container_name: lyricapi
     # ports: 
@@ -96,6 +126,11 @@ services:
     restart: unless-stopped
 
   metatube:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: ghcr.io/metatube-community/metatube-server:latest
     container_name: metatube
     ports:
@@ -109,6 +144,11 @@ services:
       - NO_PROXY=localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16
 
   nextcloud:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     container_name: nextcloud
     image: nextcloud:apache
     restart: unless-stopped
@@ -129,7 +169,16 @@ services:
     mem_limit: 4g
 
   openclaw:
-    image: openclaw/openclaw:latest
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+    # llama.cpp 的官方 CPU 构建依赖 libgomp1；使用本地派生镜像确保容器重建后仍可用。
+    build:
+      context: /mnt/SDD128G/openclaw
+      dockerfile: Dockerfile
+    image: openclaw-local:2026.9.3
     container_name: openclaw
     restart: unless-stopped
     ports:
@@ -138,6 +187,8 @@ services:
       # 本地配置固化
       - /mnt/SDD128G/openclaw/config:/home/node/.openclaw
       - /mnt/SDD128G/openclaw/workspace:/home/node/.openclaw/workspace
+      # Share native Codex login, config and threads (homeScope: user).
+      - /home/xuau/.codex:/home/node/.codex
     environment:
       HOME: /home/node
       TERM: xterm-256color
@@ -177,6 +228,11 @@ services:
       start_period: 20s
 
   photoprism:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     container_name: photoprism
     ## Use photoprism/photoprism:preview for testing preview builds:
     image: photoprism/photoprism:latest
@@ -247,6 +303,11 @@ services:
       - "/mnt/SDD128G/photoprism/storage:/photoprism/storage"                  # *Writable* storage folder for cache, database, and sidecar files (DO NOT REMOVE)
 
   transmission:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: lscr.io/linuxserver/transmission:4.0.5
     container_name: transmission
     environment:
@@ -260,7 +321,7 @@ services:
       - /mnt/SDD128G/transmission/config:/config
       - /mnt/SDD128G/transmission/transmission-web-control:/transmission-web-control
       - /mnt/HDD14T/Media_Data_HDD:/downloads
-      - /mnt/temp:/downloads_long
+      - /mnt/HDD6T/downloads_long:/downloads_long
       - /mnt/SDD128G/transmission/watch:/watch
     network_mode: host
     restart: unless-stopped
@@ -268,6 +329,11 @@ services:
 
   #智能家居
   homeassistant:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
@@ -280,6 +346,11 @@ services:
     network_mode: host
 
   sgcc_electricity:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: registry.cn-hangzhou.aliyuncs.com/arcw/sgcc_electricity:latest
     container_name: sgcc_electricity
     env_file:
@@ -294,6 +365,11 @@ services:
     init: true
 
   mosquitto:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: eclipse-mosquitto:latest
     container_name: mosquitto
     restart: unless-stopped
@@ -307,6 +383,11 @@ services:
       - /mnt/SDD128G/mqtt/data:/mosquitto/data
 
   node-red:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     container_name: Node_Red
     image: nodered/node-red:latest
     environment:
@@ -320,6 +401,11 @@ services:
     mem_limit: 4g
 
   esphome:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: ghcr.io/imagegenius/esphome:latest
     container_name: esphome
     environment:
@@ -333,6 +419,11 @@ services:
     restart: unless-stopped
     
   frigate:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     container_name: frigate
     restart: unless-stopped
     stop_grace_period: 30s # allow enough time to shut down the various services
@@ -410,6 +501,11 @@ services:
   #     - "18001:8080"
       
   glances:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: nicolargo/glances:ubuntu-latest-full
     container_name: glances
     privileged: true
@@ -429,6 +525,11 @@ services:
     restart: unless-stopped
 
   homepage:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     # ports:
@@ -446,6 +547,11 @@ services:
     mem_limit: 4g
 
   iperf3:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: sk278/iperf3:latest
     container_name: iperf3
     restart: unless-stopped
@@ -454,6 +560,11 @@ services:
       - 5201:5201/udp
 
   kms-server:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: luodaoyi/kms-server:latest
     container_name: "kms-server"
     ports:
@@ -461,6 +572,11 @@ services:
     restart: always
 
   nginx-proxy-manager:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: 'jc21/nginx-proxy-manager:latest'
     container_name: nginx-proxy-manager
     restart: unless-stopped
@@ -472,6 +588,7 @@ services:
       # Add any other Stream port you want to expose
       # - '21:21' # FTP
     volumes:
+      - /mnt/SDD128G/nginx_proxy_manager/logrotate.conf:/etc/logrotate.d/nginx-proxy-manager:ro
       - /mnt/SDD128G/nginx_proxy_manager/data:/data
       - /mnt/SDD128G/nginx_proxy_manager/letsencrypt:/etc/letsencrypt
       # Preserve :444 in the upstream Host header only for ESPHome WebSockets.
@@ -482,6 +599,11 @@ services:
       timeout: 3s
 
   dockhand:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     container_name: dockhand
     image: fnsys/dockhand:latest
     restart: unless-stopped
@@ -494,11 +616,21 @@ services:
       - /mnt/SDD128G:/mnt/SDD128G
 
   sshwifty:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: niruix/sshwifty:latest
     container_name: sshwifty
     restart: unless-stopped
 
   zerotier:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: zyclonite/zerotier
     container_name: zerotier-one
     devices:
@@ -512,6 +644,11 @@ services:
     restart: unless-stopped
 
   cloudbak:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     image: pub.tcp.mk/likeflyme/cloudbak
     container_name: cloudbak
     restart: always

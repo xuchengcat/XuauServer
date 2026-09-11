@@ -1,0 +1,14 @@
+/proc
+/tmp
+/mnt
+/dev
+/sys
+/run
+/media
+/var/log
+/var/cache/apt/archives
+/usr/src/linux-headers*
+/home/*/.gvfs
+/home/*/.cache
+/home/*/.local/share/Trash
+/var/lib/docker/overlay2
