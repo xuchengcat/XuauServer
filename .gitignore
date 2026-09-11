@@ -141,7 +141,10 @@ nginx_proxy_manager/data/*.sqlite
 nginx_proxy_manager/data/database.sqlite.pre-*
 sgcc_elec/
 zerotier/config/networks.d/*.conf
-openclaw/
+# Keep OpenClaw runtime data private, but version the local image recipe used by
+# docker-compose.yml.
+openclaw/*
+!openclaw/Dockerfile
 xiaomusic/conf/.mi.token
 xiaomusic/conf/auth.json
 xiaomusic/conf/plugins-config.json
@@ -157,3 +160,6 @@ kavita/config/
 # MoonTVPlus private initialization and runtime data
 moontvplus/init.env
 moontvplus/data/
+
+# Local maintenance snapshots may contain host metadata and service state.
+maintenance-backups/

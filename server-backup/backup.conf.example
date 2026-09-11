@@ -1,0 +1,14 @@
+# Copy this file to backup.conf to override the defaults in backup.sh.
+# backup.conf is intentionally ignored by Git because it may contain secrets.
+
+BACKUP_ROOT="/mnt/HDD6T/commonbkp"
+BACKUP_MOUNT="/mnt/HDD6T"
+BACKUP_MOUNT_UUID="00a8921e-3ee3-4664-907c-d15bcfea6782"
+MEDIA_MOUNT="/mnt/HDD14T"
+MEDIA_MOUNT_UUID="986e4336-57c3-487b-a19b-c9fc54dee560"
+KEEP_GENERATIONS=3
+MIN_FREE_GIB=100
+
+# Optional Bark notification settings.
+BARK_SERVER="xuau-bark-server.onrender.com"
+BARK_TOKEN=""
