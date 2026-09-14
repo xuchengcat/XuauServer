@@ -114,6 +114,12 @@
         description: 聚合影视
         server: my-docker
         container: moontv
+    - MoviePilot:
+        icon: mdi-movie-open-cog
+        href: https://moviepilot.xuchengcat.cn:444
+        description: 影视订阅
+        server: my-docker
+        container: moviepilot
 
     - EspHome:
         icon: si-esphome-#000000
