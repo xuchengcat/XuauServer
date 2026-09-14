@@ -139,12 +139,21 @@ homeassistant/config/id_rsa
 nginx_proxy_manager/data/database.sqlite
 nginx_proxy_manager/data/*.sqlite
 nginx_proxy_manager/data/database.sqlite.pre-*
+nginx_proxy_manager/data/database.sqlite-*
 sgcc_elec/
 zerotier/config/networks.d/*.conf
-# Keep OpenClaw runtime data private, but version the local image recipe used by
-# docker-compose.yml.
+# MoviePilot and Prowlarr directories contain runtime databases, logs, caches,
+# generated definitions, and credentials. Docker creates them when needed.
+moviepilot/
+prowlarr/
+# Keep OpenClaw runtime data private, but version the local image recipe and
+# reviewed skill sources used by docker-compose.yml.
 openclaw/*
 !openclaw/Dockerfile
+!openclaw/skills/
+openclaw/skills/*
+!openclaw/skills/media-assistant/
+!openclaw/skills/media-assistant/**
 xiaomusic/conf/.mi.token
 xiaomusic/conf/auth.json
 xiaomusic/conf/plugins-config.json
