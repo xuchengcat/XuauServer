@@ -187,6 +187,8 @@ services:
       # 本地配置固化
       - /mnt/SDD128G/openclaw/config:/home/node/.openclaw
       - /mnt/SDD128G/openclaw/workspace:/home/node/.openclaw/workspace
+      # 仓库内审查过的媒体技能覆盖工作区副本，防止运行数据进入 Git。
+      - /mnt/SDD128G/openclaw/skills/media-assistant:/home/node/.openclaw/workspace/skills/media-assistant:ro
       # Share native Codex login, config and threads (homeScope: user).
       - /home/xuau/.codex:/home/node/.codex
     environment:
@@ -197,18 +199,20 @@ services:
       OPENCLAW_WORKSPACE_DIR: /home/node/.openclaw/workspace
       TZ: Asia/Shanghai
       # 代理配置，用于访问 OpenAI / Anthropic 等境外 Token 提供商
-      # 注：172.18.0.1:17890 为 ShellCrash mixed-port，认证：xuau:86335676
+      # ShellCrash mixed-port 由 PROXY_URL 提供，凭据不写入 Compose。
       HTTP_PROXY: ${PROXY_URL}
       HTTPS_PROXY: ${PROXY_URL}
       # NO_PROXY 需使用主机名/域名，不能依赖 CIDR 匹配域名（Node.js 不支持）
       # .xuchengcat.cn 覆盖 nginx-proxy-manager 代理的所有内网域名，避免走代理返回 502
-      NO_PROXY: localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16,192.168.2.1,.xuchengcat.cn
+      NO_PROXY: localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16,192.168.2.1,moviepilot,.xuchengcat.cn
       # Nextcloud WebDAV 凭证，供 skill 调用 API 写入笔记
       # WebDAV 地址：https://nextcloud.xuchengcat.cn:444/remote.php/dav/files/YOUR_USER/
       NEXTCLOUD_URL: https://nextcloud.xuchengcat.cn:444
       NEXTCLOUD_USER: xuau
       NEXTCLOUD_PASSWORD: ${NEXTCLOUD_PASSWORD}
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+      # MoviePilot MCP：仅由 OpenClaw MCP 配置引用，不写入技能或提示词。
+      MOVIEPILOT_API_TOKEN: ${MOVIEPILOT_API_TOKEN}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     init: true
@@ -325,6 +329,60 @@ services:
       - /mnt/SDD128G/transmission/watch:/watch
     network_mode: host
     restart: unless-stopped
+
+  moviepilot:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+    image: jxxghp/moviepilot-v3:3.0.1
+    container_name: moviepilot
+    hostname: moviepilot
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      UMASK: "002"
+      TZ: Asia/Shanghai
+      NGINX_PORT: "3000"
+      PORT: "3001"
+      TORRENT_TAG: MOVIEPILOT
+      HTTP_PROXY: ${PROXY_URL}
+      HTTPS_PROXY: ${PROXY_URL}
+      NO_PROXY: localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16,192.168.2.1,moviepilot,prowlarr,jellyfin,host.docker.internal,.xuchengcat.cn
+    volumes:
+      - /mnt/SDD128G/moviepilot/config:/config
+      - /mnt/SDD128G/moviepilot/core:/moviepilot/.cloakbrowser
+      - /mnt/HDD14T/Media_Data_HDD:/downloads
+      - /mnt/SDD128G/transmission/config/torrents:/torrents:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    stop_grace_period: 120s
+    mem_limit: 3g
+
+  prowlarr:
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    ports:
+      - "9696:9696"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      UMASK: "002"
+      TZ: Asia/Shanghai
+    volumes:
+      - /mnt/SDD128G/prowlarr/config:/config
+    restart: unless-stopped
+    mem_limit: 768m
 
 
   #智能家居

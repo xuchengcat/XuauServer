@@ -13,6 +13,8 @@
 | **nginx_proxy_manager** | 反向代理与 SSL 证书管理 |
 | **portainer** | Docker 容器可视化管理 |
 | **jellyfin** | 开源媒体服务器 |
+| **moviepilot** | 媒体搜索、订阅、下载与媒体库整理自动化 |
+| **prowlarr** | BT/PT 索引器聚合与管理 |
 | **frigate** | 基于 NVR 的 AI 摄像头监控 |
 | **photoprism** | AI 驱动的照片管理 |
 | **shinobi** | 视频监控系统 |
