@@ -34,6 +34,9 @@ esp_home/ESPHome_ESP32-C6
 # Frigate NVR data (not config)
 frigate/model_cache/
 frigate/*.db
+frigate/backup_config.yaml
+frigate/.runtime_state.json.lock
+frigate/go2rtc_homekit.yml
 frigate/.exports
 frigate/.jwt_secret
 frigate/.search_stats.json
@@ -172,3 +175,4 @@ moontvplus/data/
 
 # Local maintenance snapshots may contain host metadata and service state.
 maintenance-backups/
+update-backups/
