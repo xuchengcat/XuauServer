@@ -508,6 +508,8 @@ services:
       # - "8555:8555/udp" # WebRTC over udp
     environment:
       - PLUS_API_KEY=93a7661b-aab9-4c20-94be-e9ec6c53029a:3c358977e302950122f6881e0ee2d03331ed9529
+      - HF_HUB_OFFLINE=1
+      - TRANSFORMERS_OFFLINE=1
     cpus: 3
     mem_limit: 8g
     depends_on:
@@ -646,7 +648,7 @@ services:
       # Add any other Stream port you want to expose
       # - '21:21' # FTP
     volumes:
-      - /mnt/SDD128G/nginx_proxy_manager/logrotate.conf:/etc/logrotate.d/nginx-proxy-manager:ro
+      - /mnt/SDD128G/nginx_proxy_manager/logrotate.conf:/etc/logrotate.d/nginx-proxy-manager
       - /mnt/SDD128G/nginx_proxy_manager/data:/data
       - /mnt/SDD128G/nginx_proxy_manager/letsencrypt:/etc/letsencrypt
       # Preserve :444 in the upstream Host header only for ESPHome WebSockets.

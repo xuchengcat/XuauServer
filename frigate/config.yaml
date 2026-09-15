@@ -3,7 +3,7 @@ mqtt:
   host: mosquitto
   port: 1883
   user: xuau
-  password: "123456"
+  password: '123456'
 
 auth:
   failed_login_rate_limit: 1/second;5/minute;20/hour
@@ -66,12 +66,20 @@ cameras:
         interval: 500    # Frequency for confirming stationary objects
         threshold: 500   # Frames before object considered stationary
     motion:
-      mask: 0,0.007,0.315,0.009,0.317,0.093,0.003,0.093
+      mask:
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0,0.007,0.315,0.009,0.317,0.093,0.003,0.093
       threshold: 25
       contour_area: 10
       improve_contrast: true
     objects:
-      mask: 0.18,0.106,0.203,1,0,1,0,0.103
+      mask:
+        object_mask_1:
+          friendly_name: Object Mask 1
+          enabled: true
+          coordinates: 0.18,0.106,0.203,1,0,1,0,0.103
       filters:
         person:
           min_area: 5000        # Minimum size of detection box
@@ -80,9 +88,6 @@ cameras:
           threshold: 0.7        # Required score to be considered a person
     record:
       enabled: true
-      retain:
-        days: 30
-        mode: all
       alerts:
         retain:
           days: 365
@@ -91,6 +96,10 @@ cameras:
         retain:
           days: 365
           mode: motion
+      continuous:
+        days: 30
+      motion:
+        days: 0
   bedroom:
     enabled: true
     ffmpeg:
@@ -132,7 +141,11 @@ cameras:
         - laughter
         - crying
     motion:
-      mask: 0,0,0.37,0,0.367,0.086,0.003,0.086
+      mask:
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0,0,0.37,0,0.367,0.086,0.003,0.086
       threshold: 25
       contour_area: 10
       improve_contrast: true
@@ -145,9 +158,6 @@ cameras:
           threshold: 0.7        # Required score to be considered a person
     record:
       enabled: true
-      retain:
-        days: 30
-        mode: all
       alerts:
         retain:
           days: 365
@@ -157,7 +167,11 @@ cameras:
           days: 365
           mode: motion
 
-version: 0.15-1
+      continuous:
+        days: 30
+      motion:
+        days: 0
+version: 0.18-0
 semantic_search:
   enabled: true
   reindex: false
