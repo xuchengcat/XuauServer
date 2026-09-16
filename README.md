@@ -1,59 +1,86 @@
 # XuauServer
 
-个人 Homelab 服务器配置备份仓库，基于 Docker Compose 管理的家庭自动化与媒体服务集合。
+XuauServer 是一套运行在 Ubuntu 24.04 LTS x86-64 主机上的个人 Homelab 配置。项目以根目录的 Docker Compose 为主要编排入口，覆盖影音、智能家居、监控、存储、网络和运维服务；仓库中还包含少量独立 Compose、宿主机脚本、路由配置及灾难恢复工具。
 
-## 服务列表
+> 这不是一套可在任意机器上直接启动的通用模板。Compose 使用了当前主机的绝对路径、设备节点、局域网地址和外部磁盘，部署前必须按实际环境调整。
 
-| 服务 | 说明 |
-|------|------|
-| **homeassistant** | Home Assistant 家庭自动化平台 |
-| **homebridge** | HomeKit 桥接，接入不支持苹果的设备 |
-| **nodered** | 可视化自动化流程编排 |
-| **nextcloud** | 私有云存储与协作平台 |
-| **nginx_proxy_manager** | 反向代理与 SSL 证书管理 |
-| **portainer** | Docker 容器可视化管理 |
-| **jellyfin** | 开源媒体服务器 |
-| **moviepilot** | 媒体搜索、订阅、下载与媒体库整理自动化 |
-| **prowlarr** | BT/PT 索引器聚合与管理 |
-| **frigate** | 基于 NVR 的 AI 摄像头监控 |
-| **photoprism** | AI 驱动的照片管理 |
-| **shinobi** | 视频监控系统 |
-| **bark** | iOS 自定义推送通知服务 |
-| **esp_home** | ESP 设备固件管理平台 |
-| **transmission** | BT 下载客户端 |
-| **zerotier** | 虚拟局域网组网 |
-| **mqtt** | MQTT 消息代理（Mosquitto） |
-| **homepage** | 服务导航首页 |
-| **sgcc_elec** | 国家电网电量监控 |
-| **xiaomusic** | 小爱音箱自定义音乐 |
-| **vpnupdate** | VPN 配置自动更新 |
-| **routerconfig** | 路由器配置备份 |
-| **tpu** | TPU 加速相关配置 |
-| **kms** | KMS 激活服务 |
-| **lyricapi** | 歌词 API 服务 |
+## 文档
 
-## 仓库说明
+- [工程结构](docs/PROJECT_STRUCTURE.md)：目录职责、数据分层、服务之间的关系。
+- [服务清单](docs/SERVICES.md)：每个服务的用途、入口、依赖和部署状态。
+- [部署与运维](docs/OPERATIONS.md)：启动、更新、备份、恢复和常见检查。
+- [安全与注意事项](docs/SECURITY.md)：凭据、网络暴露、权限、数据库和硬件相关风险。
 
-本仓库仅包含各服务的配置文件，不含：
+## 快速开始
 
-- 运行时数据、数据库、缓存
-- 媒体文件、照片、监控录像
-- 依赖包（`node_modules` 等）
-- 证书、私钥等敏感凭据
-
-## 使用方式
+主服务栈由根目录 [`docker-compose.yml`](docker-compose.yml) 管理：
 
 ```bash
-git clone https://github.com/xuchengcat/XuauServer.git
-cd XuauServer/<service>
+cd /mnt/SDD128G
+docker compose config -q
 docker compose up -d
+docker compose ps
 ```
 
-## 环境
+部署前至少需要：
 
-- 主机：Ubuntu 24.04 LTS x86-64
-- 容器：Docker + Docker Compose
+1. 安装 Docker Engine 和 Docker Compose 插件。
+2. 确认 `/mnt/SDD128G`、`/mnt/HDD14T`、`/mnt/HDD6T`、`/mnt/camera1t` 等挂载点存在且没有落到根分区的空目录。
+3. 根据本机情况准备根目录 `.env`，以及 `webdav/`、`sgcc_elec/`、`moontvplus/` 等服务的私有环境文件。
+4. 确认运行用户 UID/GID `1000:1000`、Intel `/dev/dri`、Coral `/dev/apex_0` 和 `/dev/net/tun` 等权限与设备节点。
+5. 阅读[安全与注意事项](docs/SECURITY.md)，轮换仓库历史配置中曾出现的明文口令或令牌。
 
-## 系统备份
+建议按服务分批启动，而不是在新主机上第一次就启动全部服务：
 
-Ubuntu 系统、服务数据及灾难恢复文件统一放在 [`server-backup`](server-backup/) 目录中管理。执行脚本、排除规则、配置说明和主硬盘恢复步骤均位于该目录；最近版本的恢复文档也会保存到 HDD6T 的 `/mnt/HDD6T/commonbkp/RESTORE.md`。
+```bash
+docker compose up -d mosquitto homeassistant node-red esphome
+docker compose up -d transmission prowlarr moviepilot jellyfin
+docker compose up -d nginx-proxy-manager homepage glances dockhand
+```
+
+## 服务概览
+
+| 分类 | 服务 |
+| --- | --- |
+| 影音与内容 | Jellyfin、Kavita、MoonTVPlus、XiaoMusic、LyricAPI、MetaTube、PhotoPrism |
+| 下载与整理 | Transmission、Prowlarr、MoviePilot、WebDAV |
+| 智能家居 | Home Assistant、Node-RED、ESPHome、Mosquitto、SGCC Electricity |
+| 视频监控 | Frigate；Shinobi 作为独立备用方案保留 |
+| 云与归档 | Nextcloud、CloudBak |
+| 网络与入口 | Nginx Proxy Manager、ZeroTier、iperf3、SSHwifty、KMS |
+| 运维管理 | Homepage、Glances、Dockhand、OpenClaw |
+| 宿主机工具 | server-backup、routerconfig、ShellCrash、vpnupdate、UpdateServerHost、HDD_Temp |
+
+完整说明见[服务清单](docs/SERVICES.md)。
+
+## 目录速览
+
+```text
+.
+├── docker-compose.yml       # 主要服务栈，当前统一入口
+├── .env                     # 主栈私有变量，不应提交
+├── docs/                    # 工程、服务、运维和安全文档
+├── homeassistant/           # Home Assistant 配置
+├── frigate/                 # Frigate 配置及本地运行状态
+├── jellyfin/                # Jellyfin 配置、插件和缓存目录
+├── nextcloud/               # Nextcloud 程序、配置及本地数据目录
+├── moviepilot/ prowlarr/    # 媒体自动化运行数据（已忽略）
+├── homepage/                # 服务导航与 Glances 配置
+├── openclaw/                # OpenClaw 本地镜像与审查过的技能
+├── server-backup/           # 系统备份及灾难恢复脚本
+├── routerconfig/            # 宿主机网络、PPPoE、防火墙配置
+└── <service>/               # 其他服务的持久化配置或独立 Compose
+```
+
+仓库中既有可版本化配置，也有数据库、缓存、证书、运行状态等本地数据。`.gitignore` 只能减少误提交，不能替代备份和密钥管理。
+
+## 备份与恢复
+
+系统和服务数据备份由 [`server-backup/backup.sh`](server-backup/backup.sh) 管理，详细说明见 [`server-backup/README.md`](server-backup/README.md)，主硬盘恢复步骤见 [`server-backup/RESTORE.md`](server-backup/RESTORE.md)。
+
+```bash
+sudo /mnt/SDD128G/server-backup/backup.sh --check
+sudo /mnt/SDD128G/server-backup/backup.sh
+```
+
+文件级归档不能保证运行中 SQLite、MariaDB 等数据库的事务一致性；关键服务仍需应用级导出、暂停容器或文件系统快照。
