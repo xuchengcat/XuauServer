@@ -67,7 +67,6 @@
 | HDD Temp | 将 SMART 硬盘温度写入 HA helper | 需要 `smartctl`、Python `requests` 和访问 HA API 的令牌 |
 | Server Backup | 系统与服务文件级归档 | root 执行 `backup.sh`，目标为 HDD6T；恢复见同目录 `RESTORE.md` |
 | TPU | Coral Gasket DKMS 驱动 | 宿主机安装材料，为 Frigate 的 `/dev/apex_0` 提供支持 |
-| FormatMusic | 音乐文件格式/目录整理 | 手工脚本；先在副本或小目录验证，避免批量误改媒体库 |
 | Codex helpers | 为本机 Codex 注入代理并启动或更新 | 本地开发辅助，含私有网络配置，不属于服务器运行时 |
 
 ## 6. 重复编排提示
