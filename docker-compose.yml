@@ -684,6 +684,11 @@ services:
     image: niruix/sshwifty:latest
     container_name: sshwifty
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      SSHWIFTY_PRESETS: >-
+        [{"Title":"xuau_server","Type":"SSH","Host":"host.docker.internal:22","Meta":{"User":"xuau","Encoding":"utf-8","Fingerprint":"SHA256:yYLQU8aAU4zbfKOWmXcei8qextIkn5e4hcByA/uRDv0"}}]
 
   zerotier:
     logging:

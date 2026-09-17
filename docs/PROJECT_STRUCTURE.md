@@ -60,7 +60,6 @@
 | `tpu/` | Coral PCIe/M.2 TPU 的 Gasket DKMS 驱动包和源码 | 宿主机驱动材料 |
 | `codex/` | 本机 Codex 启动/更新脚本及调研文档 | 本地开发工具，已忽略 |
 | `maintenance-backups/` | 运维操作前生成的本地快照 | 临时备份，已忽略 |
-| `FormatMusic.py` | 音乐文件整理脚本 | 手工工具，执行前先检查处理范围 |
 | `DATABASE_CONSOLIDATION_PLAN.md` | 数据库整合草案 | 本地未跟踪文档，不属于当前正式文档 |
 
 ## 3. 存储布局
