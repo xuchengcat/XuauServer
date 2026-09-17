@@ -5,7 +5,7 @@
 项目存在三类运行单元：
 
 1. **主服务栈**：根目录 `docker-compose.yml`，是当前推荐的统一入口，共定义 28 个服务。
-2. **独立或历史 Compose**：`bark/`、`iperf/`、`kms/`、`lyricapi/`、`nginx_proxy_manager/`、`nodered/`、`photoprism/`、`portainer/`、`transmission/`、`zerotier/` 和 `shinobi/` 下的 Compose 文件。部分服务已同时合并进主栈，不应重复启动。
+2. **独立或历史 Compose**：`bark/`、`iperf/`、`kms/`、`lyricapi/`、`nginx_proxy_manager/`、`nodered/`、`photoprism/`、`portainer/`、`transmission/` 和 `zerotier/` 下的 Compose 文件。部分服务已同时合并进主栈，不应重复启动。
 3. **宿主机工具**：`server-backup/`、`routerconfig/`、`shellclash/`、`vpnupdate/`、`UpdateServerHost/`、`HDD_Temp/` 和 `codex/`，依赖 systemd、cron、Python 或宿主机命令，不由根 Compose 管理。
 
 根 Compose 未显式指定网络的服务会加入项目默认 bridge 网络，因此能使用 Compose 服务名互相访问，例如 Frigate 连接 `mosquitto:1883`。使用 `network_mode: host` 的服务直接共享宿主机网络命名空间，不参与该服务名解析方式。
@@ -48,7 +48,6 @@
 | 目录/文件 | 作用 | 状态 |
 | --- | --- | --- |
 | `bark/` | 自建 Bark iOS 推送服务 | 独立 Compose；根 Compose 中已注释，当前注释称改用托管实例 |
-| `shinobi/` | Shinobi NVR 源码、镜像和 MySQL 5.7 编排 | 独立备用方案；根 Compose 中已注释 |
 | `portainer/` | Portainer Docker 管理界面 | 独立 Compose；主栈当前使用 Dockhand |
 | `homebridge/` | HomeKit 桥接配置及启动脚本 | 不在根 Compose，需单独运行或另行编排 |
 | `server-backup/` | 主系统、服务目录和外部数据的归档/恢复 | 宿主机 root 脚本 |
@@ -77,7 +76,6 @@
 | `/mnt/HDD6T/downloads_long` | Transmission 长期下载目录 |
 | `/mnt/HDD6T/commonbkp` | 系统完整备份集 |
 | `/mnt/camera1t/frigate` | Frigate 录像 |
-| `/mnt/camera1t/videos`、`database` | Shinobi 录像和数据库（仅独立方案） |
 
 启动容器前应使用 `findmnt` 检查外部磁盘。挂载失败时，同名目录可能仍存在于根分区；继续运行会把大量媒体、录像或数据库写到系统盘。
 

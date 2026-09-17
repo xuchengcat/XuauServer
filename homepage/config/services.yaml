@@ -139,10 +139,6 @@
         description: 自动化
         server: my-docker
         container: xiaomusic
-          #- Shinobi:
-          #icon: /icons/shinobi.png
-          #href: https://shinobi.xuchengcat.cn:444
-          #description: 监控设置
     - Frigate:
         icon: /icons/frigate.png
         href: https://frigate.xuchengcat.cn:444

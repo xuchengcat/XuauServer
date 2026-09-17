@@ -34,8 +34,6 @@
 | `esphome` | ESP 固件配置、编译和 OTA 管理 | `network_mode: host`，通常为 `6052` | 构建缓存很大；host 网络用于发现设备；仓库含自定义组件 |
 | `frigate` | 摄像头录像、检测、音频事件与检索 | `5000`、`8554`、`8555/tcp` | 依赖 Mosquitto、Coral `/dev/apex_0`、Intel QSV 和 camera1t；`5000` 是未认证内部接口，不应公网暴露 |
 
-`shinobi/` 是另一套独立 NVR 方案，使用自建镜像和 MySQL 5.7，根 Compose 中的定义已注释。除非明确迁移，不要让 Shinobi 与 Frigate 同时占用同一摄像头、录像盘或硬件加速资源。
-
 ## 4. 根 Compose：云、网络与管理
 
 | Compose 服务 | 用途 | 对外入口/网络 | 关键依赖与注意事项 |
@@ -59,7 +57,6 @@
 | Bark | iOS 推送服务 | `bark/docker-compose.yaml`；当前主栈注释说明已改用外部托管实例 |
 | Portainer | Docker 管理 UI | `portainer/docker-compose.yml`；与 Dockhand 功能重叠，Docker socket 权限很高 |
 | Homebridge | 把非原生设备接入 Apple HomeKit | 目录含 `startup.sh`、插件清单和配置，但无当前 Compose 定义 |
-| Shinobi | 备用视频监控 | 先启动 SQL Compose，再启动主 Compose；配置含旧式默认口令，启用前必须更换 |
 | ShellCrash | Mihomo/Clash 代理和规则分流 | 使用 `shellclash/install.sh` 将配置部署至 `/etc/ShellCrash` |
 | VPN Update | 更新 ShellCrash 订阅节点 | `vpnupdate/refresh_config.sh --dry-run` 验证，正式运行通常需要 root |
 | Router config | PPPoE、Netplan、IPv6、DHCP 与防火墙 | 直接影响宿主机网络，只应在控制台可恢复时应用 |
