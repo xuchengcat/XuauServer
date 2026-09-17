@@ -23,7 +23,6 @@ mqtt/config/password.txt
 mqtt/data/
 zerotier/config/*.secret
 zerotier/config/peers.d/
-shinobi/Shinobi/.bash_history
 transmission/transmission-web-control/
 esp_home/ESPHome_ESP32-C6
 
@@ -48,7 +47,6 @@ esp_home/esphome_normal/.esphome/
 # Large data directories (not config)
 photoprism/storage/
 jellyfin/cache/
-shinobi/Shinobi/
 nextcloud/data/
 nextcloud/custom_apps/
 

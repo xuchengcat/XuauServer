@@ -45,7 +45,7 @@ docker compose up -d nginx-proxy-manager homepage glances dockhand
 | 影音与内容 | Jellyfin、Kavita、MoonTVPlus、XiaoMusic、LyricAPI、MetaTube、PhotoPrism |
 | 下载与整理 | Transmission、Prowlarr、MoviePilot、WebDAV |
 | 智能家居 | Home Assistant、Node-RED、ESPHome、Mosquitto、SGCC Electricity |
-| 视频监控 | Frigate；Shinobi 作为独立备用方案保留 |
+| 视频监控 | Frigate |
 | 云与归档 | Nextcloud、CloudBak |
 | 网络与入口 | Nginx Proxy Manager、ZeroTier、iperf3、SSHwifty、KMS |
 | 运维管理 | Homepage、Glances、Dockhand、OpenClaw |

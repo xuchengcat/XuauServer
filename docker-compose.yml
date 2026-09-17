@@ -515,40 +515,6 @@ services:
     depends_on:
       - mosquitto
 
-  # shinobi:
-    # build:
-    #   context: .
-    #   args:
-    #     SHINOBI_BRANCH: dev
-    # container_name: shinobi_camera
-    # volumes:
-    #   - /dev/shm/ShinobiRAM:/dev/shm/streams
-    #   - /mnt/SDD128G/shinobi/Shinobi:/home/Shinobi
-    #   - /mnt/camera1t/videos:/home/Shinobi/videos
-    # ports:
-    #   - "11911:8080"
-    # environment:
-    #   - HOME=/home/Shinobi
-  #     - DB_HOST=shinobi-sql
-  #     - DB_USER=majesticflame
-  #     - DB_PASSWORD=1234
-  #     - DB_DATABASE=ccio
-  #     - SHINOBI_UPDATE=false
-  #   restart: unless-stopped
-
-  # shinobi-sql:
-  #   image: mysql:5.7
-  #   container_name: mysql_for_camera
-  #   volumes:
-  #     - /mnt/camera1t/database:/var/lib/mysql
-  #     - ./mysql-init:/docker-entrypoint-initdb.d
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=rootpassword
-  #     - MYSQL_DATABASE=ccio
-  #     - MYSQL_USER=majesticflame
-  #     - MYSQL_PASSWORD=1234
-  #   restart: unless-stopped
-
   #服务管理
   #no need bark any more , use https://dashboard.render.com/ instead
   # bark-server:
