@@ -1,0 +1,8 @@
+/* Hide the entire private group, including its heading. */
+.bookmark-group:has(#private-bookmark-manwa) {
+  display: none !important;
+}
+
+html.private-bookmarks-visible .bookmark-group:has(#private-bookmark-manwa) {
+  display: block !important;
+}

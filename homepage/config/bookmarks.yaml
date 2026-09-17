@@ -72,14 +72,6 @@
       description: " "
 
 - Outside:
-    - Manwa:
-        - abbr: MW
-          href: https://manwa.me/bookshelf
-          description: "漫画"
-    - Xslist:
-        - abbr: XS
-          href: https://xlist.org/zh
-          description: "AI识脸"
     - Ref:
         - abbr: RF
           href: https://reference.doraemon.press/
@@ -93,3 +85,30 @@
         - icon: /icons/youtube.png
           href: https://youtube.com/
           description: " "
+
+- Private:
+    - Manwa:
+        - id: private-bookmark-manwa
+          abbr: MW
+          href: https://manwa.me/bookshelf
+          description: "漫画"
+    - Xslist:
+        - id: private-bookmark-xslist
+          abbr: XS
+          href: https://xslist.org/zh
+          description: "AI识脸"
+    - NicoFace:
+        - id: private-bookmark-nicoface
+          abbr: NF
+          href: https://nico-face.com/
+          description: "女优识别"
+    - Sokkuri AV:
+        - id: private-bookmark-sokkuri
+          abbr: SA
+          href: https://sokkuri-av.com/en
+          description: "相似女优"
+    - FaceCheck:
+        - id: private-bookmark-facecheck
+          abbr: FC
+          href: https://facecheck.id/zh
+          description: "全网识脸"
