@@ -181,6 +181,9 @@ services:
     image: openclaw-local:2026.9.3
     container_name: openclaw
     restart: unless-stopped
+    env_file:
+      # Home Assistant MCP 专用凭证；宿主机 0600，且不挂载进 OpenClaw 工作区。
+      - /mnt/SDD128G/openclaw-secrets/homeassistant.env
     ports:
       - "18789:18789"
     volumes:
@@ -204,7 +207,7 @@ services:
       HTTPS_PROXY: ${PROXY_URL}
       # NO_PROXY 需使用主机名/域名，不能依赖 CIDR 匹配域名（Node.js 不支持）
       # .xuchengcat.cn 覆盖 nginx-proxy-manager 代理的所有内网域名，避免走代理返回 502
-      NO_PROXY: localhost,127.0.0.1,172.18.0.0/16,192.168.0.0/16,192.168.2.1,moviepilot,.xuchengcat.cn
+      NO_PROXY: localhost,127.0.0.1,host.docker.internal,172.18.0.0/16,192.168.0.0/16,192.168.2.1,moviepilot,.xuchengcat.cn
       # Nextcloud WebDAV 凭证，供 skill 调用 API 写入笔记
       # WebDAV 地址：https://nextcloud.xuchengcat.cn:444/remote.php/dav/files/YOUR_USER/
       NEXTCLOUD_URL: https://nextcloud.xuchengcat.cn:444

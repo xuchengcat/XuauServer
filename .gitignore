@@ -149,6 +149,7 @@ moviepilot/
 prowlarr/
 # Keep OpenClaw runtime data private, but version the local image recipe and
 # reviewed skill sources used by docker-compose.yml.
+openclaw-secrets/
 openclaw/*
 !openclaw/Dockerfile
 !openclaw/skills/
