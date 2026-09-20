@@ -68,6 +68,20 @@ input_select:
       - "白天"
     initial: "起床"
     icon: mdi:home-automation
+  hdd_temp_alert_sdb:
+    name: sdb温度告警级别
+    options:
+      - normal
+      - warm
+      - danger
+      - critical
+  hdd_temp_alert_sdc:
+    name: sdc温度告警级别
+    options:
+      - normal
+      - warm
+      - danger
+      - critical
 
 input_number:
   disk_temp_sdc:
