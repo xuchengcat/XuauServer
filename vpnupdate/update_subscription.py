@@ -160,7 +160,15 @@ def build_config(config_path: Path, proxies: list[dict[str, Any]]) -> dict[str, 
             if not group["use"]: group.pop("use")
         if uses_b or group.get("name") in managed:
             retained = [x for x in (group.get("proxies") or []) if str(x) not in old_names]
-            group["proxies"] = retained + [x for x in new_names if x not in retained]
+            selected_names = new_names
+            group_filter = group.get("filter")
+            if isinstance(group_filter, str) and group_filter.strip():
+                try: pattern = re.compile(group_filter)
+                except re.error as exc: raise UpdateError(f"策略组 {group.get('name')} 的 filter 正则无效: {exc}") from exc
+                selected_names = [name for name in new_names if pattern.search(name)]
+            group["proxies"] = retained + [x for x in selected_names if x not in retained]
+            if group.get("name") == "🎮 Steam":
+                group["url"] = os.getenv("STEAM_TEST_URL", "https://store.steampowered.com/").strip()
             updated += 1
     if not updated: raise UpdateError("没有找到需要写入节点的策略组，请设置 UPDATE_GROUPS")
     return document

@@ -15,7 +15,7 @@
 2. 下载并解析 Clash YAML 或 Base64 节点订阅。
 3. 检查节点字段、端口、重复名称和最低节点数量。
 4. 调用当前 Mihomo 核心验证节点配置。
-5. 更新主配置中的 `proxies` 和指定策略组。
+5. 更新主配置中的 `proxies` 和指定策略组；组内存在 `filter` 时按节点名称筛选。
 6. 原子替换主配置，然后重启 ShellCrash。
 
 任一下载、解析或验证步骤失败，均不会覆盖现有配置。修改前的主配置保存在：
@@ -59,6 +59,7 @@ SUBSCRIPTION_URL=https://example.com/subscribe?token=replace-me
 | `MIHOMO_CORE` | `/tmp/ShellCrash/CrashCore` | Mihomo 核心路径 |
 | `RESTART_COMMAND` | `systemctl restart shellcrash` | 更新后的重启命令 |
 | `UPDATE_GROUPS` | `🚀 节点选择,🎮 Steam,🤖 ChatGPT` | 写入节点的策略组，逗号分隔 |
+| `STEAM_TEST_URL` | `https://store.steampowered.com/` | Steam 策略组的健康检查地址 |
 | `MIN_PROXY_COUNT` | `1` | 最少节点数，低于该值拒绝覆盖 |
 | `HTTP_TIMEOUT` | `30` | 下载超时秒数 |
 | `BACKUP_COUNT` | `5` | 主配置备份保留数量 |
