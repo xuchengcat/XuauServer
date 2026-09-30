@@ -1,0 +1,66 @@
+Netplan candidate isolated generation exit=0
+Failed to send reload request: Permission denied
+Reload daemon failed: Interactive authentication required.
+Command '['systemctl', 'daemon-reload', '--no-ask-password']' returned non-zero exit status 1.
+
+
+Generated files under temporary root:
+run/systemd/network/10-netplan-LAN_1G.network
+run/systemd/network/10-netplan-LAN_2.5G_1.network
+run/systemd/network/10-netplan-LAN_2.5G_2.network
+run/systemd/network/10-netplan-br_ent.netdev
+run/systemd/network/10-netplan-br_ent.network
+run/systemd/network/10-netplan-br_lan.netdev
+run/systemd/network/10-netplan-br_lan.network
+run/systemd/network/10-netplan-vlan2.netdev
+run/systemd/network/10-netplan-vlan2.network
+run/systemd/network/10-netplan-vlan20.netdev
+run/systemd/network/10-netplan-vlan20.network
+run/systemd/network/10-netplan-vlan_ppp.netdev
+run/systemd/network/10-netplan-vlan_ppp.network
+
+dnsmasq candidate syntax check exit=0
+dnsmasq: syntax check OK.
+
+
+dhcp6c candidate reviewed against installed man page; no daemon started and no runtime lease test performed.
+
+Follow-up using generator directly, without CLI daemon-reload:
+Direct Netplan generator with isolated root: exit=0
+
+10-netplan-LAN_2.5G_1.network
+[Match]
+Name=LAN_2.5G_1
+
+[Network]
+LinkLocalAddressing=no
+IPv6AcceptRA=no
+VLAN=vlan2
+VLAN=vlan20
+
+10-netplan-br_lan.network
+[Match]
+Name=br_lan
+
+[Link]
+MACAddress=6a:b9:69:50:50:af
+
+[Network]
+LinkLocalAddressing=ipv6
+Address=192.168.2.1/24
+Address=fc00:192:168:2::100/64
+IPv6AcceptRA=no
+ConfigureWithoutCarrier=yes
+
+10-netplan-br_ent.network
+[Match]
+Name=br_ent
+
+[Link]
+MACAddress=02:20:00:00:00:01
+
+[Network]
+LinkLocalAddressing=ipv6
+Address=192.168.20.1/24
+IPv6AcceptRA=no
+ConfigureWithoutCarrier=yes

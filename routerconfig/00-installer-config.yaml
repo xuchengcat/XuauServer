@@ -9,17 +9,20 @@ network:
   renderer: networkd
   ethernets:
     LAN_1G: # 板载网卡，千兆给电视（百兆）
+      macaddress: 24:CF:24:1A:D5:EB
       dhcp4: false # 禁用DHCPv4
       dhcp6: false # 禁用DHCPv6
       optional: true # 置为非必须，防止Ubuntu的网络检查造成系统启动延迟
-      accept-ra: true
+      accept-ra: false # PPPoE 的 IPv6 RA 由 pppoe_dial 接收
     LAN_2.5G_1: # 2.5G网卡，作为LAN使用
       dhcp4: false # 禁用DHCPv4
       dhcp6: false # 禁用DHCPv6
+      accept-ra: false # LAN 路由接口不接受客户端侧 RA
       optional: true # 设置为非必须，防止Ubuntu的网络检查造成系统启动延迟
     LAN_2.5G_2: # 网卡enp2s0，作为LAN使用，配置同网卡enp1s0一致
       dhcp4: false
       dhcp6: false
+      accept-ra: false
       optional: true
   bridges:
     br_lan: # 将2.5G的俩个网口组成网桥，方便盲插，网桥名称为br_lan
@@ -28,13 +31,10 @@ network:
         - "LAN_2.5G_2"
       addresses: # 固定网卡所拥有的内网IP地址段
         - 192.168.2.1/24
-        # - fc00:192:168:2::1/64 # TODO 等公网IPV6调通后再行分配 
+        - fc00:192:168:2::100/64 # 避开 unwifi 错误响应的 ::1
       dhcp4: false # 禁用DHCPv4
       dhcp6: false # 禁用DHCPv6
-      nameservers: # 设置默认DNS服务器，非必须
-        addresses:
-          - 223.5.5.5
-          # - "2400:3200::1"
+      accept-ra: false # LAN 路由接口不接受客户端侧 RA
       parameters:
         stp: true # 启用生成树协议，防止环路
         forward-delay: 4
@@ -45,5 +45,6 @@ network:
       link: LAN_1G
       dhcp4: false # 禁用DHCPv4
       dhcp6: false # 禁用DHCPv6
-      accept-ra: true
+      optional: true # 仅作为 PPPoE 二层承载，不等待可路由地址
+      accept-ra: false # PPPoE 的 IPv6 RA 由 pppoe_dial 接收
       # 后续可创见IPTV使用的VLAN

@@ -1,0 +1,22 @@
+{
+  "date_local": "2026-09-28",
+  "timezone": "Asia/Shanghai",
+  "interface": "pppoe_dial",
+  "probe": "DHCPv6 SOLICIT with IA_PD, without Rapid Commit",
+  "response_type": "ADVERTISE",
+  "message_type": 2,
+  "server_link_local": "fe80::ce1a:faff:feee:b660",
+  "offered_prefix": "2408:823d:5016:8804::/62",
+  "iaid": 1,
+  "t1_seconds": 1800,
+  "t2_seconds": 2880,
+  "preferred_lifetime_seconds": 3600,
+  "valid_lifetime_seconds": 7200,
+  "pd_status_code": 0,
+  "pd_status_message": "SUCCESS",
+  "request_sent": false,
+  "rapid_commit_requested": false,
+  "lease_confirmed": false,
+  "local_addresses_or_routes_changed": false,
+  "note": "Offer only. The deployment client identity and final lease may differ. Prefix routing and renewal remain untested."
+}
