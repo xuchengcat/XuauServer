@@ -790,6 +790,47 @@
           "cards": [
             {
               "type": "heading",
+              "heading": "车辆定位",
+              "heading_style": "title",
+              "icon": "mdi:map-marker"
+            },
+            {
+              "type": "map",
+              "entities": [
+                "device_tracker.zhi_ji_qi_che_che_liang_wei_zhi"
+              ],
+              "hours_to_show": 0,
+              "default_zoom": 15,
+              "auto_fit": true,
+              "grid_options": {
+                "columns": 12,
+                "rows": 6
+              }
+            },
+            {
+              "type": "tile",
+              "entity": "device_tracker.zhi_ji_qi_che_che_liang_wei_zhi",
+              "name": "车辆位置",
+              "grid_options": {
+                "columns": 12,
+                "rows": 1
+              }
+            },
+            {
+              "type": "markdown",
+              "content": "位置来自云端车况快照，自动查询及“立即重新查询车况”按钮都会更新定位。车辆休眠时可能保留上次上传的位置。\n\n{% set ts = as_timestamp(state_attr('device_tracker.zhi_ji_qi_che_che_liang_wei_zhi', 'cloud_updated'), none) %}\n车况快照时间：{% if ts is not none %}{{ ts | timestamp_custom('%m-%d %H:%M') }}{% else %}未知{% endif %}。此时间尚未确认为定位的独立采样时间。",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
               "heading": "充电状态",
               "heading_style": "title",
               "icon": "mdi:ev-station"
@@ -1202,7 +1243,7 @@
             },
             {
               "type": "markdown",
-              "content": "里程单位与位置尚待核对，当前页面展示已确认映射的数据。",
+              "content": "里程与 chargedPower 单位、完整车锁枚举及定位独立采样时间尚待核对。",
               "grid_options": {
                 "columns": 12,
                 "rows": "auto"
