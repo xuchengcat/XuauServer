@@ -673,6 +673,19 @@
             },
             {
               "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_zong_li_cheng_2",
+              "name": "总里程",
+              "icon": "mdi:counter",
+              "tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 12,
+                "rows": 1
+              }
+            },
+            {
+              "type": "tile",
               "entity": "sensor.zhi_ji_qi_che_gu_suan_xu_hang",
               "name": "估算续航",
               "vertical": false,
@@ -1243,7 +1256,7 @@
             },
             {
               "type": "markdown",
-              "content": "里程与 chargedPower 单位、完整车锁枚举及定位独立采样时间尚待核对。",
+              "content": "chargedPower 单位、完整车锁枚举及定位独立采样时间尚待核对。",
               "grid_options": {
                 "columns": 12,
                 "rows": "auto"
