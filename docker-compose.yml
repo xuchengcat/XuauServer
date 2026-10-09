@@ -406,6 +406,31 @@ services:
     privileged: true
     network_mode: host
 
+  byd:
+    build:
+      context: /mnt/SDD128G/byd
+    container_name: byd_status
+    env_file:
+      - /mnt/SDD128G/byd/.env
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - /mnt/SDD128G/byd/data:/data
+    restart: unless-stopped
+    init: true
+    user: "1000:1000"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   sgcc_electricity:
     logging:
       driver: json-file

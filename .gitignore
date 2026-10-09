@@ -160,6 +160,10 @@ xiaomusic/conf/.mi.token
 xiaomusic/conf/auth.json
 xiaomusic/conf/plugins-config.json
 .env
+/byd/data/
+/byd/status.html
+/byd/byd_china.rar
+/byd/ha-backup-*/
 
 # Local tools and private proxy/subscription configuration
 codex/
@@ -175,3 +179,12 @@ moontvplus/data/
 # Local maintenance snapshots may contain host metadata and service state.
 maintenance-backups/
 update-backups/
+
+# Private HA snapshots and Node-RED generated state; publish sanitized exports.
+homeassistant/config/im-deployment-backups/
+homeassistant/config/byd-vehicle-dashboard.json
+byd/vehicle-dashboard.json
+nodered/automation-backup-*/
+nodered/data/.config.runtime.json
+nodered/data/.config.users.json
+nodered/data/flows.json

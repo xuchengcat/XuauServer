@@ -27,12 +27,13 @@ docker compose config --services
 - `webdav/.env`：Dufs 监听和认证配置；模板为 `.env.example`。
 - `moontvplus/init.env`：MoonTVPlus 初始化配置；模板为 `init.env.example`。
 - `sgcc_elec/.env`：国家电网账户配置。
+- `byd/.env`：国区比亚迪 App 账号配置；模板为 `.env.example`。
 - `vpnupdate/.env`：订阅 URL 和更新参数；模板为 `.env.example`。
 
 创建后应设置为仅所有者可读：
 
 ```bash
-chmod 600 .env webdav/.env moontvplus/init.env sgcc_elec/.env vpnupdate/.env
+chmod 600 .env webdav/.env moontvplus/init.env sgcc_elec/.env byd/.env vpnupdate/.env
 ```
 
 不要通过 `docker compose config` 的完整输出分享排障信息，因为变量插值后可能包含真实密钥。
@@ -132,3 +133,9 @@ sudo /mnt/SDD128G/server-backup/backup.sh
 7. 从容器内部测试依赖的服务名、端口和 DNS。
 
 如果某个服务持续重启，先停止它并保存日志；不要反复删除数据库或配置目录尝试“重置”。
+
+## Node-RED 公开配置与车辆页面
+
+Node-RED 运行凭据、编辑器状态和实际 `data/flows.json` 保持本地。恢复流程时可参考 `nodered/flows.example.json`，按 `nodered/automations/README.md` 填写私有 Bark 环境变量并替换车辆实体占位。
+
+车辆仪表盘公开模板为 `homeassistant/vehicle-dashboard.example.json`，智己 HACS 部署见 `docs/IM_MOTORS_HA.md`。

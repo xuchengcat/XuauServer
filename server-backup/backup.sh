@@ -249,12 +249,40 @@ collect_metadata() {
     log "系统恢复信息已采集到 $metadata"
 }
 
+tar_changed_directories_only() {
+    local diagnostic=$1
+    local line path
+    local changed=0
+
+    while IFS= read -r line; do
+        case "$line" in
+            "tar: Removing leading \`/' from member names"|\
+            "tar: Removing leading \`/' from hard link targets"|\
+            tar:\ *:\ socket\ ignored)
+                ;;
+            tar:\ *:\ file\ changed\ as\ we\ read\ it)
+                path=${line#tar: }
+                path=${path%: file changed as we read it}
+                [[ -d "$path" && ! -L "$path" ]] || return 1
+                changed=1
+                ;;
+            *)
+                return 1
+                ;;
+        esac
+    done <"$diagnostic"
+
+    (( changed ))
+}
+
 create_archive() {
     local source=$1
     local archive_base=$2
     local exclude=${3:-}
     local partial="$STAGING_DIR/${archive_base}.tgz.partial"
     local final="$STAGING_DIR/${archive_base}.tgz"
+    local tar_log="$STAGING_DIR/${archive_base}.tar.stderr"
+    local tar_status=0
     local -a args=(
         --create --gzip --preserve-permissions --numeric-owner
         --acls --xattrs --xattrs-include='*'
@@ -263,7 +291,16 @@ create_archive() {
 
     [[ -n "$exclude" ]] && args+=(--exclude-from "$exclude")
     log "开始归档 $source -> $partial"
-    tar "${args[@]}" "$source"
+    LC_ALL=C tar "${args[@]}" "$source" 2>"$tar_log" || tar_status=$?
+    cat -- "$tar_log" >&2
+    if (( tar_status != 0 )); then
+        if (( tar_status != 1 )) || ! tar_changed_directories_only "$tar_log"; then
+            log "tar 归档失败：退出码=$tar_status；诊断信息保留在 $tar_log" >&2
+            return "$tar_status"
+        fi
+        log "警告：归档期间有目录发生变化；请检查上面的 tar 提示：$source" >&2
+    fi
+    rm -- "$tar_log"
     sync -f "$partial"
     gzip -t "$partial"
     mv -- "$partial" "$final"

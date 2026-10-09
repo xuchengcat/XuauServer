@@ -1,0 +1,338 @@
+[
+  {
+    "id": "40217da19cf34203",
+    "type": "tab",
+    "label": "车辆 · 晚间充电提醒",
+    "disabled": false,
+    "info": "北京时间每天22:00读取HA缓存；在家、电量<40%、充电枪未连接时提醒。chargeState：1充电中、2充电完成、9等待预约，均已连接；15未插枪，0或未知跳过。BYD使用han-bark，其他通知使用xuau-bark；私有BARK_TOKEN需单独配置。",
+    "env": [
+      {
+        "name": "BARK_SERVER",
+        "value": "https://han-bark-server.onrender.com",
+        "type": "str"
+      },
+      {
+        "name": "BARK_TOKEN",
+        "value": "REPLACE_WITH_PRIVATE_BARK_TOKEN",
+        "type": "str"
+      }
+    ]
+  },
+  {
+    "id": "fd494b3120ba4a24",
+    "type": "inject",
+    "z": "40217da19cf34203",
+    "name": "每天22:00 · 北京时间",
+    "x": 180,
+    "y": 100,
+    "wires": [
+      [
+        "9dc54cf0be2c45aa"
+      ]
+    ],
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "dry_run",
+        "v": "false",
+        "vt": "bool"
+      }
+    ],
+    "repeat": "",
+    "crontab": "0 22 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date"
+  },
+  {
+    "id": "13ebfd635a5442e0",
+    "type": "inject",
+    "z": "40217da19cf34203",
+    "name": "只检查（不推送）",
+    "x": 180,
+    "y": 160,
+    "wires": [
+      [
+        "9dc54cf0be2c45aa"
+      ]
+    ],
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "dry_run",
+        "v": "true",
+        "vt": "bool"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date"
+  },
+  {
+    "id": "9dc54cf0be2c45aa",
+    "type": "api-current-state",
+    "z": "40217da19cf34203",
+    "name": "读取车辆位置",
+    "x": 420,
+    "y": 100,
+    "wires": [
+      [
+        "c2f636835c5741b8"
+      ]
+    ],
+    "server": "16d77c25f9e59817",
+    "version": 3,
+    "outputs": 1,
+    "halt_if": "",
+    "halt_if_type": "str",
+    "halt_if_compare": "is",
+    "entity_id": "device_tracker.byd_vehicle_location",
+    "state_type": "str",
+    "blockInputOverrides": true,
+    "outputProperties": [
+      {
+        "property": "vehicle.location",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "entityState"
+      }
+    ],
+    "for": "0",
+    "forType": "num",
+    "forUnits": "minutes"
+  },
+  {
+    "id": "c2f636835c5741b8",
+    "type": "api-current-state",
+    "z": "40217da19cf34203",
+    "name": "读取剩余电量",
+    "x": 650,
+    "y": 100,
+    "wires": [
+      [
+        "f49471cc04b141a1"
+      ]
+    ],
+    "server": "16d77c25f9e59817",
+    "version": 3,
+    "outputs": 1,
+    "halt_if": "",
+    "halt_if_type": "str",
+    "halt_if_compare": "is",
+    "entity_id": "sensor.byd_vehicle_battery_level",
+    "state_type": "str",
+    "blockInputOverrides": true,
+    "outputProperties": [
+      {
+        "property": "vehicle.battery",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "entityState"
+      }
+    ],
+    "for": "0",
+    "forType": "num",
+    "forUnits": "minutes"
+  },
+  {
+    "id": "f49471cc04b141a1",
+    "type": "api-current-state",
+    "z": "40217da19cf34203",
+    "name": "读取充电枪连接",
+    "x": 890,
+    "y": 100,
+    "wires": [
+      [
+        "a17934e350a847ec"
+      ]
+    ],
+    "server": "16d77c25f9e59817",
+    "version": 3,
+    "outputs": 1,
+    "halt_if": "",
+    "halt_if_type": "str",
+    "halt_if_compare": "is",
+    "entity_id": "sensor.byd_vehicle_charging_gun_connection_state",
+    "state_type": "str",
+    "blockInputOverrides": true,
+    "outputProperties": [
+      {
+        "property": "vehicle.plug",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "entityState"
+      }
+    ],
+    "for": "0",
+    "forType": "num",
+    "forUnits": "minutes"
+  },
+  {
+    "id": "a17934e350a847ec",
+    "type": "function",
+    "z": "40217da19cf34203",
+    "name": "在家 且 电量<40% 且 未插枪",
+    "x": 1150,
+    "y": 100,
+    "wires": [
+      [
+        "bb9a3971e0e04467"
+      ],
+      [
+        "7624e9dcd8ef4758"
+      ]
+    ],
+    "func": "const v = msg.vehicle || {};\nconst batteryText = String(v.battery ?? \"\").trim();\nconst battery = batteryText === \"\" ? NaN : Number(batteryText);\nconst valid = [\"home\", \"not_home\"].includes(v.location) || (typeof v.location === \"string\" && v.location !== \"unknown\" && v.location !== \"unavailable\" && v.location !== \"\");\nconst batteryValid = Number.isFinite(battery) && battery >= 0 && battery <= 100;\nconst plugValid = [\"已连接\", \"未连接\"].includes(v.plug);\nconst matched = valid && batteryValid && plugValid && v.location === \"home\" && battery < 40 && v.plug === \"未连接\";\nconst result = { checked_at: new Date().toISOString(), location: v.location ?? null, battery: batteryValid ? battery : null, plug: v.plug ?? null, matched, dry_run: msg.dry_run === true, reason: (!valid || !batteryValid || !plugValid) ? \"车辆状态未知，跳过提醒\" : matched ? \"满足充电提醒条件\" : \"不满足提醒条件\" };\nflow.set(\"last_check\", result);\nnode.status({fill: matched ? \"yellow\" : \"green\", shape: \"dot\", text: result.dry_run ? \"测试：\" + result.reason : result.reason});\nif (matched && !result.dry_run) { msg.vehicle.battery = battery; msg.check = result; return [msg, null]; }\nreturn [null, {payload: result}];",
+    "outputs": 2,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": []
+  },
+  {
+    "id": "bb9a3971e0e04467",
+    "type": "function",
+    "z": "40217da19cf34203",
+    "name": "Bark通知 · han服务器 / BARK_DEVICE",
+    "x": 1450,
+    "y": 100,
+    "wires": [
+      [
+        "d0cefef9533b4a68"
+      ]
+    ],
+    "func": "const server = String(env.get(\"BARK_SERVER\") || \"\").replace(/^https?:\\/\\//, \"\").replace(/\\/+$/, \"\");\nconst token = env.get(\"BARK_TOKEN\");\nif (!server || !token) { node.error(\"Bark配置缺失\"); return null; }\nconst title = \"车辆充电提醒\";\nconst body = `车辆在家，当前电量 ${msg.vehicle.battery}%，充电枪未连接。请记得插枪充电。`;\nmsg.method = \"GET\";\nmsg.url = `https://${server}/${encodeURIComponent(token)}/${encodeURIComponent(title)}/${encodeURIComponent(body)}?group=Vehicle`;\nmsg.payload = \"\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": []
+  },
+  {
+    "id": "d0cefef9533b4a68",
+    "type": "http request",
+    "z": "40217da19cf34203",
+    "name": "发送Bark提醒",
+    "x": 1700,
+    "y": 100,
+    "wires": [
+      [
+        "d66726c08a2e4269"
+      ]
+    ],
+    "method": "use",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "requestTimeout": "20000"
+  },
+  {
+    "id": "d66726c08a2e4269",
+    "type": "function",
+    "z": "40217da19cf34203",
+    "name": "记录推送结果（隐藏密钥）",
+    "x": 1950,
+    "y": 100,
+    "wires": [
+      [
+        "7624e9dcd8ef4758"
+      ]
+    ],
+    "func": "const code = Number(msg.payload && msg.payload.code);\nconst success = msg.statusCode === 200 && code === 200;\nconst result = {sent_at: new Date().toISOString(), success, http_status: msg.statusCode, bark_code: Number.isFinite(code) ? code : null};\nflow.set(\"last_delivery\", result);\nnode.status({fill: success ? \"green\" : \"red\", shape: \"dot\", text: success ? \"提醒已发送\" : \"Bark发送失败\"});\nreturn {payload: result};",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": []
+  },
+  {
+    "id": "7624e9dcd8ef4758",
+    "type": "debug",
+    "z": "40217da19cf34203",
+    "name": "车辆检查 / 推送结果",
+    "x": 1460,
+    "y": 240,
+    "wires": [],
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto"
+  },
+  {
+    "id": "adb7d70f765c46e3",
+    "type": "catch",
+    "z": "40217da19cf34203",
+    "name": "捕获本流程错误",
+    "x": 420,
+    "y": 300,
+    "wires": [
+      [
+        "ad7b49ebab28488b"
+      ]
+    ],
+    "scope": [
+      "9dc54cf0be2c45aa",
+      "c2f636835c5741b8",
+      "f49471cc04b141a1",
+      "a17934e350a847ec",
+      "bb9a3971e0e04467",
+      "d0cefef9533b4a68",
+      "d66726c08a2e4269"
+    ],
+    "uncaught": false
+  },
+  {
+    "id": "ad7b49ebab28488b",
+    "type": "function",
+    "z": "40217da19cf34203",
+    "name": "仅记录错误来源",
+    "x": 760,
+    "y": 300,
+    "wires": [
+      [
+        "7624e9dcd8ef4758"
+      ]
+    ],
+    "func": "const result = {checked_at: new Date().toISOString(), reason: \"流程执行失败，请检查HA连接或Bark服务\", node: msg.error?.source?.name || \"未知节点\"}; flow.set(\"last_error\", result); node.status({fill:\"red\",shape:\"ring\",text:result.reason}); return {payload:result};",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": []
+  },
+  {
+    "id": "78d69b52c11a4f75",
+    "type": "comment",
+    "z": "40217da19cf34203",
+    "name": "22:00检查HA；插枪状态已实测；手动检查不推送",
+    "x": 530,
+    "y": 400,
+    "wires": [],
+    "info": "北京时间每天22:00读取HA缓存；在家、电量<40%、充电枪未连接时提醒。chargeState：1充电中、2充电完成、9等待预约，均已连接；15未插枪，0或未知跳过。BYD使用han-bark，其他通知使用xuau-bark；私有BARK_TOKEN需单独配置。"
+  }
+]

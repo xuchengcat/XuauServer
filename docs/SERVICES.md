@@ -28,6 +28,8 @@
 | Compose 服务 | 用途 | 对外入口/网络 | 关键依赖与注意事项 |
 | --- | --- | --- | --- |
 | `homeassistant` | 家庭自动化中枢 | `network_mode: host`，通常为 `8123` | `privileged: true` 且挂载 DBus；读取 SGCC SQLite；配置中有 SSH 自动化 |
+| `byd` | 旧版国区比亚迪采集（已停用） | 无对外端口 | 每次轮询重新登录，保持停止；现用 HA 的 `byd_china` 自定义集成，见 `byd/DEPLOYMENT.md` |
+| `im_motors`（HA 集成） | 智己汽车只读车况与手动查询 | HA 内运行，无独立端口 | HACS 工程 `xuchengcat/im-motors-ha`；账号加密存储保持私有，见 `docs/IM_MOTORS_HA.md` |
 | `sgcc_electricity` | 抓取国家电网账户电量并写入 SQLite | `network_mode: host` | 账号/验证码配置在私有 `.env`；数据目录被 HA 挂载读取 |
 | `mosquitto` | MQTT 消息代理 | `1883/tcp`、`9001/tcp` | 禁止匿名访问；密码文件不应入库；Frigate 等服务依赖它 |
 | `node-red` | 可视化自动化流程编排 | `1880/tcp` | 流程凭据文件已忽略；修改前备份 `flows.json` 和凭据文件 |

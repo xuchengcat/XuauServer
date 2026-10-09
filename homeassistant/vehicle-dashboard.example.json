@@ -1,0 +1,1216 @@
+{
+  "title": "车辆",
+  "views": [
+    {
+      "title": "车辆",
+      "path": "overview",
+      "icon": "mdi:car-connected",
+      "type": "sections",
+      "max_columns": 3,
+      "dense_section_placement": true,
+      "sections": [
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "车辆概览",
+              "heading_style": "title",
+              "icon": "mdi:car-side"
+            },
+            {
+              "type": "markdown",
+              "content": "### 比亚迪 · {{ states('sensor.byd_vehicle_license_plate') }}\n每小时自动查询 · 点击刷新获取云端最新返回",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            },
+            {
+              "type": "gauge",
+              "entity": "sensor.byd_vehicle_battery_level",
+              "name": "剩余电量",
+              "min": 0,
+              "max": 100,
+              "needle": true,
+              "severity": {
+                "red": 0,
+                "yellow": 20,
+                "green": 40
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 3
+              }
+            },
+            {
+              "type": "gauge",
+              "entity": "sensor.byd_vehicle_fuel_level",
+              "name": "剩余燃油",
+              "min": 0,
+              "max": 100,
+              "needle": true,
+              "severity": {
+                "red": 0,
+                "yellow": 15,
+                "green": 30
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 3
+              }
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_ev_range",
+              "name": "纯电续航",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:road-variant",
+              "color": "green"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_fuel_range",
+              "name": "燃油续航",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:gas-station",
+              "color": "amber"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_power_gear",
+              "name": "车辆电源",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:power",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_odometer",
+              "name": "总里程",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:counter"
+            },
+            {
+              "type": "button",
+              "entity": "button.byd_vehicle_li_ji_shua_xin_zhuang_tai_yu_ding_wei",
+              "name": "立即刷新车况与定位",
+              "icon": "mdi:refresh",
+              "show_state": false,
+              "tap_action": {
+                "action": "perform-action",
+                "perform_action": "button.press",
+                "target": {
+                  "entity_id": "button.byd_vehicle_li_ji_shua_xin_zhuang_tai_yu_ding_wei"
+                }
+              },
+              "hold_action": {
+                "action": "none"
+              },
+              "grid_options": {
+                "columns": 12,
+                "rows": 2
+              }
+            },
+            {
+              "type": "markdown",
+              "content": "{% set ts = as_timestamp(states('sensor.byd_vehicle_last_updated'), none) %}\n车况上报：{% if ts is not none %}{{ ts | timestamp_custom('%m-%d %H:%M') }}{% if as_timestamp(now()) - ts > 7200 %} · **数据较旧**{% endif %}{% else %}暂无上报时间{% endif %}\n\n查询时间与车辆上报时间可能不同。",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "车辆定位",
+              "heading_style": "title",
+              "icon": "mdi:map-marker-radius"
+            },
+            {
+              "type": "map",
+              "entities": [
+                {
+                  "entity": "device_tracker.byd_vehicle_location",
+                  "name": "车辆"
+                }
+              ],
+              "hours_to_show": 0,
+              "default_zoom": 15,
+              "auto_fit": true,
+              "grid_options": {
+                "columns": 12,
+                "rows": 6
+              }
+            },
+            {
+              "type": "tile",
+              "entity": "device_tracker.byd_vehicle_location",
+              "name": "车辆位置",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:map-marker",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_gps_last_updated",
+              "name": "定位上报时间",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:clock-outline"
+            },
+            {
+              "type": "markdown",
+              "content": "{% set ts = as_timestamp(states('sensor.byd_vehicle_gps_last_updated'), none) %}\n定位上报：{% if ts is not none %}{{ ts | timestamp_custom('%m-%d %H:%M') }}{% if as_timestamp(now()) - ts > 7200 %} · **数据较旧**{% endif %}{% else %}暂无上报时间{% endif %}\n\n车辆休眠时可能显示上次上传的位置。",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "充电状态",
+              "heading_style": "title",
+              "icon": "mdi:ev-station"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_charging_gun_connection_state",
+              "name": "充电枪连接",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:ev-plug-type2",
+              "color": "green"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_charging_state",
+              "name": "充电状态",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:battery-charging",
+              "color": "green"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_charging_system",
+              "name": "充电系统",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:ev-station"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_charging_power",
+              "name": "充电功率",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:flash"
+            },
+            {
+              "type": "entities",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.byd_vehicle_smart_charge_schedule_tip",
+                  "name": "预约充电提示"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_charge_remaining_hours",
+                  "name": "充满剩余小时"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_charge_remaining_minutes",
+                  "name": "充满剩余分钟"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            },
+            {
+              "type": "markdown",
+              "content": "已插枪未充电时，请查看预约充电提示确认是否在等待预约时间。车辆休眠时可能显示上次上报的状态，请结合车辆上报时间判断。",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "四轮胎压",
+              "heading_style": "title",
+              "icon": "mdi:car-tire-alert"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_front_left_tire_pressure",
+              "name": "左前 · 胎压",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car-tire-alert",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_front_right_tire_pressure",
+              "name": "右前 · 胎压",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car-tire-alert",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_rear_left_tire_pressure",
+              "name": "左后 · 胎压",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car-tire-alert",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.byd_vehicle_rear_right_tire_pressure",
+              "name": "右后 · 胎压",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car-tire-alert",
+              "color": "blue"
+            },
+            {
+              "type": "entities",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.byd_vehicle_tire_pressure_system",
+                  "name": "胎压系统"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_front_left_tire_status",
+                  "name": "左前轮胎状态"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_front_right_tire_status",
+                  "name": "右前轮胎状态"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_rear_left_tire_status",
+                  "name": "左后轮胎状态"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_rear_right_tire_status",
+                  "name": "右后轮胎状态"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "车门与车窗",
+              "heading_style": "title",
+              "icon": "mdi:car-door-lock"
+            },
+            {
+              "type": "entities",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.byd_vehicle_front_left_door_lock",
+                  "name": "左前门锁"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_front_right_door_lock",
+                  "name": "右前门锁"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_rear_left_door_lock",
+                  "name": "左后门锁"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_rear_right_door_lock",
+                  "name": "右后门锁"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              },
+              "title": "门锁"
+            },
+            {
+              "type": "entities",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.byd_vehicle_front_left_door",
+                  "name": "左前车门"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_front_right_door",
+                  "name": "右前车门"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_rear_left_door",
+                  "name": "左后车门"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_rear_right_door",
+                  "name": "右后车门"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_trunk",
+                  "name": "后备箱"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              },
+              "title": "车门"
+            },
+            {
+              "type": "entities",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.byd_vehicle_front_left_window",
+                  "name": "左前车窗"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_front_right_window",
+                  "name": "右前车窗"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_rear_left_window",
+                  "name": "左后车窗"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_rear_right_window",
+                  "name": "右后车窗"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_skylight",
+                  "name": "天窗"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              },
+              "title": "车窗"
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "车辆系统",
+              "heading_style": "title",
+              "icon": "mdi:car-info"
+            },
+            {
+              "type": "entities",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.byd_vehicle_power_battery_status",
+                  "name": "动力电池"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_power_system",
+                  "name": "动力系统"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_engine_status",
+                  "name": "发动机"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_braking_system",
+                  "name": "制动系统"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_abs_warning",
+                  "name": "ABS"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_esp",
+                  "name": "车身稳定系统"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_srs",
+                  "name": "安全气囊"
+                },
+                {
+                  "entity": "sensor.byd_vehicle_steering_system",
+                  "name": "转向系统"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "智己 LS6",
+      "path": "im-motors",
+      "icon": "mdi:car-electric",
+      "type": "sections",
+      "max_columns": 3,
+      "dense_section_placement": true,
+      "sections": [
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "车辆概览",
+              "heading_style": "title",
+              "icon": "mdi:car-side"
+            },
+            {
+              "type": "markdown",
+              "content": "### 智己 · LS6\n每 60 分钟查询云端车况，也可点击按钮立即重新查询。车辆休眠时可能返回上次上传的数据。",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            },
+            {
+              "type": "gauge",
+              "entity": "sensor.zhi_ji_qi_che_dian_liang",
+              "name": "剩余电量",
+              "min": 0,
+              "max": 100,
+              "needle": true,
+              "severity": {
+                "red": 0,
+                "yellow": 20,
+                "green": 40
+              },
+              "grid_options": {
+                "columns": 12,
+                "rows": 3
+              }
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_cltc_xu_hang",
+              "name": "CLTC 续航",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:road-variant",
+              "color": "green"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_gu_suan_xu_hang",
+              "name": "估算续航",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:road-variant",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_che_liang_yun_xing_fen_lei",
+              "name": "运行状态",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car"
+            },
+            {
+              "type": "tile",
+              "entity": "binary_sensor.zhi_ji_qi_che_app_yun_duan_che_suo",
+              "name": "云端车锁",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              }
+            },
+            {
+              "type": "tile",
+              "entity": "binary_sensor.zhi_ji_qi_che_che_liang_zai_xian",
+              "name": "车辆在线",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              }
+            },
+            {
+              "type": "tile",
+              "entity": "binary_sensor.zhi_ji_qi_che_che_liang_lian_jie",
+              "name": "车辆连接",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              }
+            },
+            {
+              "type": "button",
+              "entity": "button.zhi_ji_qi_che_li_ji_zhong_xin_cha_xun_che_kuang",
+              "name": "立即重新查询车况",
+              "icon": "mdi:refresh",
+              "show_state": false,
+              "tap_action": {
+                "action": "perform-action",
+                "perform_action": "button.press",
+                "target": {
+                  "entity_id": "button.zhi_ji_qi_che_li_ji_zhong_xin_cha_xun_che_kuang"
+                }
+              },
+              "hold_action": {
+                "action": "none"
+              },
+              "grid_options": {
+                "columns": 12,
+                "rows": 2
+              }
+            },
+            {
+              "type": "markdown",
+              "content": "{% set ts = as_timestamp(states('sensor.zhi_ji_qi_che_yun_duan_che_kuang_geng_xin_shi_jian'), none) %}\n云端车况时间：{% if ts is not none %}{{ ts | timestamp_custom('%m-%d %H:%M') }}{% if as_timestamp(now()) - ts > 7200 %} · **数据较旧**{% endif %}{% else %}暂无更新时间{% endif %}\n\n{% set rt = as_timestamp(state_attr('sensor.zhi_ji_qi_che_dian_liang', 'retrieved_at'), none) %}\nHA 查询时间：{% if rt is not none %}{{ rt | timestamp_custom('%m-%d %H:%M') }}{% else %}暂无查询时间{% endif %}\n\n各组数据的采样时间尚未确认。",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "充电状态",
+              "heading_style": "title",
+              "icon": "mdi:ev-station"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_chong_dian_zhuang_tai",
+              "name": "充电状态",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:battery-charging",
+              "color": "green"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_chong_dian_mu_biao_dian_liang",
+              "name": "目标电量",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:battery-check",
+              "color": "green"
+            },
+            {
+              "type": "tile",
+              "entity": "binary_sensor.zhi_ji_qi_che_yu_yue_chong_dian_kai_qi",
+              "name": "预约充电",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:calendar-clock"
+            },
+            {
+              "type": "entities",
+              "title": "预约与充电信息",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.zhi_ji_qi_che_yu_yue_chong_dian_kai_shi",
+                  "name": "预约开始"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_yu_yue_chong_dian_jie_shu",
+                  "name": "预约结束"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_che_liang_chong_dian_gong_lu",
+                  "name": "车辆充电功率"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_chong_dian_zhuang_gong_lu",
+                  "name": "充电桩功率"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_chong_dian_sheng_yu_shi_jian",
+                  "name": "充满剩余时间"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_dang_qian_chong_dian_hao_shi",
+                  "name": "当前充电耗时"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            },
+            {
+              "type": "markdown",
+              "content": "未处于充电状态时，功率、剩余时间和耗时可能显示未知。预约时段跨零点时，结束时间属于次日。",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "四轮胎压与胎温",
+              "heading_style": "title",
+              "icon": "mdi:car-tire-alert"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_zuo_qian_tai_ya",
+              "name": "左前 · 胎压",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car-tire-alert",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_you_qian_tai_ya",
+              "name": "右前 · 胎压",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car-tire-alert",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_zuo_hou_tai_ya",
+              "name": "左后 · 胎压",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car-tire-alert",
+              "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_you_hou_tai_ya",
+              "name": "右后 · 胎压",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car-tire-alert",
+              "color": "blue"
+            },
+            {
+              "type": "entities",
+              "title": "轮胎温度",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.zhi_ji_qi_che_zuo_qian_tai_wen",
+                  "name": "左前胎温"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_you_qian_tai_wen",
+                  "name": "右前胎温"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_zuo_hou_tai_wen",
+                  "name": "左后胎温"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_you_hou_tai_wen",
+                  "name": "右后胎温"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "车门与车窗",
+              "heading_style": "title",
+              "icon": "mdi:car-door"
+            },
+            {
+              "type": "entities",
+              "title": "车门与盖板",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "binary_sensor.zhi_ji_qi_che_zuo_qian_che_men",
+                  "name": "左前车门"
+                },
+                {
+                  "entity": "binary_sensor.zhi_ji_qi_che_you_qian_che_men",
+                  "name": "右前车门"
+                },
+                {
+                  "entity": "binary_sensor.zhi_ji_qi_che_zuo_hou_che_men",
+                  "name": "左后车门"
+                },
+                {
+                  "entity": "binary_sensor.zhi_ji_qi_che_you_hou_che_men",
+                  "name": "右后车门"
+                },
+                {
+                  "entity": "binary_sensor.zhi_ji_qi_che_qian_cang_gai",
+                  "name": "前舱盖"
+                },
+                {
+                  "entity": "binary_sensor.zhi_ji_qi_che_wei_men",
+                  "name": "尾门"
+                },
+                {
+                  "entity": "binary_sensor.zhi_ji_qi_che_chong_dian_kou_gai",
+                  "name": "充电口盖"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            },
+            {
+              "type": "entities",
+              "title": "车窗开度",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.zhi_ji_qi_che_zuo_qian_che_chuang_kai_du",
+                  "name": "左前车窗"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_you_qian_che_chuang_kai_du",
+                  "name": "右前车窗"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_zuo_hou_che_chuang_kai_du",
+                  "name": "左后车窗"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_you_hou_che_chuang_kai_du",
+                  "name": "右后车窗"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "温度",
+              "heading_style": "title",
+              "icon": "mdi:thermometer"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_che_nei_wen_du",
+              "name": "车内温度",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:car"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_che_liang_wai_wen",
+              "name": "车辆外温",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:thermometer"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_tian_qi_wen_du",
+              "name": "天气温度",
+              "vertical": false,
+              "tap_action": {
+                "action": "more-info"
+              },
+              "icon_tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 6,
+                "rows": 1
+              },
+              "icon": "mdi:weather-partly-cloudy"
+            },
+            {
+              "type": "entities",
+              "title": "空调设定",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.zhi_ji_qi_che_kong_diao_zuo_ce_she_ding_wen_du",
+                  "name": "左侧设定"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_kong_diao_you_ce_she_ding_wen_du",
+                  "name": "右侧设定"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {
+              "type": "heading",
+              "heading": "数据与集成",
+              "heading_style": "title",
+              "icon": "mdi:car-info"
+            },
+            {
+              "type": "entities",
+              "title": "数据状态",
+              "show_header_toggle": false,
+              "entities": [
+                {
+                  "entity": "sensor.zhi_ji_qi_che_che_kuang_jie_xi_zhuang_tai",
+                  "name": "车况解析状态"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_shou_ye_che_liang_xi_lie",
+                  "name": "首页车辆系列"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_shou_ye_che_xing_xiang_mu_dai_ma",
+                  "name": "首页车型项目代码"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_yun_duan_che_kuang_geng_xin_shi_jian",
+                  "name": "云端更新时间"
+                },
+                {
+                  "entity": "sensor.zhi_ji_qi_che_yuan_shu_ju_geng_xin_shi_jian",
+                  "name": "元数据读取时间"
+                }
+              ],
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            },
+            {
+              "type": "markdown",
+              "content": "里程单位与位置尚待核对，当前页面展示已确认映射的数据。",
+              "grid_options": {
+                "columns": 12,
+                "rows": "auto"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

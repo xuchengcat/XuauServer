@@ -1,0 +1,15 @@
+com.byd.bydautolink*
+.env
+*.apk
+class*
+dumps.txt
+main.go
+#decompile.js
+apk/
+decodePayload.js
+byd-api-crypto.js
+#samples/
+AGENTS.md
+.codex/
+byd/*
+status.html
