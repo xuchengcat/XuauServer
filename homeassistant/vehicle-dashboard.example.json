@@ -673,19 +673,6 @@
             },
             {
               "type": "tile",
-              "entity": "sensor.zhi_ji_qi_che_zong_li_cheng_2",
-              "name": "总里程",
-              "icon": "mdi:counter",
-              "tap_action": {
-                "action": "more-info"
-              },
-              "grid_options": {
-                "columns": 12,
-                "rows": 1
-              }
-            },
-            {
-              "type": "tile",
               "entity": "sensor.zhi_ji_qi_che_gu_suan_xu_hang",
               "name": "估算续航",
               "vertical": false,
@@ -701,6 +688,19 @@
               },
               "icon": "mdi:road-variant",
               "color": "blue"
+            },
+            {
+              "type": "tile",
+              "entity": "sensor.zhi_ji_qi_che_zong_li_cheng_2",
+              "name": "总里程",
+              "icon": "mdi:counter",
+              "tap_action": {
+                "action": "more-info"
+              },
+              "grid_options": {
+                "columns": 12,
+                "rows": 1
+              }
             },
             {
               "type": "tile",
