@@ -1,0 +1,19 @@
+# Merge these groups into /etc/ShellCrash/yamls/proxy-groups.yaml.
+# Use main-config nodes instead of the removed provider b.
+- name: oversea
+  type: url-test
+  include-all: true
+  url: https://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 100
+  lazy: true
+
+# Check the subscription server itself rather than general connectivity.
+- name: subscription
+  type: fallback
+  proxies:
+    - 新加坡-优化-GPT
+    - 香港-优化
+  url: https://47.242.128.61:5000/
+  interval: 60
+  lazy: false

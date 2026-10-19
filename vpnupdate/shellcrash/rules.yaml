@@ -1,0 +1,2 @@
+# Prepend to /etc/ShellCrash/yamls/rules.yaml; retain existing rules.
+- IP-CIDR,47.242.128.61/32,subscription,no-resolve

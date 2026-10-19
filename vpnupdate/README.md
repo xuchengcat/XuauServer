@@ -80,6 +80,44 @@ SUBSCRIPTION_URL=https://example.com/subscribe?token=replace-me
 sudo ./refresh_config.sh
 ```
 
+### 普通用户读取权限
+
+dry run 不要求 root，但需要读取主配置。如果主配置为 `root:shellcrash 640`，
+可仅授予当前用户读取权限：
+
+```bash
+sudo setfacl -m "u:$(id -un):r--" /etc/ShellCrash/yamls/config.yaml
+```
+
+正式更新会原子替换主配置，不保留这项单文件 ACL；替换后需要重新授予。
+
+### 订阅服务器专用分流
+
+本机排查发现，`47.242.128.61:5000` 经 HY2 节点访问失败，而
+“新加坡-优化-GPT”和“香港-优化”可以下载订阅。可使用仓库中的
+`shellcrash/` 配置片段，为该 IP 建立独立的 `subscription` 故障切换组。
+它直接检查目标服务器，每 60 秒检测一次，优先新加坡，失败时切换香港。
+
+1. 将 `shellcrash/proxy-groups.yaml` 中的策略组合并到
+   `/etc/ShellCrash/yamls/proxy-groups.yaml`。保留其他策略组，同名组只留一份。
+   示例中的 `oversea` 使用 `include-all: true`，替代已经删除的 provider `b`。
+2. 将 `shellcrash/rules.yaml` 中的 IP 规则放在
+   `/etc/ShellCrash/yamls/rules.yaml` 最前面，保留已有规则。
+3. 两个文件都是 YAML 列表，不添加 `proxy-groups:` 或 `rules:` 顶层标题。
+4. 重启并以普通用户验证：
+
+```bash
+sudo systemctl restart shellcrash
+./refresh_config.sh --dry-run
+```
+
+不要直接覆盖整个自定义文件。此配置依赖示例中的节点名称；部署到其他订阅或
+节点被重命名、删除时，应同步调整策略组。故障切换不能保证服务始终可用。
+
+更新器仅写入 `CONFIG_PATH` 指定的主配置，不修改这两个自定义文件。
+ShellCrash 重启时会重新合并它们，因此规则不会被正常订阅更新覆盖。
+当前更新器只调用核心验证订阅节点，不会验证 ShellCrash 最终合并后的自定义配置。
+
 ## 定时更新
 
 使用 root 的 crontab，例如每天 04:17 更新：
@@ -99,6 +137,7 @@ sudo ./refresh_config.sh
 ├── README.md               # 使用文档
 ├── refresh_config.sh       # 命令行入口
 ├── requirements.txt        # Python 依赖
+├── shellcrash/             # 订阅服务器分流规则与策略组示例
 └── update_subscription.py  # 下载、解析、验证及更新逻辑
 ```
 
