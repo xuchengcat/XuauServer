@@ -34,6 +34,7 @@ esp_home/ESPHome_ESP32-C6
 frigate/model_cache/
 frigate/*.db
 frigate/backup_config.yaml
+frigate/.runtime_state.json
 frigate/.runtime_state.json.lock
 frigate/go2rtc_homekit.yml
 frigate/.exports

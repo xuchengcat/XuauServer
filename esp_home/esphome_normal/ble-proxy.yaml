@@ -1,35 +1,145 @@
 esphome:
   name: ble-proxy
   friendly_name: BLE_PROXY
+  on_boot:
+    priority: -100
+    then:
+      - lambda: id(hallway_csi).set_sensing_runtime(true);
 
 esp32:
   board: esp32-c3-devkitm-1
   framework:
-    type: arduino
+    type: esp-idf
 
 bluetooth_proxy:
   active: True
 
+esp32_ble:
+  enable_on_boot: false
+
+# Leave most radio time available for CSI, while retaining BLE proxy connections.
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 320ms
+    window: 10ms
+    active: false
+    continuous: true
+
 # Enable logging
 logger:
+  level: INFO
+  baud_rate: 115200
 
 # Enable Home Assistant API
 api:
   encryption:
-    key: "l/NswMsfDAg95SXOkr8gjkYSCqt9DFZ7ZU0o09U8LfI="
+    key: !secret ble_proxy_api_encryption_key
 
 ota:
   - platform: esphome
-    password: "7032696f9cc7cf08145f66a5f3c926a2"
+    on_begin:
+      then:
+        - lambda: id(hallway_csi).set_sensing_runtime(false);
+    on_error:
+      then:
+        - lambda: id(hallway_csi).set_sensing_runtime(!id(hallway_bluetooth).state);
+    password: !secret ble_proxy_ota_password
 
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+  power_save_mode: none
+  output_power: 8.5dB
+  ssid: !secret hallway_wifi_ssid
+  password: !secret hallway_wifi_password
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "Ble-Proxy Fallback Hotspot"
-    password: "C5iJbOWi636Q"
+    password: !secret ble_proxy_fallback_password
 
 captive_portal:
-    
+
+# Experimental hallway activity-based occupancy; no motion is not proof of absence.
+external_components:
+  - source:
+      type: local
+      path: .esphome/espectre-source/src/cpp/frontend/esphome/components
+    components: [espectre]
+
+espectre:
+  id: hallway_csi
+  detection_algorithm: lightweight
+  traffic_generator_mode: ping
+  csi_capture_profile: auto
+  direct_api: false
+  motion_sensor:
+    id: hallway_motion
+    name: "Hallway Motion"
+  movement_sensor:
+    name: "Hallway Movement Score"
+    on_value:
+      then:
+        - lambda: |-
+            if (std::isfinite(x)) id(hallway_last_sample) = millis();
+  calibration_active_sensor:
+    name: "Hallway Calibrating"
+  recalibrate_button:
+    name: "Hallway Recalibrate"
+  diagnostics_button:
+    name: "Hallway Refresh Diagnostics"
+  threshold_number:
+    name: "Hallway Motion Threshold"
+
+binary_sensor:
+  - platform: template
+    id: hallway_occupancy
+    name: "Hallway Occupancy"
+    device_class: occupancy
+    lambda: |-
+      static uint32_t last_motion = 0;
+      static bool initialized = false;
+      if (!id(hallway_motion).has_state() || id(hallway_csi).is_calibrating() ||
+          !id(hallway_csi).is_sensing_enabled() || id(hallway_last_sample) == 0 ||
+          static_cast<uint32_t>(millis() - id(hallway_last_sample)) > 10000U) {
+        initialized = false;
+        if (id(hallway_occupancy).has_state()) {
+          id(hallway_occupancy).invalidate_state();
+        }
+        return {};
+      }
+      if (!initialized) {
+        last_motion = millis() - 60000U;
+        initialized = true;
+      }
+      if (id(hallway_motion).state) {
+        last_motion = millis();
+      }
+      return static_cast<uint32_t>(millis() - last_motion) < 60000U;
+
+sensor:
+  - platform: wifi_signal
+    name: "Hallway WiFi Signal"
+    update_interval: 60s
+  - platform: uptime
+    name: "Hallway Uptime"
+    update_interval: 60s
+
+globals:
+  - id: hallway_last_sample
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+# Exclusive radio modes: default to CSI; enable BLE only when needed.
+switch:
+  - platform: template
+    id: hallway_bluetooth
+    name: "Hallway Bluetooth Proxy"
+    icon: mdi:bluetooth
+    optimistic: true
+    restore_mode: ALWAYS_OFF
+    turn_on_action:
+      - lambda: id(hallway_csi).set_sensing_runtime(false);
+      - ble.enable:
+    turn_off_action:
+      - ble.disable:
+      - lambda: id(hallway_csi).set_sensing_runtime(true);
