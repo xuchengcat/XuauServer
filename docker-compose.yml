@@ -366,7 +366,9 @@ services:
       options:
         max-size: "50m"
         max-file: "5"
-    image: jxxghp/moviepilot-v3:3.0.1
+    build:
+      context: ./moviepilot
+    image: moviepilot-local:3.0.1-media-fixes
     container_name: moviepilot
     hostname: moviepilot
     ports:

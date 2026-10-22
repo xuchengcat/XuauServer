@@ -146,7 +146,13 @@ sgcc_elec/
 zerotier/config/networks.d/*.conf
 # MoviePilot and Prowlarr directories contain runtime databases, logs, caches,
 # generated definitions, and credentials. Docker creates them when needed.
-moviepilot/
+moviepilot/*
+!moviepilot/Dockerfile
+!moviepilot/.dockerignore
+!moviepilot/README.md
+!moviepilot/fixes/
+moviepilot/fixes/__pycache__/
+moviepilot/fixes/.pytest_cache/
 prowlarr/
 # Keep OpenClaw runtime data private, but version the local image recipe and
 # reviewed skill sources used by docker-compose.yml.
