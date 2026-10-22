@@ -166,6 +166,9 @@ def build_config(config_path: Path, proxies: list[dict[str, Any]]) -> dict[str, 
                 try: pattern = re.compile(group_filter)
                 except re.error as exc: raise UpdateError(f"策略组 {group.get('name')} 的 filter 正则无效: {exc}") from exc
                 selected_names = [name for name in new_names if pattern.search(name)]
+            if group.get("type") == "fallback":
+                preferred = [name for name in (group.get("proxies") or []) if name in selected_names]
+                selected_names = preferred + [name for name in selected_names if name not in preferred]
             group["proxies"] = retained + [x for x in selected_names if x not in retained]
             if group.get("name") == "🎮 Steam":
                 group["url"] = os.getenv("STEAM_TEST_URL", "https://store.steampowered.com/").strip()

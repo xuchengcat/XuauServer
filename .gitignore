@@ -181,6 +181,10 @@ moontvplus/data/
 maintenance-backups/
 update-backups/
 
+# Maintenance snapshots, downloads, and runtime results stay local.
+/maintenance/*
+!/maintenance/*.py
+
 # Private HA snapshots and Node-RED generated state; publish sanitized exports.
 homeassistant/config/im-deployment-backups/
 homeassistant/config/byd-vehicle-dashboard.json

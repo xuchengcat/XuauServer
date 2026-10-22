@@ -115,18 +115,52 @@ sudo systemctl restart shellcrash
 节点被重命名、删除时，应同步调整策略组。故障切换不能保证服务始终可用。
 
 更新器仅写入 `CONFIG_PATH` 指定的主配置，不修改这两个自定义文件。
+对于 `fallback` 策略组，更新器保留仍然有效的节点优先顺序，新节点追加到末尾，
+避免订阅刷新改变 ChatGPT 等服务的优先出口。
 ShellCrash 重启时会重新合并它们，因此规则不会被正常订阅更新覆盖。
 当前更新器只调用核心验证订阅节点，不会验证 ShellCrash 最终合并后的自定义配置。
 
 ## 定时更新
 
-使用 root 的 crontab，例如每天 04:17 更新：
+当前服务器使用 systemd timers，时区为 Asia/Shanghai：
 
-```cron
-17 4 * * * cd /mnt/SDD128G/vpnupdate && ./refresh_config.sh >>/var/log/vpnupdate.log 2>&1
+| 时间 | 任务 | Timer |
+| --- | --- | --- |
+| 每天 04:17 左右 | 刷新订阅，检查最终配置，有变化才重启 | `shellcrash-subscription-update.timer` |
+| 每天 04:47 左右 | 检查并更新 GeoIP、GeoSite、CN IPv4/IPv6 列表 | `shellcrash-geodata-update.timer` |
+
+两个任务共享互斥锁，防止同时修改文件或重启服务。关机错过的执行会在开机后补跑。
+ShellCrash 停止时跳过更新。下载或校验失败保留原文件；重启失败则恢复旧文件并重启。
+任务日志保存在 systemd journal，不包含订阅地址或节点凭据。
+
+Geo 更新保留当前全球版/精简版 GeoIP 类型。只有数据实际变化才重启，已通过配置版本检查
+的任务直接结束；使用 `--force-check` 可以强制下载并校验而不强制重启。
+MRS 规则集仍由 Mihomo 按配置的 86400 秒周期自动刷新。
+
+安装或更新 unit 文件：
+
+```bash
+sudo install -m 644 systemd/shellcrash-*.service systemd/shellcrash-*.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now shellcrash-subscription-update.timer shellcrash-geodata-update.timer
 ```
 
-配置定时任务前，建议先手动完成一次正式更新。
+检查执行计划和最近日志：
+
+```bash
+systemctl list-timers 'shellcrash-*-update.timer'
+sudo journalctl -u shellcrash-subscription-update.service -u shellcrash-geodata-update.service -n 60
+```
+
+手动执行同一套维护逻辑：
+
+```bash
+sudo systemctl start shellcrash-subscription-update.service
+sudo systemctl start shellcrash-geodata-update.service
+sudo flock --wait 300 /run/lock/shellcrash-maintenance.lock python3 maintain_shellcrash.py geodata --force-check
+```
+
+订阅备份仍受 `.env` 中的 `BACKUP_COUNT` 控制；重启失败使用的临时回滚数据只保存在进程内存。
 
 ## 文件说明
 

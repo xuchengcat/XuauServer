@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily ShellCrash Geo data refresh
+
+[Timer]
+OnCalendar=*-*-* 04:47:00 Asia/Shanghai
+AccuracySec=1min
+Persistent=true
+Unit=shellcrash-geodata-update.service
+
+[Install]
+WantedBy=timers.target

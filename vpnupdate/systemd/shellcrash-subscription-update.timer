@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily ShellCrash subscription refresh
+
+[Timer]
+OnCalendar=*-*-* 04:17:00 Asia/Shanghai
+AccuracySec=1min
+Persistent=true
+Unit=shellcrash-subscription-update.service
+
+[Install]
+WantedBy=timers.target

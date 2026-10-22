@@ -1,0 +1,433 @@
+# OpenClaw: full state reads and capability-checked light control via official HA MCP.
+script:
+  openclaw_read_states:
+    alias: OpenClaw 全部实体状态查询
+    description: Read current states from ALL Home Assistant domains, including calendar/script/button/update. Read
+      only. Filter by entity_ids, domain, name, area or device. Results include exact entity_id for light control.
+      Paginate with offset and limit; do not treat first page as all results. Unavailable/unknown are real states,
+      not success.
+    mode: parallel
+    max: 10
+    fields:
+      entity_ids:
+        description: Optional exact entity IDs. Empty means no ID filter.
+        selector:
+          entity:
+            multiple: true
+      domain:
+        description: Optional single HA domain, e.g. light, sensor, switch, script, calendar.
+        selector:
+          text:
+            multiline: false
+      name:
+        description: Optional case-insensitive substring of friendly name or entity ID.
+        selector:
+          text:
+            multiline: false
+      area:
+        description: Optional exact HA area name or area ID.
+        selector:
+          text:
+            multiline: false
+      device:
+        description: Optional exact HA device registry ID.
+        selector:
+          text:
+            multiline: false
+      state:
+        description: Optional exact state, e.g. on, off, unavailable.
+        selector:
+          text:
+            multiline: false
+      offset:
+        description: Zero-based pagination offset, default 0.
+        selector:
+          number:
+            min: 0
+            max: 100000
+            step: 1
+            mode: box
+      limit:
+        description: Page size 1..100, default 50.
+        selector:
+          number:
+            min: 1
+            max: 100
+            step: 1
+            mode: box
+    sequence:
+    - variables:
+        reply:
+          success: false
+          commands_dispatched: false
+          error: Request rejected before dispatch
+    - variables:
+        selected_ids: '{{ entity_ids | default([]) }}'
+        filter_domain: '{{ domain | default('''') | lower | trim }}'
+        filter_name: '{{ name | default('''') | lower | trim }}'
+        filter_area: '{{ area | default('''') | trim }}'
+        filter_device: '{{ device | default('''') | trim }}'
+        filter_state: '{{ state | default('''') }}'
+        page_offset: '{{ [0, offset | default(0) | int(0)] | max }}'
+        page_limit: '{{ [[limit | default(50) | int(50), 1] | max, 100] | min }}'
+    - if: '{{ selected_ids is string or selected_ids is mapping or selected_ids is not iterable }}'
+      then:
+      - variables:
+          reply:
+            success: false
+            commands_dispatched: false
+            error: entity_ids must be an array of exact entity IDs
+      else:
+      - variables:
+          matched: "{% set ns = namespace(ids=[]) %}\n{% for s in states | sort(attribute='entity_id') %}\n{% if\
+            \ (not selected_ids or s.entity_id in selected_ids)\n and (not filter_domain or s.domain == filter_domain)\n\
+            \ and (not filter_name or filter_name in s.name | lower or filter_name in s.entity_id)\n and (not filter_area\
+            \ or area_id(s.entity_id) == filter_area or area_name(s.entity_id) == filter_area)\n and (not filter_device\
+            \ or device_id(s.entity_id) == filter_device)\n and (not filter_state or s.state == filter_state) %}\n\
+            {% set ns.ids = ns.ids + [s.entity_id] %}\n{% endif %}{% endfor %}{{ ns.ids }}"
+      - variables:
+          reply: '{% set ns = namespace(rows=[]) %}
+
+            {% for eid in matched[page_offset:page_offset + page_limit] %}
+
+            {% set s = states[eid] %}
+
+            {% set a = namespace(values={}) %}
+
+            {% for key in [''unit_of_measurement'',''device_class'',''temperature'',''current_temperature'',''humidity'',''brightness'',''color_temp_kelvin'',''rgb_color'',''percentage'',''current_position'',''battery_level'',''volume_level'',''media_title'',''media_artist'',''hvac_action'',''last_triggered'',''next_dawn'',''next_dusk'',''latitude'',''longitude'',''message'',''start_time'',''end_time'',''installed_version'',''latest_version'',''options'',''min'',''max'',''step'']
+            %}
+
+            {% if key in s.attributes %}{% set a.values = dict(a.values, **{key:((s.attributes[key].isoformat()
+            if s.attributes[key].isoformat is defined else s.attributes[key]) | to_json | from_json)}) %}{% endif
+            %}
+
+            {% endfor %}
+
+            {% if s.domain == ''light'' %}{% set a.values = (dict(s.attributes) | to_json | from_json) %}{% endif
+            %}
+
+            {% set ns.rows = ns.rows + [dict(entity_id=eid, name=s.name, domain=s.domain, state=s.state, area=area_name(eid),
+            device_id=device_id(eid), last_changed=s.last_changed.isoformat(), attributes=a.values)] %}
+
+            {% endfor %}
+
+            {{ dict(success=true, total=matched | count, offset=page_offset, returned=ns.rows | count, next_offset=(page_offset
+            + page_limit if page_offset + page_limit < matched | count else none), missing_entity_ids=(selected_ids
+            | reject(''in'', states | map(attribute=''entity_id'') | list) | list), entities=ns.rows) }}'
+    - stop: Return live entity states
+      response_variable: reply
+  openclaw_light_power:
+    alias: OpenClaw 灯光完整控制
+    description: Control light power and all supported light attributes. First read script__openclaw_read_states
+      (domain=light) for exact IDs, supported_color_modes, effect_list and color temperature bounds. Required power=on/off
+      and entity_ids array. Optional attributes object supports brightness (0..255), brightness_pct (0..100), brightness_step
+      (-255..255), brightness_step_pct (-100..100), color_temp_kelvin, rgb_color, rgbw_color, rgbww_color, hs_color,
+      xy_color, color_name, white (0..255), effect, transition (0..300 seconds), flash (short/long). Only supported
+      capabilities allowed; off only accepts transition. Do not guess ambiguous names. Unknown/offline/non-light
+      entities reject the whole call. dry_run=true validates without sending. Returns requested attributes and observed
+      states; only claim changes reflected in observed attributes. Dedicated light delta/extension controls use
+      script__openclaw_light_setting.
+    mode: queued
+    max: 10
+    fields:
+      entity_ids:
+        description: Required exact light entity IDs resolved by live state query.
+        required: true
+        selector:
+          entity:
+            domain: light
+            multiple: true
+      power:
+        description: 'Required desired power state: on or off.'
+        required: true
+        selector:
+          select:
+            options:
+            - 'on'
+            - 'off'
+      dry_run:
+        description: Validate without changing anything; default false.
+        selector:
+          boolean: null
+      attributes:
+        description: Optional light.turn_on attributes object. Read live capabilities first. Only supported attributes
+          and correct values accepted. Off accepts only transition.
+        selector:
+          object: null
+    sequence:
+    - variables:
+        reply:
+          success: false
+          commands_dispatched: false
+          error: Request rejected before dispatch
+    - if: '{{ entity_ids is not defined or entity_ids is string or entity_ids is mapping or entity_ids is not iterable
+        or entity_ids | count == 0 or power | default('''') not in [''on'', ''off''] or (dry_run is defined and
+        dry_run is not boolean) }}'
+      then:
+      - variables:
+          reply:
+            success: false
+            commands_dispatched: false
+            error: Require nonempty entity_ids array, power on/off, and optional boolean dry_run
+      else:
+      - variables:
+          targets: '{{ entity_ids | unique | list }}'
+      - variables:
+          invalid_targets: '{% set ns=namespace(ids=[]) %}{% for eid in targets %}{% if eid is not string or not
+            eid.startswith(''light.'') or states(eid) in [''unknown'',''unavailable''] %}{% set ns.ids=ns.ids+[eid]
+            %}{% endif %}{% endfor %}{{ ns.ids }}'
+      - if: '{{ invalid_targets | count > 0 }}'
+        then:
+        - variables:
+            reply:
+              success: false
+              commands_dispatched: false
+              error: Non-light, missing or offline target; no light commands dispatched
+        else:
+        - variables:
+            requested_attributes: '{{ attributes | default({}) }}'
+        - if: '{{ requested_attributes is not mapping }}'
+          then:
+          - variables:
+              reply:
+                success: false
+                commands_dispatched: false
+                error: attributes must be an object
+          else:
+          - variables:
+              attribute_errors: "{% set ns=namespace(errors=[]) %}\n{% set allowed=['brightness','brightness_pct','brightness_step','brightness_step_pct','color_temp_kelvin','rgb_color','rgbw_color','rgbww_color','hs_color','xy_color','color_name','white','effect','transition','flash']\
+                \ %}\n{% for key,val in requested_attributes.items() %}\n{% if key not in allowed %}{% set ns.errors=ns.errors+['unsupported\
+                \ attribute: '+key] %}{% endif %}\n{% if power == 'off' and key != 'transition' %}{% set ns.errors=ns.errors+['off\
+                \ accepts only transition'] %}{% endif %}\n{% if key in ['brightness','brightness_pct','brightness_step','brightness_step_pct','color_temp_kelvin','white','transition']\
+                \ %}\n {% if val is not number or val is boolean %}{% set ns.errors=ns.errors+[key+' must be numeric']\
+                \ %}\n {% elif (key in ['brightness','white'] and not 0 <= val <= 255) or (key=='brightness_pct'\
+                \ and not 0 <= val <= 100) or (key=='brightness_step' and not -255 <= val <= 255) or (key=='brightness_step_pct'\
+                \ and not -100 <= val <= 100) or (key=='transition' and not 0 <= val <= 300) %}{% set ns.errors=ns.errors+[key+'\
+                \ out of range'] %}{% endif %}\n{% endif %}\n{% if key in ['rgb_color','rgbw_color','rgbww_color','hs_color','xy_color']\
+                \ %}\n {% set size={'rgb_color':3,'rgbw_color':4,'rgbww_color':5,'hs_color':2,'xy_color':2}[key]\
+                \ %}\n {% if val is string or val is mapping or val is not iterable or val | count != size %}{%\
+                \ set ns.errors=ns.errors+[key+' invalid vector'] %}\n {% else %}{% for item in val %}{% if item\
+                \ is not number or item is boolean %}{% set ns.errors=ns.errors+[key+' requires numbers'] %}{% elif\
+                \ key in ['rgb_color','rgbw_color','rgbww_color'] and not 0<=item<=255 %}{% set ns.errors=ns.errors+[key+'\
+                \ out of range'] %}{% elif key=='xy_color' and not 0<=item<=1 %}{% set ns.errors=ns.errors+[key+'\
+                \ out of range'] %}{% elif key=='hs_color' and not 0<=item<=(360 if loop.index0==0 else 100) %}{%\
+                \ set ns.errors=ns.errors+[key+' out of range'] %}{% endif %}{% endfor %}{% endif %}\n{% endif %}\n\
+                {% if key=='flash' and val not in ['short','long'] %}{% set ns.errors=ns.errors+['invalid flash']\
+                \ %}{% endif %}\n{% if key in ['effect','color_name'] and val is not string %}{% set ns.errors=ns.errors+[key+'\
+                \ must be a string'] %}{% endif %}\n{% endfor %}\n{% set color_keys=requested_attributes.keys()\
+                \ | select('in',['color_temp_kelvin','rgb_color','rgbw_color','rgbww_color','hs_color','xy_color','color_name','white'])\
+                \ | list %}\n{% if color_keys | count > 1 %}{% set ns.errors=ns.errors+['use only one color representation']\
+                \ %}{% endif %}\n{% set brightness_keys=requested_attributes.keys() | select('in',['brightness','brightness_pct','brightness_step','brightness_step_pct'])\
+                \ | list %}\n{% if brightness_keys | count > 1 %}{% set ns.errors=ns.errors+['use only one brightness\
+                \ representation'] %}{% endif %}\n{% for eid in targets %}\n{% set modes=state_attr(eid,'supported_color_modes')\
+                \ | default([],true) %}\n{% set features=state_attr(eid,'supported_features') | int(0) %}\n{% if\
+                \ brightness_keys and (not modes or modes == ['onoff']) %}{% set ns.errors=ns.errors+[eid+' has\
+                \ no brightness control'] %}{% endif %}\n{% if 'color_temp_kelvin' in requested_attributes %}\n\
+                \ {% set kelvin=requested_attributes.color_temp_kelvin %}\n {% if 'color_temp' not in modes or kelvin\
+                \ is not number or not (state_attr(eid,'min_color_temp_kelvin')|int(0)) <= kelvin <= (state_attr(eid,'max_color_temp_kelvin')|int(0))\
+                \ %}{% set ns.errors=ns.errors+[eid+' invalid/unsupported color temperature'] %}{% endif %}\n{%\
+                \ endif %}\n{% if color_keys | reject('eq','color_temp_kelvin') | list and not (modes | select('in',['rgb','rgbw','rgbww','hs','xy','white'])\
+                \ | list) %}{% set ns.errors=ns.errors+[eid+' has no requested color support'] %}{% endif %}\n{%\
+                \ if 'effect' in requested_attributes and requested_attributes.effect not in (state_attr(eid,'effect_list')\
+                \ | default([],true)) %}{% set ns.errors=ns.errors+[eid+' unknown effect'] %}{% endif %}\n{% if\
+                \ 'transition' in requested_attributes and not (features | bitwise_and(32)) %}{% set ns.errors=ns.errors+[eid+'\
+                \ has no transition support'] %}{% endif %}\n{% if 'flash' in requested_attributes and not (features\
+                \ | bitwise_and(8)) %}{% set ns.errors=ns.errors+[eid+' has no flash support'] %}{% endif %}\n{%\
+                \ endfor %}\n{{ ns.errors }}"
+          - if: '{{ attribute_errors | count > 0 }}'
+            then:
+            - variables:
+                reply: '{{ dict(success=false, commands_dispatched=false, error=(attribute_errors | join(''; '')))
+                  }}'
+            else:
+            - variables:
+                before: '{% set ns=namespace(rows=[]) %}{% for eid in targets %}{% set ns.rows=ns.rows+[dict(entity_id=eid,state=states(eid))]
+                  %}{% endfor %}{{ ns.rows }}'
+                needs_change: '{{ targets if requested_attributes else targets | reject(''is_state'', power) | list
+                  }}'
+            - variables:
+                expected: '{% set ns=namespace(rows={}) %}
+
+                  {% for eid in targets %}
+
+                  {% set a=namespace(values={},unknown=[]) %}
+
+                  {% set b=namespace(value=none) %}
+
+                  {% if ''brightness'' in requested_attributes %}{% set b.value=requested_attributes.brightness
+                  | round(0) | int %}
+
+                  {% elif ''brightness_pct'' in requested_attributes %}{% set b.value=(requested_attributes.brightness_pct
+                  * 255 / 100) | round(0) | int %}
+
+                  {% elif ''brightness_step'' in requested_attributes %}{% set b.value=[[((state_attr(eid,''brightness'')|int(0))
+                  + requested_attributes.brightness_step)|int,0]|max,255]|min %}
+
+                  {% elif ''brightness_step_pct'' in requested_attributes %}{% set b.value=[[((state_attr(eid,''brightness'')|int(0))
+                  + requested_attributes.brightness_step_pct * 255 / 100)|round(0)|int,0]|max,255]|min %}{% endif
+                  %}
+
+                  {% if b.value is not none and b.value > 0 %}{% set a.values=dict(a.values,brightness=b.value)
+                  %}{% endif %}
+
+                  {% for key in [''color_temp_kelvin'',''effect'',''rgb_color'',''rgbw_color'',''rgbww_color'',''hs_color'',''xy_color'']
+                  %}
+
+                  {% if key in requested_attributes %}{% set a.values=dict(a.values,**{key:requested_attributes[key]})
+                  %}{% endif %}{% endfor %}
+
+                  {% for key in [''color_name'',''white'',''flash''] %}{% if key in requested_attributes %}{% set
+                  a.unknown=a.unknown+[key] %}{% endif %}{% endfor %}
+
+                  {% set ns.rows=dict(ns.rows,**{eid:dict(state=(''off'' if b.value == 0 else power),attributes=a.values,unverifiable=a.unknown)})
+                  %}
+
+                  {% endfor %}{{ ns.rows }}'
+            - if: '{{ not (dry_run | default(false)) and needs_change | count > 0 }}'
+              then:
+              - action: light.turn_{{ power }}
+                target:
+                  entity_id: '{{ needs_change }}'
+                data: '{{ requested_attributes }}'
+              - wait_template: "{% set ns=namespace(mismatches=[],unverified=[]) %}\n{% for eid,wanted in expected.items()\
+                  \ %}\n{% if states(eid) != wanted.state %}{% set ns.mismatches=ns.mismatches+[eid+':state'] %}{%\
+                  \ endif %}\n{% for key,value in wanted.attributes.items() %}\n{% set actual=state_attr(eid,key)\
+                  \ %}\n{% if key in ['brightness','color_temp_kelvin'] %}\n {% if actual is not number or (actual-value)|abs\
+                  \ > (25 if key=='color_temp_kelvin' else 2) %}{% set ns.mismatches=ns.mismatches+[eid+':'+key]\
+                  \ %}{% endif %}\n{% elif key in ['rgb_color','rgbw_color','rgbww_color','hs_color','xy_color']\
+                  \ %}\n {% if actual is not iterable or actual|count != value|count %}{% set ns.mismatches=ns.mismatches+[eid+':'+key]\
+                  \ %}\n {% else %}{% for index in range(value|count) %}{% if (actual[index]-value[index])|abs >\
+                  \ (0.01 if key=='xy_color' else 2) %}{% set ns.mismatches=ns.mismatches+[eid+':'+key] %}{% endif\
+                  \ %}{% endfor %}{% endif %}\n{% elif actual != value %}{% set ns.mismatches=ns.mismatches+[eid+':'+key]\
+                  \ %}{% endif %}\n{% endfor %}\n{% for key in wanted.unverifiable %}{% set ns.unverified=ns.unverified+[eid+':'+key]\
+                  \ %}{% endfor %}\n{% endfor %}\n{{ ns.mismatches | count == 0 }}"
+                timeout: 00:00:12
+                continue_on_timeout: true
+            - variables:
+                verification_report: "{% set ns=namespace(mismatches=[],unverified=[]) %}\n{% for eid,wanted in\
+                  \ expected.items() %}\n{% if states(eid) != wanted.state %}{% set ns.mismatches=ns.mismatches+[eid+':state']\
+                  \ %}{% endif %}\n{% for key,value in wanted.attributes.items() %}\n{% set actual=state_attr(eid,key)\
+                  \ %}\n{% if key in ['brightness','color_temp_kelvin'] %}\n {% if actual is not number or (actual-value)|abs\
+                  \ > (25 if key=='color_temp_kelvin' else 2) %}{% set ns.mismatches=ns.mismatches+[eid+':'+key]\
+                  \ %}{% endif %}\n{% elif key in ['rgb_color','rgbw_color','rgbww_color','hs_color','xy_color']\
+                  \ %}\n {% if actual is not iterable or actual|count != value|count %}{% set ns.mismatches=ns.mismatches+[eid+':'+key]\
+                  \ %}\n {% else %}{% for index in range(value|count) %}{% if (actual[index]-value[index])|abs >\
+                  \ (0.01 if key=='xy_color' else 2) %}{% set ns.mismatches=ns.mismatches+[eid+':'+key] %}{% endif\
+                  \ %}{% endfor %}{% endif %}\n{% elif actual != value %}{% set ns.mismatches=ns.mismatches+[eid+':'+key]\
+                  \ %}{% endif %}\n{% endfor %}\n{% for key in wanted.unverifiable %}{% set ns.unverified=ns.unverified+[eid+':'+key]\
+                  \ %}{% endfor %}\n{% endfor %}\n{{ dict(confirmed=ns.mismatches | count == 0 and ns.unverified\
+                  \ | count == 0, mismatches=ns.mismatches, unverified_attributes=ns.unverified) }}"
+            - variables:
+                reply: '{% set ns=namespace(rows=[]) %}{% for eid in targets %}{% set ns.rows=ns.rows+[dict(entity_id=eid,name=state_attr(eid,''friendly_name''),state=states(eid),attributes=(dict(states[eid].attributes)
+                  | to_json | from_json))] %}{% endfor %}{{ dict(success=(true if dry_run | default(false) else
+                  verification_report.confirmed), dry_run=dry_run | default(false), requested_power=power, verification=verification_report,
+                  requested_attributes=requested_attributes, commands_dispatched=(needs_change | count > 0 and not
+                  (dry_run | default(false))), before=before, entities=ns.rows) }}'
+    - stop: Return observed light states
+      response_variable: reply
+  openclaw_light_setting:
+    alias: OpenClaw 灯光扩展属性控制
+    description: Set reviewed light-extension number/select entities only (brightness_delta, ct_delta, ct_adjust_alexa).
+      Query live states with device filter to discover IDs and min/max/step/options first. value is numeric for
+      number, an exact option string for select. Write-only unknown number state is allowed only if parent light
+      is online. dry_run validates without changing. Returns observed parent light properties; relative setters
+      may not report their own state.
+    mode: queued
+    max: 10
+    fields:
+      entity_id:
+        required: true
+        description: Exact reviewed light extension number/select entity ID.
+        selector:
+          select:
+            options:
+            - number.yeelink_cn_307214634_ceiling18_brightness_delta_p_3_1
+            - number.yeelink_cn_307214634_ceiling18_ct_delta_p_3_2
+            - number.yeelink_cn_123762290_ceiling10_brightness_delta_p_3_1
+            - number.yeelink_cn_123762290_ceiling10_ct_delta_p_3_2
+            - number.yeelink_cn_292762626_ceiling14_brightness_delta_p_3_1
+            - number.yeelink_cn_292762626_ceiling14_ct_delta_p_3_2
+            - select.yeelink_cn_123762290_ceiling10_ct_adjust_alexa_p_3_3
+      value:
+        required: true
+        description: Numeric value for number (JSON number or numeric string), exact option string for select.
+        selector:
+          text:
+            multiline: false
+      dry_run:
+        description: Validation only, default false.
+        selector:
+          boolean: null
+    sequence:
+    - variables:
+        reply:
+          success: false
+          commands_dispatched: false
+          error: Request rejected before dispatch
+    - variables:
+        setting_parents:
+          number.yeelink_cn_307214634_ceiling18_brightness_delta_p_3_1: light.yeelink_cn_307214634_ceiling18_s_2_light
+          number.yeelink_cn_307214634_ceiling18_ct_delta_p_3_2: light.yeelink_cn_307214634_ceiling18_s_2_light
+          number.yeelink_cn_123762290_ceiling10_brightness_delta_p_3_1: light.yeelink_cn_123762290_ceiling10_s_2_light
+          number.yeelink_cn_123762290_ceiling10_ct_delta_p_3_2: light.yeelink_cn_123762290_ceiling10_s_2_light
+          number.yeelink_cn_292762626_ceiling14_brightness_delta_p_3_1: light.yeelink_cn_292762626_ceiling14_s_2_light
+          number.yeelink_cn_292762626_ceiling14_ct_delta_p_3_2: light.yeelink_cn_292762626_ceiling14_s_2_light
+          select.yeelink_cn_123762290_ceiling10_ct_adjust_alexa_p_3_3: light.yeelink_cn_123762290_ceiling10_s_2_light
+    - if: '{{ entity_id | default('''') not in setting_parents or value is not defined or (dry_run is defined and
+        dry_run is not boolean) }}'
+      then:
+      - variables:
+          reply:
+            success: false
+            commands_dispatched: false
+            error: Require approved light setting and value
+      else:
+      - variables:
+          parent_light: '{{ setting_parents[entity_id] }}'
+      - variables:
+          value: '{{ value | float(none) if entity_id.startswith(''number.'') else value }}'
+      - if: '{{ states(entity_id) == ''unavailable'' or states(parent_light) not in [''on'',''off''] }}'
+        then:
+        - variables:
+            reply:
+              success: false
+              commands_dispatched: false
+              error: Light setting or parent light is offline
+        else:
+        - if: '{{ (entity_id.startswith(''number.'') and (value is not number or value is boolean or not (state_attr(entity_id,''min'')|float)
+            <= value <= (state_attr(entity_id,''max'')|float) or (((value - (state_attr(entity_id,''min'')|float))
+            / (state_attr(entity_id,''step'')|float(1))) % 1) | abs > 0.000001)) or (entity_id.startswith(''select.'')
+            and value not in state_attr(entity_id,''options'')) }}'
+          then:
+          - variables:
+              reply:
+                success: false
+                commands_dispatched: false
+                error: Value must match the setting range/step or exact options
+          else:
+          - variables:
+              before_state: '{{ states(entity_id) }}'
+              before_light: '{{ (dict(states[parent_light].attributes) | to_json | from_json) }}'
+          - if: '{{ not (dry_run | default(false)) }}'
+            then:
+            - choose:
+              - conditions: '{{ entity_id.startswith(''number.'') }}'
+                sequence:
+                - action: number.set_value
+                  target:
+                    entity_id: '{{ entity_id }}'
+                  data:
+                    value: '{{ value }}'
+              default:
+              - action: select.select_option
+                target:
+                  entity_id: '{{ entity_id }}'
+                data:
+                  option: '{{ value }}'
+          - variables:
+              reply: '{{ dict(success=true, dry_run=dry_run | default(false), command_accepted=not (dry_run | default(false)),
+                entity_id=entity_id, requested_value=value, observed_setting_state=states(entity_id), parent_light=parent_light,
+                before_light=before_light, observed_light_attributes=(dict(states[parent_light].attributes) | to_json
+                | from_json)) }}'
+    - stop: Return light extension result; command acceptance is not verified physical change
+      response_variable: reply

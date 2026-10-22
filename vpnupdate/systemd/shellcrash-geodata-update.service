@@ -1,0 +1,16 @@
+[Unit]
+Description=Refresh ShellCrash GeoIP GeoSite and CN IP lists safely
+Wants=network-online.target
+After=network-online.target shellcrash.service
+RequiresMountsFor=/mnt/SDD128G/vpnupdate
+
+[Service]
+Type=oneshot
+User=root
+UMask=0077
+WorkingDirectory=/mnt/SDD128G/vpnupdate
+ExecCondition=/usr/bin/systemctl is-active --quiet shellcrash.service
+ExecStart=/usr/bin/flock --wait 300 /run/lock/shellcrash-maintenance.lock /usr/bin/python3 /mnt/SDD128G/vpnupdate/maintain_shellcrash.py geodata
+TimeoutStartSec=20min
+StandardOutput=journal
+StandardError=journal
