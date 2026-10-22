@@ -189,3 +189,6 @@ nodered/automation-backup-*/
 nodered/data/.config.runtime.json
 nodered/data/.config.users.json
 nodered/data/flows.json
+
+# Certbot-managed certificate renewal state
+/nginx_proxy_manager/letsencrypt/renewal/npm-1.conf
