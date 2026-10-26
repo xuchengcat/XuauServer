@@ -3,7 +3,9 @@ Description=Check OpenAI and start Codex in the codex_long tmux session
 Wants=network-online.target
 After=network-online.target shellcrash.service
 RequiresMountsFor=/mnt/SDD128G/codex-autostart /mnt/SDD128G/codex /home/xuau
-StartLimitIntervalSec=0
+# Keep the five-start budget until reboot or an explicit reset-failed.
+StartLimitIntervalSec=infinity
+StartLimitBurst=5
 
 [Service]
 Type=oneshot

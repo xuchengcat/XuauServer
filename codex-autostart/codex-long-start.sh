@@ -44,11 +44,11 @@ if ! timeout --kill-after=10s 120s "$codex" exec \
     -c 'developer_instructions="This is a connectivity probe. Do not use tools or read files. Reply with exactly CODEX_READY."' \
     -o "$probe_dir/reply" 'Reply with exactly CODEX_READY. Do not use tools.' \
     >"$probe_dir/output" 2>&1; then
-    log 'Model probe failed or timed out; systemd will retry in 60 seconds.'
+    log 'Model probe failed or timed out; automatic retries are limited to five attempts per boot (60-second interval).'
     exit 1
 fi
 if [[ ! -f "$probe_dir/reply" ]] || [[ "$(tr -d '[:space:]' < "$probe_dir/reply")" != CODEX_READY ]]; then
-    log 'Model probe did not return the expected reply; systemd will retry in 60 seconds.'
+    log 'Model probe did not return the expected reply; automatic retries are limited to five attempts per boot (60-second interval).'
     exit 1
 fi
 log 'Model access confirmed.'

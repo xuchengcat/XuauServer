@@ -19,8 +19,8 @@
 2. 服务等待网络目标及目录挂载。代理服务若在启动中，会先等待其启动任务结束；代理真正可用由后续请求检查。
 3. 如果 `codex_long` 已存在，直接成功退出，不向会话发送命令、不重启其中的进程。
 4. 否则使用现有 `~/.codex` 登录和配置，在空临时目录中执行一次 `codex exec`，要求模型仅回复 `CODEX_READY`。探测使用只读沙箱，超时 120 秒，可能产生少量模型用量。临时输出在结束后删除，日志不输出认证信息或代理地址。
-5. 探测失败后由 systemd 每隔 60 秒重试，直到成功。探测成功后创建会话，并在面板内重新载入私有代理环境，再执行 `/home/xuau/.local/bin/codex --yolo`。
-6. 文件锁避免并发执行；创建前再次检查同名会话。工作目录不可访问或 Codex 不存在时也会重试。
+5. 探测失败后由 systemd 间隔 60 秒重试，每次开机最多启动 5 次（含首次，即最多重试 4 次）。连续 5 次失败后停止，服务显示 `failed`，日志包含 `Start request repeated too quickly`；下次开机或手动重置后才能再试。探测成功后创建会话，并在面板内重新载入私有代理环境，再执行 `/home/xuau/.local/bin/codex --yolo`。
+6. 文件锁避免并发执行；创建前再次检查同名会话。工作目录不可访问或 Codex 不存在时也会重试，并共用上述次数上限。上限使用 `StartLimitIntervalSec=infinity` 和 `StartLimitBurst=5`；手动启动（包括因已有会话而跳过）也占用次数，成功后不会自动重置。
 
 这是开机启动任务，不持续监控 Codex 存活。手动退出 Codex 后不会自动重拉。重启会创建新的 Codex 对话，不自动恢复以前的对话。已有同名空会话也会跳过，需要人工处理。
 
@@ -64,9 +64,15 @@ tmux attach -t codex_long
 
 # 手动触发一次启动；已有同名会话时跳过
 sudo systemctl start codex-long.service
+
+# 达到失败上限后，修复网络或配置，再重置次数并重新启动
+sudo systemctl reset-failed codex-long.service
+sudo systemctl start codex-long.service
 ```
 
 服务是 `oneshot`，成功后显示 `inactive (dead)` 属于正常现象；检查日志和 tmux 会话确认结果。`KillMode=process` 使启动服务结束或停止时不会连带终止 tmux 服务及会话。
+
+`--probe-only` 是直接执行脚本，仅探测一次，不自动重试，也不占 systemd 的启动次数。
 
 停用自启动和失败重试：
 
