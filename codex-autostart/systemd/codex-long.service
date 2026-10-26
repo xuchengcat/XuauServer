@@ -1,0 +1,20 @@
+[Unit]
+Description=Check OpenAI and start Codex in the codex_long tmux session
+Wants=network-online.target
+After=network-online.target shellcrash.service
+RequiresMountsFor=/mnt/SDD128G/codex-autostart /mnt/SDD128G/codex /home/xuau
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+User=xuau
+Group=xuau
+Environment=HOME=/home/xuau
+Environment=PATH=/home/xuau/.local/bin:/usr/local/bin:/usr/bin:/bin
+WorkingDirectory=/mnt/SDD128G/codex-autostart
+ExecStart=/mnt/SDD128G/codex-autostart/codex-long-start.sh
+Restart=on-failure
+RestartSec=60s
+TimeoutStartSec=180s
+# tmux and Codex must survive completion/stopping of this bootstrap service.
+KillMode=process

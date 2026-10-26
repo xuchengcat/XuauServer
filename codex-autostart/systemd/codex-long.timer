@@ -1,0 +1,10 @@
+[Unit]
+Description=Start codex_long five minutes after boot
+
+[Timer]
+OnBootSec=5min
+AccuracySec=1s
+Unit=codex-long.service
+
+[Install]
+WantedBy=timers.target

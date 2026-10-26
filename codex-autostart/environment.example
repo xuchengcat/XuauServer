@@ -1,0 +1,8 @@
+# Copy to /home/xuau/.config/codex-long/environment and chmod 600.
+# Omit these exports if direct access works. Never commit real credentials.
+export HTTP_PROXY='http://USER:PASSWORD@127.0.0.1:17890'
+export HTTPS_PROXY="$HTTP_PROXY"
+export ALL_PROXY="$HTTP_PROXY"
+export http_proxy="$HTTP_PROXY"
+export https_proxy="$HTTP_PROXY"
+export all_proxy="$HTTP_PROXY"
