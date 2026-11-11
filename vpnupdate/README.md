@@ -133,6 +133,16 @@ ShellCrash 重启时会重新合并它们，因此规则不会被正常订阅更
 ShellCrash 停止时跳过更新。下载或校验失败保留原文件；重启失败则恢复旧文件并重启。
 任务日志保存在 systemd journal，不包含订阅地址或节点凭据。
 
+2026-10-23 修复：`shellcrash/fw_getlanip.sh` 按 `via` 关键字读取 IPv6 网关，
+跳过 PPPoE 的 `default dev pppoe_dial`，避免把接口名写入 nftables 地址集合。
+本机关闭保守模式（`start_old=OFF`），统一由 systemd 管理，避免核心在运行但
+systemd 显示 inactive、定时更新被跳过的情况。
+已恢复 `shellcrash.service` 开机启动，并移除禁用启动标记（原标记已备份）。
+`systemd/shellcrash.service.d/privileges.conf` 明确以 root 运行启动/停止钩子及核心，
+保留 `shellcrash` 组（GID 7890）供防回环规则使用。
+重启后同时检查控制器、systemd 状态和本机代理链的 IPv6 保护规则；缺失则报错并回滚。
+手动 `refresh_config.sh` 正式更新自动通过 sudo 提权，直接运行 Python 正式更新时必须为 root。
+
 Geo 更新保留当前全球版/精简版 GeoIP 类型。只有数据实际变化才重启，已通过配置版本检查
 的任务直接结束；使用 `--force-check` 可以强制下载并校验而不强制重启。
 MRS 规则集仍由 Mihomo 按配置的 86400 秒周期自动刷新。
@@ -141,6 +151,8 @@ MRS 规则集仍由 Mihomo 按配置的 86400 秒周期自动刷新。
 
 ```bash
 sudo install -m 644 systemd/shellcrash-*.service systemd/shellcrash-*.timer /etc/systemd/system/
+sudo install -D -m 644 systemd/shellcrash.service.d/privileges.conf /etc/systemd/system/shellcrash.service.d/privileges.conf
+sudo install -m 755 shellcrash/fw_getlanip.sh /etc/ShellCrash/starts/fw_getlanip.sh
 sudo systemctl daemon-reload
 sudo systemctl enable --now shellcrash-subscription-update.timer shellcrash-geodata-update.timer
 ```
@@ -161,6 +173,10 @@ sudo flock --wait 300 /run/lock/shellcrash-maintenance.lock python3 maintain_she
 ```
 
 订阅备份仍受 `.env` 中的 `BACKUP_COUNT` 控制；重启失败使用的临时回滚数据只保存在进程内存。
+ShellCrash 自身升级可能覆盖 `starts/fw_getlanip.sh`，升级后应复查或重新安装此修复文件。
+本次修复前的文件保存在 `/mnt/SDD128G/maintenance-backups/shellcrash-fix-20261023/`。
+
+回归检查：`python3 -m unittest discover -s . -p 'test_shellcrash_health.py' -v`。
 
 ## 文件说明
 

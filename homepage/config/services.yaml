@@ -42,7 +42,7 @@
         widget:
           type: jellyfin
           url: http://jellyfin:8096
-          key: 952a6776a69f4cc98849716f52a95e32
+          key: "{{HOMEPAGE_VAR_JELLYFIN_KEY}}"
           enableNowPlaying: true
           enableBlocks: true
           showEpisodeNumber: true
@@ -56,8 +56,8 @@
         widget:
           type: transmission
           url: http://172.17.0.1:9091
-          username: xuau
-          password: 123456
+          username: "{{HOMEPAGE_VAR_TRANSMISSION_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_TRANSMISSION_PASSWORD}}"
     - PhotoPrism:
         icon: /icons/photoprism.png
         href: https://photoprism.xuchengcat.cn:444
@@ -66,10 +66,10 @@
         container: photoprism
         widget:
           type: photoprism
-            #username: xuau
-            #password: 123456
+            #username: "{{HOMEPAGE_VAR_PHOTOPRISM_USERNAME}}"
+            #password: "{{HOMEPAGE_VAR_PHOTOPRISM_PASSWORD}}"
           url: http://photoprism:2342
-          key: RxfNRC-Y7Rq5r-vNEtdi-8xqRDQ
+          key: "{{HOMEPAGE_VAR_PHOTOPRISM_KEY}}"
           fields: ["albums", "photos", "videos"]
     # - Glances:
     #     icon: /icons/cadvisor.png
@@ -94,7 +94,7 @@
         widget:
           type: homeassistant
           url: http://172.17.0.1:8123
-          key: "<removed-ha-token>"
+          key: "{{HOMEPAGE_VAR_HA_TOKEN}}"
           fields: ["people_home", "lights_on", "switches_on"]
     - Kavita:
         icon: sh-kavita.png
@@ -154,7 +154,7 @@
         #widget:
           #type: nextcloud
           #url: https://nextcloud.xuchengcat.cn
-          #key: HwQu7CgKUbUJqGUNuTvFYFrRRmcLNnaYJz8KJyDjS5xaAJYKwBDCP88oJb7VSiKG
+          #key: "{{HOMEPAGE_VAR_NEXTCLOUD_KEY}}"
           #fields: ["memoryusage","numfiles","numshares"]
 
     - Wechat:

@@ -1,0 +1,6 @@
+homeassistant:
+  customize:
+    device_tracker.su_eg96690_location:
+      entity_picture: /local/vehicle-icons/qin.svg?v=1
+    device_tracker.zhi_ji_qi_che_che_liang_wei_zhi:
+      entity_picture: /local/vehicle-icons/im.svg?v=1

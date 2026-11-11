@@ -44,6 +44,24 @@ def atomic_write(path: Path, data: bytes) -> None:
         Path(temporary).unlink(missing_ok=True)
 
 
+def require_root() -> None:
+    if os.geteuid() != 0:
+        raise RuntimeError('ShellCrash maintenance requires root; run with sudo')
+
+
+def verify_firewall() -> None:
+    flags = dict(re.findall(r'^([A-Za-z_][A-Za-z0-9_]*)=(.*)$', (BASE / 'configs/ShellCrash.cfg').read_text(), re.M))
+    if flags.get('firewall_mod') != 'nftables' or flags.get('firewall_area') not in ('2', '3'):
+        return
+    rules = subprocess.run(['nft', 'list', 'chain', 'inet', 'shellcrash', 'output'], check=True, capture_output=True, text=True).stdout
+    if not re.search(r'\bredirect to\b|\btproxy\b|\bmeta mark set\b', rules):
+        raise RuntimeError('ShellCrash output proxy rule is missing')
+    if flags.get('ipv6_redir') == 'ON':
+        for pattern in (r'ip6 daddr \{[^}]+\} return', r'ip6 saddr != \{[^}]+\} return'):
+            if not re.search(pattern, rules):
+                raise RuntimeError('ShellCrash IPv6 output guard is missing')
+
+
 def verify_service() -> None:
     for attempt in range(30):
         try:
@@ -54,6 +72,7 @@ def verify_service() -> None:
             with urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:' + port + '/version', headers=headers), timeout=2) as response:
                 json.load(response)
             subprocess.run(['systemctl', 'is-active', '--quiet', 'shellcrash'], check=True)
+            verify_firewall()
             return
         except (OSError, ValueError, KeyError, subprocess.CalledProcessError):
             if attempt == 29:
@@ -62,7 +81,8 @@ def verify_service() -> None:
 
 
 def restart() -> None:
-    subprocess.run(['systemctl', 'restart', 'shellcrash'], check=True, timeout=120)
+    require_root()
+    subprocess.run(['systemctl', '--no-ask-password', 'restart', 'shellcrash'], check=True, timeout=120)
     verify_service()
 
 
@@ -204,6 +224,7 @@ def main() -> int:
     parser.add_argument('--force-check', action='store_true', help='Download and validate Geo data even if versions match')
     args = parser.parse_args()
     try:
+        require_root()
         verify_service()
         if args.task == 'subscription':
             subscription()

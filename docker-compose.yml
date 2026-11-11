@@ -7,6 +7,11 @@ services:
         max-size: "50m"
         max-file: "5"
     container_name: jellyfin_qsv
+    env_file:
+      - /mnt/SDD128G/jellyfin/lan-bypass.env
+    environment:
+      HTTP_PROXY: ${PROXY_URL}
+      HTTPS_PROXY: ${PROXY_URL}
     image: nyanmisaka/jellyfin:latest
     ports:
       - 8096:8096
@@ -131,7 +136,7 @@ services:
       options:
         max-size: "50m"
         max-file: "5"
-    image: ghcr.io/metatube-community/metatube-server:latest
+    image: ghcr.io/metatube-community/metatube-server:dev@sha256:c40a16a2d5f2aba216d7b79ebd1e28dad49890a73025cb155284a400dc54a1a2
     container_name: metatube
     ports:
       - "8082:8080"
@@ -623,6 +628,9 @@ services:
       # - /mnt/HDD14T:/disk/mount/HDD14T
       - /mnt/HDD14T:/disk/mount/HDD14T
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    env_file:
+      - path: ./homepage/secrets.env
+        format: raw
     environment:
       HOMEPAGE_ALLOWED_HOSTS: xuchengcat.cn,172.0.17:3000,192.168.2.1:3000
     restart: unless-stopped

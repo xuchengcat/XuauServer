@@ -179,21 +179,36 @@ def build_config(config_path: Path, proxies: list[dict[str, Any]]) -> dict[str, 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--env-file", type=Path, default=BASE_DIR / ".env"); parser.add_argument("--dry-run", action="store_true"); args = parser.parse_args()
     try:
+        if not args.dry_run and os.geteuid() != 0:
+            raise UpdateError("正式更新需要 root 权限，请使用 sudo ./refresh_config.sh")
         load_dotenv(args.env_file.resolve()); url = os.getenv("SUBSCRIPTION_URL", "").strip()
         if not url.startswith(("https://", "http://")): raise UpdateError("SUBSCRIPTION_URL 必须是 http(s) URL")
         config_path, core = env_path("CONFIG_PATH", "/etc/ShellCrash/yamls/config.yaml"), env_path("MIHOMO_CORE", "/tmp/ShellCrash/CrashCore")
         proxies = validate_proxies(parse_subscription(fetch(url, int(os.getenv("HTTP_TIMEOUT", "30")), os.getenv("SUBSCRIPTION_USER_AGENT", "clash.meta"))), int(os.getenv("MIN_PROXY_COUNT", "1")))
         validate_with_core(proxies, core)
         document = build_config(config_path, proxies)
+        original = config_path.read_bytes()
         with tempfile.TemporaryDirectory(prefix="vpnupdate-") as directory:
             candidate = Path(directory) / "config.yaml"; candidate.write_text(yaml.safe_dump(document, allow_unicode=True, sort_keys=False, width=4096), encoding="utf-8")
             if args.dry_run: print(f"校验通过：解析到 {len(proxies)} 个节点（dry-run，未写入）"); return 0
             changed = atomic_install(candidate, config_path, int(os.getenv("BACKUP_COUNT", "5")))
         restart = os.getenv("RESTART_COMMAND", "systemctl restart shellcrash").strip()
-        if changed and restart: subprocess.run(restart.split(), check=True)
+        if changed and restart:
+            from maintain_shellcrash import atomic_write, restart as checked_restart
+            def reload_service():
+                if restart in ("systemctl restart shellcrash", "systemctl restart shellcrash.service"):
+                    checked_restart()
+                else:
+                    subprocess.run(restart.split(), check=True, timeout=120)
+            try:
+                reload_service()
+            except Exception:
+                atomic_write(config_path, original)
+                reload_service()
+                raise UpdateError("重启或健康检查失败，已恢复原配置") from None
         state = "内容未变化" if not changed else ("已安装并重载" if restart else "已安装（未配置重载命令）")
         print(f"更新成功：{len(proxies)} 个节点，{state}"); return 0
-    except (UpdateError, OSError, ValueError, subprocess.CalledProcessError) as exc:
+    except (RuntimeError, OSError, ValueError, subprocess.SubprocessError) as exc:
         print(f"更新失败：{exc}", file=sys.stderr); return 1
 
 if __name__ == "__main__": raise SystemExit(main())

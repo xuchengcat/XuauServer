@@ -2,10 +2,12 @@
 script:
   openclaw_read_states:
     alias: OpenClaw 全部实体状态查询
-    description: Read current states from ALL Home Assistant domains, including calendar/script/button/update. Read
-      only. Filter by entity_ids, domain, name, area or device. Results include exact entity_id for light control.
+    description: 'Read current states from ALL Home Assistant domains, including calendar/script/button/update.
+      Read only. Filter by entity_ids, domain, name, area or device. Results include exact entity_id for light control.
       Paginate with offset and limit; do not treat first page as all results. Unavailable/unknown are real states,
-      not success.
+      not success. Vehicle lookup: BYD/Qin entities use su_eg96690, not byd; IM uses zhi_ji_qi_che. For location
+      query domain=device_tracker; coordinates and freshness metadata are returned. last_changed is state-change
+      time, not GPS sample time. Read gps_last_updated/last_updated vehicle sensors for BYD.'
     mode: parallel
     max: 10
     fields:
@@ -94,7 +96,7 @@ script:
 
             {% set a = namespace(values={}) %}
 
-            {% for key in [''unit_of_measurement'',''device_class'',''temperature'',''current_temperature'',''humidity'',''brightness'',''color_temp_kelvin'',''rgb_color'',''percentage'',''current_position'',''battery_level'',''volume_level'',''media_title'',''media_artist'',''hvac_action'',''last_triggered'',''next_dawn'',''next_dusk'',''latitude'',''longitude'',''message'',''start_time'',''end_time'',''installed_version'',''latest_version'',''options'',''min'',''max'',''step'']
+            {% for key in [''unit_of_measurement'',''device_class'',''temperature'',''current_temperature'',''humidity'',''brightness'',''color_temp_kelvin'',''rgb_color'',''percentage'',''current_position'',''battery_level'',''volume_level'',''media_title'',''media_artist'',''hvac_action'',''last_triggered'',''next_dawn'',''next_dusk'',''latitude'',''longitude'',''message'',''start_time'',''end_time'',''installed_version'',''latest_version'',''options'',''min'',''max'',''step'',''source_type'',''gps_accuracy'',''location_status'',''coordinate_system'',''source_coordinate_system'',''cloud_updated'',''retrieved_at'',''individual_sample_time_verified'',''vehicle_timestamp'',''chargeState'',''chargingState'',''smart_charge_tip'',''mapping_basis'']
             %}
 
             {% if key in s.attributes %}{% set a.values = dict(a.values, **{key:((s.attributes[key].isoformat()
@@ -107,7 +109,8 @@ script:
             %}
 
             {% set ns.rows = ns.rows + [dict(entity_id=eid, name=s.name, domain=s.domain, state=s.state, area=area_name(eid),
-            device_id=device_id(eid), last_changed=s.last_changed.isoformat(), attributes=a.values)] %}
+            device_id=device_id(eid), last_changed=s.last_changed.isoformat(), last_updated=s.last_updated.isoformat(),
+            attributes=a.values)] %}
 
             {% endfor %}
 
