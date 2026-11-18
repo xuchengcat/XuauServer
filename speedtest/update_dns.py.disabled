@@ -1,0 +1,48 @@
+#!/usr/bin/python3
+"""Update only speedtest.xuchengcat.cn AAAA; reuse NPM's existing DNS provider."""
+import base64,datetime,hashlib,hmac,ipaddress,json,sqlite3,subprocess,urllib.parse,urllib.request,urllib.error,uuid,sys
+DOMAIN='xuchengcat.cn'; RR='speedtest'
+def main():
+    addresses=json.loads(subprocess.check_output(['ip','-j','-6','addr','show','dev','pppoe_dial'],text=True))
+    candidates=[a['local'] for row in addresses for a in row.get('addr_info',[]) if a.get('scope')=='global' and not a.get('temporary',False) and ipaddress.ip_address(a['local']).is_global and a.get('preferred_life_time',0)!=0]
+    if not candidates: raise RuntimeError('No preferred non-temporary global IPv6 on pppoe_dial')
+    value=candidates[0]
+    with sqlite3.connect('file:/mnt/SDD128G/nginx_proxy_manager/data/database.sqlite?mode=ro',uri=True) as db:
+        meta=json.loads(db.execute('select meta from certificate where id=1 and is_deleted=0').fetchone()[0])
+    if meta.get('dns_provider')!='aliyun':raise RuntimeError('Unexpected DNS provider')
+    creds={k.strip():v.strip() for line in meta['dns_provider_credentials'].splitlines() if '=' in line and not line.lstrip().startswith('#') for k,v in [line.split('=',1)]}
+    def api(action,**args):
+        p=dict(Format='JSON',Version='2015-01-09',AccessKeyId=creds['dns_aliyun_access_key'],SignatureMethod='HMAC-SHA1',SignatureVersion='1.0',SignatureNonce=str(uuid.uuid4()),Timestamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),Action=action,**args)
+        quote=lambda x:urllib.parse.quote(str(x),safe='~')
+        canonical='&'.join(quote(k)+'='+quote(v) for k,v in sorted(p.items()))
+        signed='GET&%2F&'+quote(canonical)
+        p['Signature']=base64.b64encode(hmac.new((creds['dns_aliyun_access_key_secret']+'&').encode(),signed.encode(),hashlib.sha1).digest()).decode()
+        try:
+            with urllib.request.urlopen('https://alidns.aliyuncs.com/?'+urllib.parse.urlencode(p),timeout=20) as r:response=json.load(r)
+        except urllib.error.HTTPError as e:
+            try:code=json.load(e).get('Code','HTTP failure')
+            except Exception:code='HTTP failure'
+            raise RuntimeError('DNS API '+str(code)) from None
+        if 'Code' in response:raise RuntimeError('DNS API '+str(response['Code']))
+        return response
+    records=api('DescribeSubDomainRecords',SubDomain=RR+'.'+DOMAIN,PageSize=100).get('DomainRecords',{}).get('Record',[])
+    records=[r for r in records if r.get('RR')==RR]
+    if any(r.get('Type')=='CNAME' for r in records):raise RuntimeError('Existing CNAME conflicts; no changes made')
+    # Preserve the existing wildcard A/ZeroTier behavior after adding an explicit name.
+    if not any(r.get('Type')=='A' for r in records):
+        api('AddDomainRecord',DomainName=DOMAIN,RR=RR,Type='A',Value='192.168.192.1',TTL=600)
+        print('Added dedicated A record preserving ZeroTier address')
+    aaaa=[r for r in records if r.get('Type')=='AAAA']
+    if len(aaaa)>1:raise RuntimeError('Multiple AAAA records; manual review required')
+    if not aaaa:
+        api('AddDomainRecord',DomainName=DOMAIN,RR=RR,Type='AAAA',Value=value,TTL=600)
+        print('Added AAAA',value)
+    elif ipaddress.ip_address(aaaa[0]['Value'])!=ipaddress.ip_address(value):
+        api('UpdateDomainRecord',RecordId=aaaa[0]['RecordId'],RR=RR,Type='AAAA',Value=value,TTL=600)
+        print('Updated AAAA',value)
+    else:print('AAAA current',value)
+if __name__=='__main__':
+    try:main()
+    except Exception as e:
+        print('DNS update failed:',type(e).__name__,str(e) if isinstance(e,RuntimeError) else '(details suppressed)',file=sys.stderr)
+        sys.exit(1)

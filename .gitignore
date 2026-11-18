@@ -201,7 +201,17 @@ nodered/data/.config.users.json
 nodered/data/flows.json
 
 # Certbot-managed certificate renewal state
-/nginx_proxy_manager/letsencrypt/renewal/npm-1.conf
+/nginx_proxy_manager/letsencrypt/renewal/*.conf
 
 # Homepage credentials stay on this host.
 /homepage/secrets.env
+
+# Local firmware diagnostics and Home Assistant snapshots contain device state.
+/esp_home/diagnostics/
+/homeassistant/config/backups/
+
+# LibreSpeed upstream reference checkout and optional downloaded GeoIP assets.
+# The deployed, customized web sources and license are tracked under www/.
+/speedtest/speedtest-master/
+/speedtest/www/backend/country_asn.mmdb
+/speedtest/www/backend/geoip2.phar

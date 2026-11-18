@@ -1,0 +1,21 @@
+services:
+  speedtest:
+    image: local/php-apache-speedtest:20261118
+    pull_policy: never
+    container_name: speedtest
+    restart: unless-stopped
+    entrypoint: ["apache2-foreground"]
+    volumes:
+      - ./www:/var/www/html:ro
+      - ./php-speedtest.ini:/usr/local/etc/php/conf.d/zz-speedtest.ini:ro
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/backend/empty.php') === false ? 1 : 0);"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true
+    name: sdd128g_default
