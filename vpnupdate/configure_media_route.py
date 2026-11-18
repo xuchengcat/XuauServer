@@ -105,4 +105,6 @@ def main() -> None:
 
 
 if __name__ == '__main__':
-    main()
+    from service_domain_policy import maintenance_lock
+    with maintenance_lock():
+        main()

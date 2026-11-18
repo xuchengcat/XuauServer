@@ -1,2 +1,4 @@
 # Prepend to /etc/ShellCrash/yamls/rules.yaml; retain existing rules.
+- DOMAIN-SUFFIX,speedtest.xuchengcat.cn,DIRECT
+- DOMAIN-SUFFIX,xuchengcat.cn,DIRECT
 - IP-CIDR,47.242.128.61/32,subscription,no-resolve

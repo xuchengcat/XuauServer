@@ -12,8 +12,10 @@ import subprocess
 import tempfile
 import time
 import urllib.request
+import urllib.parse
 import ipaddress
 import yaml
+from service_domain_policy import maintenance_lock, verify as verify_service_domains, verify_persistent
 
 BASE = Path('/etc/ShellCrash')
 RUNTIME = Path('/tmp/ShellCrash/config.yaml')
@@ -62,17 +64,74 @@ def verify_firewall() -> None:
                 raise RuntimeError('ShellCrash IPv6 output guard is missing')
 
 
+def verify_node_dns(runtime: dict) -> None:
+    """Node lookup must work before any proxy node can connect."""
+    servers = runtime.get('dns', {}).get('proxy-server-nameserver', [])
+    if not isinstance(servers, list) or not servers:
+        raise RuntimeError('ShellCrash encrypted node DNS is missing')
+    for server in servers:
+        endpoint = urllib.parse.urlsplit(str(server))
+        try:
+            ipaddress.ip_address(endpoint.hostname or '')
+        except ValueError:
+            raise RuntimeError('ShellCrash node DNS must use an IP endpoint without bootstrap DNS') from None
+        if (endpoint.scheme not in ('https', 'tls', 'quic')
+                or endpoint.fragment.split('&')[0] != 'DIRECT'
+                or 'skip-cert-verify=true' in endpoint.fragment):
+            raise RuntimeError('ShellCrash node DNS must use verified encryption and DIRECT routing')
+
+
+def verify_startup_timing() -> None:
+    flags = dict(re.findall(r'^([A-Za-z_][A-Za-z0-9_]*)=(.*)$', (BASE / 'configs/ShellCrash.cfg').read_text(), re.M))
+    delay = int(flags.get('start_delay', '0'))
+    timeout = subprocess.run(
+        ['systemctl', 'show', 'shellcrash', '-p', 'TimeoutStartUSec', '--value'],
+        check=True, capture_output=True, text=True,
+    ).stdout.strip()
+    if timeout == 'infinity':
+        return
+    units = {'us': 0.000001, 'ms': 0.001, 's': 1, 'min': 60, 'h': 3600, 'd': 86400}
+    pattern = r'(\d+(?:\.\d+)?)\s*(us|ms|min|s|h|d)'
+    if not timeout or re.sub(pattern, '', timeout).strip():
+        raise RuntimeError('Cannot verify ShellCrash startup timeout')
+    seconds = sum(float(value) * units[unit] for value, unit in re.findall(pattern, timeout))
+    if seconds < delay + 15:
+        raise RuntimeError('ShellCrash startup timeout needs at least 15 seconds beyond start_delay')
+
+
+def verify_healthcheck_dns(runtime: dict) -> None:
+    policies = runtime.get('dns', {}).get('nameserver-policy', {})
+    for group in runtime.get('proxy-groups', []):
+        host = urllib.parse.urlsplit(group.get('url', '')).hostname
+        if not host:
+            continue
+        for domain, servers in policies.items():
+            suffix = domain.removeprefix('+.').removeprefix('*.')
+            if host != suffix and not host.endswith('.' + suffix):
+                continue
+            if isinstance(servers, str):
+                servers = [servers]
+            if any(urllib.parse.urlsplit(server).fragment.split('&')[0] == group['name'] for server in servers):
+                raise RuntimeError('ShellCrash health-check DNS depends on the group being checked')
+
+
 def verify_service() -> None:
+    controller_client = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     for attempt in range(30):
         try:
             runtime = yaml.safe_load(RUNTIME.read_text())
             controller = str(runtime.get('external-controller', ':9999'))
             port = controller.rsplit(':', 1)[1]
             headers = {'Authorization': 'Bearer ' + str(runtime['secret'])} if runtime.get('secret') else {}
-            with urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:' + port + '/version', headers=headers), timeout=2) as response:
+            with controller_client.open(urllib.request.Request('http://127.0.0.1:' + port + '/version', headers=headers), timeout=2) as response:
                 json.load(response)
             subprocess.run(['systemctl', 'is-active', '--quiet', 'shellcrash'], check=True)
             verify_firewall()
+            verify_node_dns(runtime)
+            verify_healthcheck_dns(runtime)
+            verify_startup_timing()
+            verify_persistent(BASE)
+            verify_service_domains(runtime)
             return
         except (OSError, ValueError, KeyError, subprocess.CalledProcessError):
             if attempt == 29:
@@ -87,6 +146,9 @@ def restart() -> None:
 
 
 def validate(runtime: dict, directory: Path, geo: bool = False) -> None:
+    verify_node_dns(runtime)
+    verify_healthcheck_dns(runtime)
+    verify_service_domains(runtime)
     candidate = copy.deepcopy(runtime)
     for provider in candidate.get('rule-providers', {}).values():
         source = (BASE / provider['path']).resolve()
@@ -145,6 +207,8 @@ def subscription() -> None:
                 atomic_write(target, original)
                 restart()
                 raise
+        verify_persistent(BASE)
+        verify_service_domains(yaml.safe_load(RUNTIME.read_text()))
         log(f'Subscription OK: {len(nodes)} entries; ' + ('updated and restarted' if changed else 'unchanged, no restart'))
     except Exception as error:
         # Avoid subscription tokens or node secrets in the system journal.
@@ -225,11 +289,12 @@ def main() -> int:
     args = parser.parse_args()
     try:
         require_root()
-        verify_service()
-        if args.task == 'subscription':
-            subscription()
-        else:
-            geodata(args.force_check)
+        with maintenance_lock():
+            verify_service()
+            if args.task == 'subscription':
+                subscription()
+            else:
+                geodata(args.force_check)
     except Exception as error:
         log('ERROR: ' + str(error))
         return 1

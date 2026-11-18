@@ -176,7 +176,7 @@ def build_config(config_path: Path, proxies: list[dict[str, Any]]) -> dict[str, 
     if not updated: raise UpdateError("没有找到需要写入节点的策略组，请设置 UPDATE_GROUPS")
     return document
 
-def main() -> int:
+def update_main() -> int:
     parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--env-file", type=Path, default=BASE_DIR / ".env"); parser.add_argument("--dry-run", action="store_true"); args = parser.parse_args()
     try:
         if not args.dry_run and os.geteuid() != 0:
@@ -187,6 +187,8 @@ def main() -> int:
         proxies = validate_proxies(parse_subscription(fetch(url, int(os.getenv("HTTP_TIMEOUT", "30")), os.getenv("SUBSCRIPTION_USER_AGENT", "clash.meta"))), int(os.getenv("MIN_PROXY_COUNT", "1")))
         validate_with_core(proxies, core)
         document = build_config(config_path, proxies)
+        from service_domain_policy import verify_candidate
+        verify_candidate(document)
         original = config_path.read_bytes()
         with tempfile.TemporaryDirectory(prefix="vpnupdate-") as directory:
             candidate = Path(directory) / "config.yaml"; candidate.write_text(yaml.safe_dump(document, allow_unicode=True, sort_keys=False, width=4096), encoding="utf-8")
@@ -206,9 +208,20 @@ def main() -> int:
                 atomic_write(config_path, original)
                 reload_service()
                 raise UpdateError("重启或健康检查失败，已恢复原配置") from None
+        if not changed:
+            from maintain_shellcrash import verify_service
+            verify_service()
         state = "内容未变化" if not changed else ("已安装并重载" if restart else "已安装（未配置重载命令）")
         print(f"更新成功：{len(proxies)} 个节点，{state}"); return 0
     except (RuntimeError, OSError, ValueError, subprocess.SubprocessError) as exc:
         print(f"更新失败：{exc}", file=sys.stderr); return 1
+
+def main() -> int:
+    # Dry-run is read-only; formal updates share the scheduler's Python lock.
+    if '--dry-run' in sys.argv or os.geteuid() != 0:
+        return update_main()
+    from service_domain_policy import maintenance_lock
+    with maintenance_lock():
+        return update_main()
 
 if __name__ == "__main__": raise SystemExit(main())

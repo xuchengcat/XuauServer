@@ -178,6 +178,39 @@ ShellCrash 自身升级可能覆盖 `starts/fw_getlanip.sh`，升级后应复查
 
 回归检查：`python3 -m unittest discover -s . -p 'test_shellcrash_health.py' -v`。
 
+### 2026-11-18 节点入口 DNS 与冷启动修复
+
+节点自身的解析与 OpenAI 目标域名的解析是两条独立链路。节点入口曾被明文 DNS
+解析到不可用 IP；因此只保护 `chatgpt.com` 等目标域名仍会出现 TLS 握手 EOF。
+当前 `/etc/ShellCrash/yamls/user.yaml` 使用经本机直连、验证 TLS 证书的国内 DoH：
+
+```yaml
+dns:
+  proxy-server-nameserver:
+    - https://223.5.5.5/dns-query#DIRECT
+    - https://1.12.12.12/dns-query#DIRECT
+```
+
+此项应合并到已有 `dns`，保留 OpenAI 独立 DNS、局域网域名策略和 Fake-IP 白名单。
+直接使用加密 DNS 的 IP 地址，避免引入解析 DNS 服务器域名的额外依赖；不固定节点 IP。
+
+GPT fallback 健康检查改为 `https://1.1.1.1/cdn-cgi/trace`，状态码为 `200/302`。
+Mihomo 探测发送 HEAD，该地址在验证时返回 302；不跟随重定向，避免再引入域名解析。
+这使健康检查不再依赖经 GPT 分组发送的 ChatGPT DNS，故障线路可以自动切换。
+它检查 TLS/HTTP 连通性，账号、模型调用和长连接另需实际验证。节点优先顺序和
+300 秒检查周期保留，订阅更新器会保留这些组参数。
+
+`/etc/ShellCrash/configs/ShellCrash.cfg` 的 `start_delay=60`，systemd 启动超时为
+90 秒。通过清除临时启动标记再重启服务，实测冷启动等待路径；没有重启整台服务器。
+
+维护脚本在更新前和重启后拒绝明文/依赖代理的节点 DNS、DNS 与健康检查相互依赖的
+配置；同时要求 systemd 超时至少比延迟多 15 秒。本地控制器检查直接连接回环地址，
+不依赖代理环境。正常订阅和 Geo 更新不会覆盖 `user.yaml`、启动延迟或健康检查参数。
+
+本次生产配置备份仅 root 可读，位于
+`/mnt/SDD128G/maintenance-backups/codex-shellcrash-fix-20261118-205222/`。
+定位与修复验证记录位于 `/mnt/SDD128G/codex/codex-proxy-diagnosis-20261118/`。
+
 ## 文件说明
 
 ```text
@@ -192,3 +225,49 @@ ShellCrash 自身升级可能覆盖 `starts/fw_getlanip.sh`，升级后应复查
 ```
 
 本地 `.env` 含敏感数据，不应进入版本控制。
+
+
+## 家庭服务 speedtest 域名策略（2026-11-18）
+
+对外域名为 `<服务名>.speedtest.xuchengcat.cn:444`。持久分流位于
+`/etc/ShellCrash/yamls/rules.yaml`，最前面保留以下规则：
+
+```yaml
+- DOMAIN-SUFFIX,speedtest.xuchengcat.cn,DIRECT
+- DOMAIN-SUFFIX,xuchengcat.cn,DIRECT
+```
+
+`service_domain_policy.py` 提供规则合并、持久/运行配置校验、候选验证与维护锁。
+预览不联网、不写入、不重启：
+
+```bash
+python3 /mnt/SDD128G/vpnupdate/service_domain_policy.py
+```
+
+正式安装（幂等；核心校验通过后发布，失败恢复规则并启动旧配置）：
+
+```bash
+sudo python3 /mnt/SDD128G/vpnupdate/service_domain_policy.py --apply
+```
+
+手动订阅、定时维护、媒体路由安装及上述安装器在 Python 入口共用
+`/run/lock/shellcrash-maintenance.lock`；systemd ExecStart 不再外套 flock，避免嵌套锁。
+当前 timer 时间不变。无节点变化时仍验证域名策略，不无条件重启。
+缺失或被覆盖的规则会明确报错，应先检查持久片段，不能通过只改
+`/tmp/ShellCrash/config.yaml` 修复。
+
+公网 DNS/DDNS、系统 hosts 与域名 IP 映射由用户管理。本次保留既有
+`+.xuchengcat.cn -> 127.0.0.1:53` 转发及 fake-IP whitelist 模式；不向白名单
+加入 speedtest 后缀，不切换全局 DNS 模式。
+Shadowrocket/Clash 订阅生成项目 `clashsubscribemerge` 的现有通配绑定保持原样，
+客户端匹配行为留待后续验证。
+
+离线回归测试：
+
+```bash
+python3 -m unittest discover -s /mnt/SDD128G/vpnupdate -p 'test_*.py' -v
+```
+
+回滚时先恢复本次备份的 Python 脚本、rules.yaml、配套 systemd unit，再执行
+`systemctl daemon-reload` 并校验/恢复 ShellCrash；旧 unit 的 flock 与新 Python 锁
+不能混用。备份位于本次迁移工作目录 `backup/`，其中含私密配置，勿公开。

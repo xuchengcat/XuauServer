@@ -9,6 +9,39 @@ import maintain_shellcrash as maintenance
 
 
 class ShellCrashHealthTests(unittest.TestCase):
+    def test_health_check_cannot_depend_on_its_own_dns_group(self):
+        runtime = {
+            'dns': {'nameserver-policy': {'+.chatgpt.com': ['https://1.1.1.1/dns-query#GPT&disable-ipv6=true']}},
+            'proxy-groups': [{'name': 'GPT', 'url': 'https://chatgpt.com/cdn-cgi/trace'}],
+        }
+        with self.assertRaises(RuntimeError):
+            maintenance.verify_healthcheck_dns(runtime)
+        runtime['proxy-groups'][0]['url'] = 'https://1.1.1.1/cdn-cgi/trace'
+        maintenance.verify_healthcheck_dns(runtime)
+
+    def test_node_dns_rejects_plaintext_and_proxy_dependency(self):
+        valid = ['https://223.5.5.5/dns-query#DIRECT', 'https://1.12.12.12/dns-query#DIRECT']
+        maintenance.verify_node_dns({'dns': {'proxy-server-nameserver': valid}})
+        for servers in ([], ['223.5.5.5'],
+                        ['https://223.5.5.5/dns-query#🤖 ChatGPT'],
+                        ['https://dns.alidns.com/dns-query#DIRECT'],
+                        ['https://223.5.5.5/dns-query#DIRECT&skip-cert-verify=true']):
+            with self.subTest(servers=servers), self.assertRaises(RuntimeError):
+                maintenance.verify_node_dns({'dns': {'proxy-server-nameserver': servers}})
+
+    def test_cold_start_delay_must_fit_systemd_timeout(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            (base / 'configs').mkdir()
+            config = base / 'configs/ShellCrash.cfg'
+            with patch.object(maintenance, 'BASE', base), patch.object(maintenance.subprocess, 'run') as run:
+                run.return_value.stdout = '1min 30s\n'
+                config.write_text('start_delay=60\n')
+                maintenance.verify_startup_timing()
+                config.write_text('start_delay=120\n')
+                with self.assertRaises(RuntimeError):
+                    maintenance.verify_startup_timing()
+
     def test_default_routes_never_become_interface_names(self):
         fixtures = [
             ('default dev pppoe_dial metric 1024', []),
