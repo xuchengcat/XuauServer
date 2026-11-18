@@ -177,6 +177,12 @@
         description: 反代理
         server: my-docker
         container: nginx-proxy-manager
+    - Speedtest:
+        icon: mdi-speedometer
+        href: https://speedtest.xuchengcat.cn:444/
+        description: 家庭服务器测速
+        server: my-docker
+        container: speedtest
     - Sshwifty:
         icon: si-zsh-#F15A24
         href: https://ssh.xuchengcat.cn:444
