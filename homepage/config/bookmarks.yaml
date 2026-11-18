@@ -26,11 +26,11 @@
       description: VPN
   - Excahange:
     - abbr: EX
-      href: https://exchange.xuchengcat.cn:444
+      href: https://exchange.speedtest.xuchengcat.cn:444
       description: 交换机
   - UnWifi:
     - abbr: WF
-      href: https://unwifi.xuchengcat.cn:444
+      href: https://unwifi.speedtest.xuchengcat.cn:444
       description: Wi-Fi 副路由管理
   - ZeroTier:
     - icon: /icons/zerotier.png

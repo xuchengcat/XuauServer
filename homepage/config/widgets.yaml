@@ -3,7 +3,7 @@
 # https://gethomepage.dev/en/configs/widgets
 
 - glances:
-    url: https://glances.xuchengcat.cn:444
+    url: https://glances.speedtest.xuchengcat.cn:444
     version: 4
     cpu: true
     mem: true

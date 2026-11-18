@@ -6,14 +6,14 @@
 #         widget:
 #           type: glances
 #           version: 4
-#           url: https://glances.xuchengcat.cn
+#           url: https://glances.speedtest.xuchengcat.cn
 #           metric: network:pppoe_dial
 #           chart: false
 #     - Temperature:
 #         widget:
 #           type: glances
 #           version: 4
-#           url: https://glances.xuchengcat.cn
+#           url: https://glances.speedtest.xuchengcat.cn
 #           metric: sensor:pch_cannonlake 0
 #           chart: false
 # - Storage Monitor:
@@ -21,21 +21,21 @@
     #     widget:
     #       type: glances
     #       version: 4
-    #       url: https://glances.xuchengcat.cn
+    #       url: https://glances.speedtest.xuchengcat.cn
     #       metric: fs:/mnt/HDD14T
     #       chart: false
     # - SDD512G:
     #     widget:
     #       type: glances
     #       version: 4
-    #       url: https://glances.xuchengcat.cn
+    #       url: https://glances.speedtest.xuchengcat.cn
     #       metric: fs:/etc/hosts
     #       chart: false
 
 - NA Area:
     - Jellyfin:
         icon: si-jellyfin-#00a4dc
-        href: https://jellyfin.xuchengcat.cn:444
+        href: https://jellyfin.speedtest.xuchengcat.cn:444
         description: 影音娱乐
         server: my-docker
         container: jellyfin_qsv
@@ -49,7 +49,7 @@
           expandOneStreamToTwoRows: false
     - Transmission:
         icon: si-transmission-#D70008
-        href: https://transmission.xuchengcat.cn:444
+        href: https://transmission.speedtest.xuchengcat.cn:444
         description: 下载服务
         server: my-docker
         container: transmission
@@ -60,7 +60,7 @@
           password: "{{HOMEPAGE_VAR_TRANSMISSION_PASSWORD}}"
     - PhotoPrism:
         icon: /icons/photoprism.png
-        href: https://photoprism.xuchengcat.cn:444
+        href: https://photoprism.speedtest.xuchengcat.cn:444
         description: 照片存储
         server: my-docker
         container: photoprism
@@ -73,21 +73,21 @@
           fields: ["albums", "photos", "videos"]
     # - Glances:
     #     icon: /icons/cadvisor.png
-    #     href: https://glances.xuchengcat.cn
+    #     href: https://glances.speedtest.xuchengcat.cn
     #     description: 状态查询
     #     server: my-docker
     #     container: glances
     #     widget:
     #       type: glances
     #       version: 4
-    #       url: https://glances.xuchengcat.cn
+    #       url: https://glances.speedtest.xuchengcat.cn
     #       metric: sensor:Package id 0
     #       chart: false
 
 # - HA Area:
     - HomeAssistant:
         icon: si-homeassistant-#18BCF2
-        href: https://homeassistant.xuchengcat.cn:444
+        href: https://homeassistant.speedtest.xuchengcat.cn:444
         description: 智能家居
         server: my-docker
         container: homeassistant
@@ -98,68 +98,68 @@
           fields: ["people_home", "lights_on", "switches_on"]
     - Kavita:
         icon: sh-kavita.png
-        href: https://kavita.xuchengcat.cn:444
+        href: https://kavita.speedtest.xuchengcat.cn:444
         description: 漫画阅读
         server: my-docker
         container: kavita
     - WebDAV:
         icon: mdi-folder-network
-        href: https://webdav.xuchengcat.cn:444
+        href: https://webdav.speedtest.xuchengcat.cn:444
         description: 媒体文件管理
         server: my-docker
         container: webdav
     - MoonTV:
         icon: si-jellyfin-#808080
-        href: https://moontv.xuchengcat.cn:444
+        href: https://moontv.speedtest.xuchengcat.cn:444
         description: 聚合影视
         server: my-docker
         container: moontv
     - MoviePilot:
         icon: mdi-movie-open-cog
-        href: https://moviepilot.xuchengcat.cn:444
+        href: https://moviepilot.speedtest.xuchengcat.cn:444
         description: 影视订阅
         server: my-docker
         container: moviepilot
 
     - EspHome:
         icon: si-esphome-#000000
-        href: https://esphome.xuchengcat.cn:444
+        href: https://esphome.speedtest.xuchengcat.cn:444
         description: DIY
         server: my-docker
         container: esphome
     - Nodred:
         icon: si-nodered-#8F0000
-        href: https://nodred.xuchengcat.cn:444
+        href: https://nodred.speedtest.xuchengcat.cn:444
         description: 自动化
         server: my-docker
         container: Node_Red
     - XiaoMusic:
         icon: si-xiaomi-#ff6900
-        href: https://xiaomusic.xuchengcat.cn:444
+        href: https://xiaomusic.speedtest.xuchengcat.cn:444
         description: 自动化
         server: my-docker
         container: xiaomusic
     - Frigate:
         icon: /icons/frigate.png
-        href: https://frigate.xuchengcat.cn:444
+        href: https://frigate.speedtest.xuchengcat.cn:444
         description: 监控设置
         server: my-docker
         container: frigate
     - NextCloud:
         icon: si-nextcloud-#0082C9
-        href: https://nextcloud.xuchengcat.cn:444
+        href: https://nextcloud.speedtest.xuchengcat.cn:444
         description: 私有云服务
         server: my-docker
         container: nextcloud
         #widget:
           #type: nextcloud
-          #url: https://nextcloud.xuchengcat.cn
+          #url: https://nextcloud.speedtest.xuchengcat.cn
           #key: "{{HOMEPAGE_VAR_NEXTCLOUD_KEY}}"
           #fields: ["memoryusage","numfiles","numshares"]
 
     - Wechat:
         icon: si-wechat-#07C160
-        href: https://wechat.xuchengcat.cn:444
+        href: https://wechat.speedtest.xuchengcat.cn:444
         description: 微信备份
         server: my-docker
         container: cloudbak
@@ -167,13 +167,13 @@
 # - MA Area:
     - Dockhand:
         icon: mdi-docker
-        href: https://dockhand.xuchengcat.cn:444
+        href: https://dockhand.speedtest.xuchengcat.cn:444
         description: Docker管理
         server: my-docker
         container: dockhand
     - NginxProxy:
         icon: si-nginxproxymanager-#F15833
-        href: https://nginx.xuchengcat.cn:444
+        href: https://nginx.speedtest.xuchengcat.cn:444
         description: 反代理
         server: my-docker
         container: nginx-proxy-manager
@@ -185,22 +185,22 @@
         container: speedtest
     - Sshwifty:
         icon: si-zsh-#F15A24
-        href: https://ssh.xuchengcat.cn:444
+        href: https://ssh.speedtest.xuchengcat.cn:444
         description: 网页版ssh
         server: my-docker
         container: sshwifty
     # - Bark:
     #     icon: /icons/google-messages.png
     #     abbr: BA
-    #     href: https://bark.xuchengcat.cn:444
+    #     href: https://bark.speedtest.xuchengcat.cn:444
     #     description: ios通知服务
     - OpenClaw:
         icon: si-anthropic-#D97757
-        href: https://openclaw.xuchengcat.cn:444
+        href: https://openclaw.speedtest.xuchengcat.cn:444
         description: AI编程助手
         server: my-docker
         container: openclaw
     - ClashConfig:
         icon: /icons/clash.png
-        href: http://xuchengcat.cn:9999/ui/#/
+        href: https://yacdclash.speedtest.xuchengcat.cn:444/ui/#/
         description: 机场配置

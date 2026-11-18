@@ -11,7 +11,7 @@
   "cache_dir": "cache",
   "cache_max_size_mb": 500,
   "cache_song_name": "cache_songs",
-  "hostname": "https://xiaomusic.xuchengcat.cn",
+  "hostname": "https://xiaomusic.speedtest.xuchengcat.cn",
   "port": 18090,
   "public_port": 444,
   "proxy": "",

@@ -166,10 +166,10 @@ services:
     environment:
       OVERWRITEPROTOCOL: 'https'
       OVERWRITECONDADDR: ''
-      OVERWRITEHOST: 'nextcloud.xuchengcat.cn'
-      OVERWRITECLIURL: 'https://nextcloud.xuchengcat.cn:444'
+      OVERWRITEHOST: 'nextcloud.speedtest.xuchengcat.cn:444'
+      OVERWRITECLIURL: 'https://nextcloud.speedtest.xuchengcat.cn:444'
       TRUSTED_PROXIES: '172.16.0.0/12'
-      TRUSTED_DOMAINS: 'nextcloud.xuchengcat.cn'
+      TRUSTED_DOMAINS: 'nextcloud.xuchengcat.cn nextcloud.speedtest.xuchengcat.cn'
     cpus: 1
     mem_limit: 4g
 
@@ -632,7 +632,7 @@ services:
       - path: ./homepage/secrets.env
         format: raw
     environment:
-      HOMEPAGE_ALLOWED_HOSTS: xuchengcat.cn,172.0.17:3000,192.168.2.1:3000
+      HOMEPAGE_ALLOWED_HOSTS: xuchengcat.cn,home.speedtest.xuchengcat.cn,home.speedtest.xuchengcat.cn:444,172.0.17:3000,192.168.2.1:3000
     restart: unless-stopped
     cpus: 1
     mem_limit: 4g
