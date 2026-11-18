@@ -215,3 +215,6 @@ nodered/data/flows.json
 /speedtest/speedtest-master/
 /speedtest/www/backend/country_asn.mmdb
 /speedtest/www/backend/geoip2.phar
+
+# Standalone bridge repository and its local runtime files.
+/lark-codex-bridge/
