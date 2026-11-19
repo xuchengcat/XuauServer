@@ -218,3 +218,6 @@ nodered/data/flows.json
 
 # Standalone bridge repository and its local runtime files.
 /lark-codex-bridge/
+
+# Private standalone Blender project and runtime data.
+/blender/

@@ -16,8 +16,8 @@ v0.4.4 增加默认启用的“总里程”传感器及概览卡片，`period.ve
 
 - 代码由 HACS 管理于 `/config/custom_components/im_motors/`。
 - 私有账号文件由集成保存在 `/config/.storage/im_motors/`，备份须包含匹配密钥及完整加密目录。
-- 本地开发工程：`/mnt/SDD128G/codex/im-motors-ha/`。
-- 本地研究笔记入口：`/mnt/SDD128G/codex/im-motors-development/README.md`。
+- 本地开发工程：`/mnt/SDD128G/codex/im-motors/im-motors-ha/`。
+- 本地研究笔记入口：`/mnt/SDD128G/codex/im-motors/im-motors-development/README.md`。
 - 研究材料从本人 Nextcloud Documents 归档恢复，8,459项文件通过原清单 SHA-256 校验。
 - 原始截图、车辆日志、账号存储和维护备份保留本地，不纳入公开服务器仓库。
 
