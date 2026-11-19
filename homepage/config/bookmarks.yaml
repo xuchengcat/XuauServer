@@ -40,6 +40,10 @@
     - icon: /icons/render.png
       href: https://dashboard.render.com/
       description: bark server
+  - Vercel:
+    - icon: /icons/vercel.png
+      href: https://vercel.com/xuau
+      description: 项目部署
   - Zeabur:
     - abbr: ZB
       href: https://dash.zeabur.com/
