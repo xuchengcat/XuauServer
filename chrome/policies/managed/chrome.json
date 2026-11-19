@@ -1,0 +1,18 @@
+{
+  "ExtensionSettings": {
+    "jfedfbgedapdagkghmgibemcoggfppbb": {
+      "toolbar_pin": "force_pinned",
+      "installation_mode": "force_installed",
+      "update_url": "https://clients2.google.com/service/update2/crx"
+    }
+  },
+  "DownloadDirectory": "/media",
+  "PromptForDownloadLocation": true,
+  "BrowserSignin": 0,
+  "DefaultBrowserSettingEnabled": false,
+  "ProxySettings": {
+    "ProxyMode": "fixed_servers",
+    "ProxyServer": "http://chrome-proxy:8080",
+    "ProxyBypassList": "localhost;127.0.0.1;[::1];192.168.*;10.*;172.16.*;172.17.*;172.18.*;*.xuchengcat.cn"
+  }
+}

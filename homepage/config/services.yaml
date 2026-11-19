@@ -96,6 +96,12 @@
           url: http://172.17.0.1:8123
           key: "{{HOMEPAGE_VAR_HA_TOKEN}}"
           fields: ["people_home", "lights_on", "switches_on"]
+    - Chrome:
+        icon: /icons/chrome.png
+        href: https://chrome.speedtest.xuchengcat.cn:444
+        description: 远程浏览器 · 2K · 猫抓
+        server: my-docker
+        container: chrome
     - Kavita:
         icon: sh-kavita.png
         href: https://kavita.speedtest.xuchengcat.cn:444

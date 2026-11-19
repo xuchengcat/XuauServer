@@ -221,3 +221,10 @@ nodered/data/flows.json
 
 # Private standalone Blender project and runtime data.
 /blender/
+
+# Server Chrome private browser profile and session data.
+/chrome/config/
+/chrome/private/
+
+# Local Homepage configuration backups.
+/homepage/config/*.bak.*

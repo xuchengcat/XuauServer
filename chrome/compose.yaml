@@ -1,0 +1,46 @@
+services:
+  chrome:
+    image: lscr.io/linuxserver/chrome:latest
+    container_name: chrome
+    restart: unless-stopped
+    depends_on:
+      - chrome-proxy
+    shm_size: "1gb"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Asia/Shanghai
+      LC_ALL: zh_CN.UTF-8
+      TITLE: Server Chrome
+      SELKIES_MANUAL_RESOLUTION: "true"
+      SELKIES_MANUAL_WIDTH: "2560"
+      SELKIES_MANUAL_HEIGHT: "1440"
+      SELKIES_ENABLE_RESIZE: "false"
+      CHROME_CLI: "--no-first-run --window-size=2560,1440 https://www.google.com/"
+    volumes:
+      - ./config:/config
+      - ./policies/managed/chrome.json:/etc/opt/chrome/policies/managed/server-chrome.json:ro
+      - /mnt/HDD14T/Media_Data_HDD:/media
+    networks:
+      - proxy
+      - browser-egress
+  chrome-proxy:
+    image: lscr.io/linuxserver/chrome:latest
+    container_name: chrome-proxy
+    user: "1000:1000"
+    entrypoint: ["/lsiopy/bin/python3", "/app/proxy-relay.py"]
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    volumes:
+      - ./proxy-relay.py:/app/proxy-relay.py:ro
+      - ./private/upstream:/run/upstream:ro
+    networks:
+      - browser-egress
+networks:
+  browser-egress:
+
+  proxy:
+    external: true
+    name: sdd128g_default
