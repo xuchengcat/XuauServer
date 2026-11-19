@@ -745,7 +745,7 @@ services:
       options:
         max-size: "50m"
         max-file: "5"
-    image: pub.tcp.mk/likeflyme/cloudbak
+    image: likeflyme/cloudbak:latest
     container_name: cloudbak
     restart: always
     ports:
